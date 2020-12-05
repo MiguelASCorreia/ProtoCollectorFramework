@@ -27,9 +27,8 @@ public class ProtocolViewGenerator {
     private Context context;
     private HashMap<String, JSONObject> protocolsByTag;
     private List<String> mainProtocols;
-    private HashMap<String, List<String>> phasesProtocols;
     private HashMap<String, Integer> numberOfEOIsPerProtocol;
-    private HashMap<String, String> selectedPhasePerProtocols;
+    private HashMap<String, String> typeOfEOIsPerProtocol;
 
     private SortedSet<String> hiddenProtocols;
     private HashMap<String, HashMap<String, List<ComponentView>>> viewsPerProtocol;
@@ -51,16 +50,12 @@ public class ProtocolViewGenerator {
         return mainProtocols;
     }
 
-    public HashMap<String, List<String>> getPhasesProtocols() {
-        return phasesProtocols;
-    }
-
     public HashMap<String, Integer> getNumberOfEOIsPerProtocol() {
         return numberOfEOIsPerProtocol;
     }
 
-    public HashMap<String, String> getSelectedPhasePerProtocols() {
-        return selectedPhasePerProtocols;
+    public HashMap<String, String> getTypeOfEOIsPerProtocol() {
+        return typeOfEOIsPerProtocol;
     }
 
     public SortedSet<String> getHiddenProtocols() {
@@ -91,8 +86,7 @@ public class ProtocolViewGenerator {
 
             protocolsByTag = new HashMap<>(jsonArray.length());
             numberOfEOIsPerProtocol = new HashMap<>(jsonArray.length());
-            phasesProtocols = new HashMap<>(jsonArray.length());
-            selectedPhasePerProtocols = new HashMap<>();
+            typeOfEOIsPerProtocol = new HashMap<>(jsonArray.length());
 
             try {
 
@@ -105,36 +99,20 @@ public class ProtocolViewGenerator {
                     JSONObject protocol = jsonArray.getJSONObject(y);
                     protocolsByTag.put(protocol.getString("name"), protocol);
                     int numberOfEOIs = 0;
+                    String type = "eoi";
 
-                    String observation_type;
-                    String observation_number;
-                    if (mainProtocols != null && mainProtocols.contains(protocol.getString("name"))) {
-                        observation_type = "observations_specific";
-                        observation_number = "number_specific";
-                    } else {
-                        observation_type = "observations_general";
-                        observation_number = "number_general";
-                    }
+                    if (protocol.getJSONObject("eoi").has("number"))
+                        numberOfEOIs = protocol.getJSONObject("eoi").getInt("number");
 
-                    if (protocol.has("phases")) {
-                        JSONArray phases = protocol.getJSONArray("phases");
-                        List<String> phases_names = new ArrayList<>(phases.length());
-                        for (int i = 0; i < phases.length(); i++) {
-                            JSONObject actualPhase = phases.getJSONObject(i);
-                            if (actualPhase.has(observation_type))
-                                phases_names.add(actualPhase.getString("name"));
-                        }
-                        if (phases_names.size() > 0)
-                            phasesProtocols.put(protocol.getString("name"), phases_names);
-                    } else {
-                        if (protocol.getJSONObject("eoi").has(observation_number))
-                            numberOfEOIs = protocol.getJSONObject("eoi").getInt(observation_number);
+                    if (protocol.getJSONObject("eoi").has("name"))
+                        type = protocol.getJSONObject("eoi").getString("name");
 
-                        numberOfEOIsPerProtocol.put(protocol.getString("name"), numberOfEOIs);
+                    numberOfEOIsPerProtocol.put(protocol.getString("name"), numberOfEOIs);
+                    typeOfEOIsPerProtocol.put(protocol.getString("name"), type);
 
-                        if (eois < numberOfEOIs)
-                            eois = numberOfEOIs;
-                    }
+                    if (eois < numberOfEOIs)
+                        eois = numberOfEOIs;
+
 
 
                 }
@@ -146,33 +124,6 @@ public class ProtocolViewGenerator {
         }
         return -1;
     }
-
-
-    public int selectPhase(int eois, String selectedPhase, List<String> protocolsWithPhases){
-        selectedPhasePerProtocols.put(protocolsWithPhases.get(0),selectedPhase);
-        try {
-            JSONArray phases = protocolsByTag.get(protocolsWithPhases.get(0)).getJSONArray("phases");
-            int phases_eois_count = 0;
-            for(int i = 0; i < phases.length(); i++){
-                JSONObject phase = phases.getJSONObject(i);
-                if(phase.getString("name").equals(selectedPhase)) {
-                    if (mainProtocols.contains(protocolsWithPhases.get(0))) {
-                        phases_eois_count = phase.getJSONObject("eoi").getInt("number_specific");
-                    } else if (phase.getJSONObject("eoi").has("number_general")) {
-                        phases_eois_count = phase.getJSONObject("eoi").getInt("number_general");
-                    }
-                }
-            }
-
-            numberOfEOIsPerProtocol.put(protocolsWithPhases.get(0),phases_eois_count);
-            if(eois < phases_eois_count)
-                return phases_eois_count;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return eois;
-    }
-
 
 
     private HashMap<String, List<ComponentView>> getViews(String key, JSONArray observations){
@@ -323,11 +274,6 @@ public class ProtocolViewGenerator {
     }
 
 
-    //mlimitedObservationsEOis
-    //hidden
-    //mViewsPErProtocols
-    //mVisitObservations
-
     public boolean fillViews(){
         hiddenProtocols = new TreeSet<>();
         viewsPerProtocol = new HashMap<>();
@@ -364,37 +310,13 @@ public class ProtocolViewGenerator {
                     }
                 }
 
-                JSONObject target;
-                if (!protocol.has("phases")) {
-                    target = protocol;
-                    if (mainProtocols.contains(key))
-                        viewsPerProtocol.put(key, getViews(key, protocol.getJSONArray("observations_specific")));
-                    else if (protocol.getJSONObject("eoi").has("number_general"))
-                        viewsPerProtocol.put(key, getViews(key, protocol.getJSONArray("observations_general")));
+                JSONObject target = protocol;
 
-                } else {
-                    JSONArray phases = protocol.getJSONArray("phases");
-                    JSONObject phase = null;
-                    for (int w = 0; w < phases.length(); w++) {
-                        JSONObject aux = phases.getJSONObject(w);
-                        if (aux.getString("name").equals(selectedPhasePerProtocols.get(key))) {
-                            phase = aux;
-                        }
-                    }
-                    if (phase != null) {
-                        target = phase;
-                        if (mainProtocols.contains(key))
-                            viewsPerProtocol.put(key, getViews(key, phase.getJSONArray("observations_specific")));
-                        else if (phase.getJSONObject("eoi").has("number_general"))
-                            viewsPerProtocol.put(key, getViews(key, protocol.getJSONArray("observations_general")));
-                    } else
-                        target = null;
-
-                }
+                viewsPerProtocol.put(key, getViews(key, protocol.getJSONArray("observations")));
 
 
-                if (target != null && target.has("observations_for_visit")) {
-                    JSONArray observations_for_visit_for_protocol = target.getJSONArray("observations_for_visit");
+                if (target.has("general_data")) {
+                    JSONArray observations_for_visit_for_protocol = target.getJSONArray("general_data");
                     List<ComponentBuildInfo> observations_for_visit_data = new ArrayList<>(observations_for_visit_for_protocol.length());
                     for (int z = 0; z < observations_for_visit_for_protocol.length(); z++) {
                         JSONObject ob = observations_for_visit_for_protocol.getJSONObject(z);
