@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/first_value"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/separator"
+            app:layout_constraintEnd_toStartOf="@+id/separator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/separator"
+            app:np_dividerColor="@color/colorPrimary"
+            app:np_dividerThickness="1dp"
+            app:np_formatter=""
+            app:np_order="ascending"
+            app:np_orientation="vertical"
+            app:np_selectedTextColor="@color/colorPrimary"
+            app:np_selectedTextSize="20sp"
+            app:np_textColor="@color/colorPrimary"
+            app:np_textSize="16sp"
+            app:np_typeface="" />
+
+        <TextView
+            android:id="@+id/separator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="8sp"
+            android:text="/"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/second_value"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/separator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/separator"
+            app:layout_constraintTop_toTopOf="@+id/separator"
+            app:np_dividerColor="@color/colorPrimary"
+            app:np_dividerThickness="1dp"
+            app:np_formatter=""
+            app:np_order="ascending"
+            app:np_orientation="vertical"
+            app:np_selectedTextColor="@color/colorPrimary"
+            app:np_selectedTextSize="20sp"
+            app:np_textColor="@color/colorPrimary"
+            app:np_textSize="16sp"
+            app:np_typeface="" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
