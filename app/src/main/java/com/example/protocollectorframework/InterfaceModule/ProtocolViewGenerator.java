@@ -22,6 +22,9 @@ import java.util.Locale;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+/**
+ * Class that process the protocol specification language a generates the associated views and data
+ */
 public class ProtocolViewGenerator {
 
     private Context context;
@@ -37,49 +40,92 @@ public class ProtocolViewGenerator {
 
     private ComponentsAPI mComponentAPI;
 
+    /**
+     * Constructor with activity's handler
+     * @param context: current activity context
+     * @param incomingHandler: activity handler to handle the modification of the data fields
+     */
     public ProtocolViewGenerator(Context context, Handler incomingHandler){
         this.context = context;
         this.mComponentAPI = new ComponentsAPI(context,incomingHandler);
     }
 
+    /**
+     * Returns the JSONObject data associated with each protocol
+     * @return structure that maps each protocol name to the corresponding JSONObject
+     */
     public HashMap<String, JSONObject> getProtocolsByTag() {
         return protocolsByTag;
     }
 
+    /**
+     * Returns the main protocols for the given plot
+     * @return
+     */
     public List<String> getMainProtocols() {
         return mainProtocols;
     }
 
+    /**
+     * Returns the number of EOIs associated with each protocol
+     * @return structure that maps each protocol name to the corresponding EOI count
+     */
     public HashMap<String, Integer> getNumberOfEOIsPerProtocol() {
         return numberOfEOIsPerProtocol;
     }
 
+    /**
+     * Returns the name of the EOIs associated with each protocol
+     * @return structure that maps each protocol name to the corresponding EOI count
+     */
     public HashMap<String, String> getTypeOfEOIsPerProtocol() {
         return typeOfEOIsPerProtocol;
     }
 
+    /**
+     * Returns the protocols that are not enabled on the current type of the year
+     * @return structure that contains the protocols not enabled
+     */
     public SortedSet<String> getHiddenProtocols() {
         return hiddenProtocols;
     }
 
+    /**
+     * Returns each view associated with each observation with each protocol
+     * @return structure that maps each protocol name to the observations and associated views
+     */
     public HashMap<String, HashMap<String, List<ComponentView>>> getViewsPerProtocol() {
         return viewsPerProtocol;
     }
 
+    /**
+     * Returns the component build info that is necessary to generate the general observation data fields
+     * @return structure that maps the protocol name to the observations component build info
+     */
     public HashMap<String, List<ComponentBuildInfo>> getGeneralObservations() {
         return generalObservations;
     }
 
+    /**
+     * Returns the observations that are limited to certain EOIs in each protocol
+     * @return structure that maps each protocol name to the observations and associated limited EOIs
+     */
     public HashMap<String, HashMap<String, List<Integer>>> getLimitedObservations() {
         return limitedObservations;
     }
 
-    public int processProtocolsForPlot(PlotData plotData, String protocols_file_name) {
+    /**
+     * Process the protocol configuration file and extracts the data depending on the plot
+     * @param plotData: plot object data
+     * @param protocols_file_path: protocol's configuration file path
+     * @return
+     */
+    public int processProtocolsForPlot(PlotData plotData, String protocols_file_path) {
 
         int eois = 0;
 
         ConfigurationManager cf = new ConfigurationManager(context);
-        JSONArray jsonArray = cf.readProtocols(protocols_file_name);
+        JSONArray jsonArray = cf.readProtocols(protocols_file_path);
 
         if (jsonArray != null) {
 
@@ -126,7 +172,13 @@ public class ProtocolViewGenerator {
     }
 
 
-    private HashMap<String, List<ComponentView>> getViews(String key, JSONArray observations){
+    /**
+     * Returns the views associated to the protocol observations
+     * @param protocol: protocol's name
+     * @param observations: observations structure
+     * @return views associated to the protocol observations
+     */
+    private HashMap<String, List<ComponentView>> getViews(String protocol, JSONArray observations){
         HashMap<String, List<ComponentView>> observations_map = new HashMap<>(observations.length());
 
 
@@ -147,17 +199,17 @@ public class ProtocolViewGenerator {
                         limited_to.add(l,array.getInt(l));
                     }
 
-                    if(limitedObservations.get(key) == null)
-                        limitedObservations.put(key,new HashMap<String, List<Integer>>());
+                    if(limitedObservations.get(protocol) == null)
+                        limitedObservations.put(protocol,new HashMap<String, List<Integer>>());
 
-                    limitedObservations.get(key).put(name,limited_to);
+                    limitedObservations.get(protocol).put(name,limited_to);
 
 
                 }
                 for (int z = 0; z < iterations.length(); z++) {
                     JSONObject iteration_obj = iterations.getJSONObject(z);
 
-                    ComponentBuildInfo buildInfo = setComponent(iteration_obj,name,key);
+                    ComponentBuildInfo buildInfo = setComponent(iteration_obj,name,protocol);
                     if (buildInfo == null)
                         continue;
 
@@ -178,6 +230,13 @@ public class ProtocolViewGenerator {
         return observations_map;
     }
 
+    /**
+     * Returns the component build info based on the observation's iteration associated to the protocol
+     * @param iteration_obj: observation's iteration structure
+     * @param ob_name: observation's name
+     * @param protocol: protocol's name
+     * @return component build info extracted from the protocol data field
+     */
     private ComponentBuildInfo setComponent(JSONObject iteration_obj, String ob_name, String protocol){
 
         List<String> temp_values = null;
@@ -273,7 +332,10 @@ public class ProtocolViewGenerator {
         }
     }
 
-
+    /**
+     * Create all views for the current protocols
+     * @return true if success, false otherwise
+     */
     public boolean fillViews(){
         hiddenProtocols = new TreeSet<>();
         viewsPerProtocol = new HashMap<>();

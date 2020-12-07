@@ -14,6 +14,9 @@ import com.shawnlin.numberpicker.NumberPicker;
 
 import java.util.Calendar;
 
+/**
+ * Custom view for the custom date picker used on the temporal component
+ */
 public class CustomDatePicker extends FrameLayout {
 
     private NumberPicker dayOfMonthPicker;

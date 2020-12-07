@@ -42,6 +42,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class that allows the generation of interface components based on different data types
+ */
 public class ComponentsAPI {
 
     public static final int COMPONENT_BOOLEAN = 0;
@@ -53,32 +56,57 @@ public class ComponentsAPI {
     public static final int COMPONENT_INTERVAL = 6;
 
     public static final String TYPE_DATE  = "date";
-    public static final String TYPE_TIME = "time";
+    public static final String TYPE_TIME = "datetime";
 
     private Context context;
     private static boolean saveValues;
     private Handler incomingHandler;
 
 
+    /**
+     * Default constructor
+     * @param context: current activity context
+     */
     public ComponentsAPI(Context context){
         this.context = context;
         saveValues = true;
     }
 
+    /**
+     * Constructor with activity's handler
+     * @param context: current activity context
+     * @param incomingHandler: activity handler to handle the modification of the data fields
+     */
     public ComponentsAPI(Context context, Handler incomingHandler){
         this.context = context;
         saveValues = true;
         this.incomingHandler = incomingHandler;
     }
 
+    /**
+     * Enables or disables the sending of the data to the activity's handler
+     * @param save: send the state
+     */
     public void setSaveValues(boolean save){
         saveValues = save;
     }
 
+    /**
+     * Checks if the sending of the data to the activity's handler is enabled
+     * @return if the sending of the data to the activity's handler is enabled
+     */
     public boolean getSaveValues(){
         return saveValues;
     }
 
+    /**
+     * Sends a message to the current handler with the data associated to the field
+     * @param title: title of the field
+     * @param value: value of the field
+     * @param observation_name: name of the observation
+     * @param protocol_name: name of the protocol
+     * @param component_type: type of the component
+     */
     public void sendStateToActivity(String title, String value, String observation_name, String protocol_name, int component_type){
         try {
             JSONObject jsonObject = new JSONObject();
@@ -101,6 +129,11 @@ public class ComponentsAPI {
         }
     }
 
+    /**
+     * Returns the data associated to the field's view
+     * @param componentView: field's view
+     * @return data associated to the field's view
+     */
     public ComponentData getComponent(ComponentView componentView){
         int type = componentView.getType();
         String title = ((TextView)(componentView.getView().findViewById(R.id.component_title))).getText().toString();
@@ -153,7 +186,11 @@ public class ComponentsAPI {
         return null;
     }
 
-
+    /**
+     * Sets the value on the view based on the given data
+     * @param cd: field's data
+     * @param view: field's view
+     */
     public void setComponentValue(ComponentData cd, ComponentView view){
         String value = cd.getValue();
         switch (cd.getType()){
@@ -224,6 +261,11 @@ public class ComponentsAPI {
         }
     }
 
+    /**
+     * Creates the field view based on build info extracted from the protocol specification
+     * @param buildInfo: component build info extracted from the protocol
+     * @return field's view
+     */
     public ComponentView setComponent(ComponentBuildInfo buildInfo){
         int type = buildInfo.getType();
         String name = buildInfo.getLabel();
@@ -260,6 +302,13 @@ public class ComponentsAPI {
     }
 
 
+    /**
+     * Generates a boolean component
+     * @param title: field's title
+     * @param observation_name: observation's name
+     * @param protocol_name: protocol's name
+     * @return boolean component view
+     */
     private ComponentView setComponentBoolean(String title, String observation_name, String protocol_name){
         ComponentView v = new ComponentView(COMPONENT_BOOLEAN, View.inflate(context, R.layout.component_boolean_layout, null));
         TextView textView = v.getView().findViewById(R.id.component_title);
@@ -280,7 +329,15 @@ public class ComponentsAPI {
         return v;
     }
 
-
+    /**
+     * Generates a interval component
+     * @param title: field's title
+     * @param firstValues: left domain of the interval
+     * @param lastValues: right domain of the interval
+     * @param observation_name: observation's name
+     * @param protocol_name: protocol's name
+     * @return interval component view
+     */
     private ComponentView setComponentInterval(String title, String[] firstValues, String[] lastValues, String observation_name, String protocol_name){
         ComponentView v = new ComponentView(COMPONENT_INTERVAL, View.inflate(context, R.layout.component_interval_layout, null));
 
@@ -305,7 +362,15 @@ public class ComponentsAPI {
     }
 
 
-
+    /**
+     * Generates a count component
+     * @param title: field's title
+     * @param values: domain of allowed values
+     * @param units: units of the count
+     * @param observation_name: observation's name
+     * @param protocol_name: protocol's name
+     * @return count component view
+     */
     public ComponentView setComponentCount(String title, String[] values, String units, String observation_name, String protocol_name){
         ComponentView v = new ComponentView(COMPONENT_COUNT, View.inflate(context, R.layout.component_count_layout, null),units);
         TextView textView = v.getView().findViewById(R.id.component_title);
@@ -331,6 +396,17 @@ public class ComponentsAPI {
 
     }
 
+    /**
+     * Generates a numeric component
+     * @param title: field's title
+     * @param value_type: type of value (integer or real)
+     * @param min: minimum  allowed value
+     * @param max: maximum allowed value
+     * @param units: units associated
+     * @param observation_name: observation's name
+     * @param protocol_name: protocol's name
+     * @return numeric component view
+     */
     public ComponentView setComponentNumeric(String title, String value_type, int min, int max, String units, String observation_name, String protocol_name) {
         ComponentView v;
         EditText et;
@@ -415,6 +491,13 @@ public class ComponentsAPI {
 
     }
 
+    /**
+     * Generates a textual component
+     * @param title: field's title
+     * @param observation_name: observation's name
+     * @param protocol_name: protocol's name
+     * @return textual component view
+     */
 
     @SuppressLint("ClickableViewAccessibility")
     public ComponentView setComponentText(String title, String observation_name, String protocol_name) {
@@ -480,7 +563,14 @@ public class ComponentsAPI {
     }
 
 
-
+    /**
+     * Generates a temporal component
+     * @param title: field's title
+     * @param type: type of temporal data (date or datetime)
+     * @param observation_name: observation's name
+     * @param protocol_name: protocol's name
+     * @return temporal component view
+     */
     public ComponentView setComponentTemporal(String title, String type, String observation_name, String protocol_name){
         ComponentView v = null;
         try {
@@ -522,6 +612,15 @@ public class ComponentsAPI {
         return v;
     }
 
+    /**
+     * Generates a categorical component
+     * @param title: field's title
+     * @param observation_name: observation's name
+     * @param protocol_name: protocol's name
+     * @param categories: possible categories
+     * @param unique: uniqueness of the selection
+     * @return categorical component view
+     */
     private ComponentView setComponentCategory(String title, String observation_name, String protocol_name, String[] categories, boolean unique){
         ComponentView v = new ComponentView(COMPONENT_CATEGORY, View.inflate(context, R.layout.component_categorical_layout, null));
         TextView textView = v.getView().findViewById(R.id.component_title);

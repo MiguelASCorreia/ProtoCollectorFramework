@@ -12,6 +12,10 @@ import com.example.protocollectorframework.R;
 
 import java.util.List;
 
+/**
+ * Adapter used on the categorical components
+ */
+
 public class CategoriesAdapter extends BaseAdapter {
 
     private Context context;
