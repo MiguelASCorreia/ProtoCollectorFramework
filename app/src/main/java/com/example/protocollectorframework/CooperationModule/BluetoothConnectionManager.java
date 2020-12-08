@@ -581,7 +581,6 @@ public class BluetoothConnectionManager {
                 if (mDevicesDialog != null && mDevicesDialog.isShowing())
                     mDevicesDialog.dismiss();
 
-                //                   progressDialog.dismiss();
                 cancelDiscovery();
                 stopSearchingReceiver();
                 SharedMethods.showToast(mContext, mContext.getString(R.string.bluetooth_linked));

@@ -25,6 +25,7 @@ public class CustomDatePicker extends FrameLayout {
 
     private boolean callOnClick = true;
 
+
     public CustomDatePicker(Context context) {
         super(context);
         initView();
@@ -46,6 +47,9 @@ public class CustomDatePicker extends FrameLayout {
         initView();
     }
 
+    /**
+     * Initialize the layout that contains the date picker
+     */
     private void initView() {
         View v = inflate(getContext(), R.layout.custom_date_picker, this);
         dayOfMonthPicker = v.findViewById(R.id.day_picker);
@@ -97,7 +101,12 @@ public class CustomDatePicker extends FrameLayout {
     }
 
 
-
+    /**
+     * Sets each spinner value
+     * @param day: day of the month
+     * @param month: month
+     * @param year: year
+     */
     private void setDay( int day, int month, int year){
         callOnClick = false;
 
@@ -122,22 +131,46 @@ public class CustomDatePicker extends FrameLayout {
 
     }
 
+    /**
+     * Returns the current value on the day of the month spinner
+     * @return day of the month
+     */
     public int getDayOfMonth(){
         return dayOfMonthPicker.getValue();
     }
+
+    /**
+     * Returns the current value on the month spinner
+     * @return month
+     */
     public int getMonth(){
         return monthPicker.getValue();
     }
+
+    /**
+     * Returns the current value on the year spinner
+     * @return year
+     */
     public int getYear(){
         return yearPicker.getValue();
     }
 
+    /**
+     * Sets the date given the year, month and day of the month
+     * @param year: year
+     * @param month: month
+     * @param dayOfMonth: day of the month
+     */
     public void setDate(int year, int month, int dayOfMonth){
         yearPicker.setValue(year);
         monthPicker.setValue(month);
         dayOfMonthPicker.setValue(dayOfMonth);
     }
 
+    /**
+     * Returns the date shown on the view on the format dd/MM/yyyy
+     * @return date on the format dd/mm/yyyy
+     */
     public String getDate(){
         return dayOfMonthPicker.getValue() + "/" + monthPicker.getValue() + "/" + yearPicker.getValue();
     }

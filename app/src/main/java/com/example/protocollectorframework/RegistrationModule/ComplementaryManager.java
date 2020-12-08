@@ -21,14 +21,12 @@ public class ComplementaryManager {
 
 
     private ComplementaryTable mComplementaryTable;
-    private Context context;
 
     /**
      * Constructor
      * @param context: context of the activity
      */
     public ComplementaryManager(Context context){
-        this.context = context;
         mComplementaryTable = new ComplementaryTable(context);
     }
 

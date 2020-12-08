@@ -12,6 +12,10 @@ import androidx.annotation.RequiresApi;
 import com.example.protocollectorframework.R;
 import com.shawnlin.numberpicker.NumberPicker;
 
+
+/**
+ * Custom view for the custom datetime picker used on the temporal component
+ */
 public class CustomTimePicker extends FrameLayout {
 
     private NumberPicker hoursPicker;
@@ -41,6 +45,9 @@ public class CustomTimePicker extends FrameLayout {
         initView();
     }
 
+    /**
+     * Initialize the layout that contains the datetime picker
+     */
     private void initView() {
         View v = inflate(getContext(), R.layout.custom_time_picker, this);
         hoursPicker = v.findViewById(R.id.hour_picker);
@@ -85,22 +92,46 @@ public class CustomTimePicker extends FrameLayout {
     }
 
 
+    /**
+     * Returns the hours spinner value
+     * @return hours
+     */
     public int getHours(){
         return hoursPicker.getValue();
     }
+
+    /**
+     * Returns the minutes spinner value
+     * @return minutes
+     */
     public int getMinutes(){
         return minutesPicker.getValue();
     }
+
+    /**
+     * Returns the seconds spinner value
+     * @return seconds
+     */
     public int getSeconds(){
         return secondsPicker.getValue();
     }
 
+    /**
+     * Sets each spinner value given the hour, minutes and seconds
+     * @param hours: hours
+     * @param minutes: minutes
+     * @param seconds: seconds
+     */
     public void setTime(int hours, int minutes, int seconds){
         this.hoursPicker.setValue(hours);
         this.minutesPicker.setValue(minutes);
         this.secondsPicker.setValue(seconds);
     }
 
+    /**
+     * Returns the datetime in the format hh:mm:ss
+     * @return datetime in the format hh:mm:ss
+     */
     public String getTime(){
         return hoursPicker.getValue() + ":" + minutesPicker.getValue() + ":" + secondsPicker.getValue();
     }

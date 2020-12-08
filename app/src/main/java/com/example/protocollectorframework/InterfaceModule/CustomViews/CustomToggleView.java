@@ -13,6 +13,9 @@ import androidx.annotation.RequiresApi;
 
 import com.example.protocollectorframework.R;
 
+/**
+ * Custom view for the custom toggle used on the boolean component
+ */
 public class CustomToggleView extends FrameLayout {
 
     private boolean isChecked;
@@ -42,39 +45,9 @@ public class CustomToggleView extends FrameLayout {
         initView();
     }
 
-
-    public boolean isChecked(){
-        return isChecked;
-    }
-
-    public void setChecked(boolean checked){
-        if(checked){
-            positive.setBackground(getResources().getDrawable(R.drawable.custom_toggle_positive_selected));
-            positive.setTextColor(Color.WHITE);
-            negative.setBackground(getResources().getDrawable(R.drawable.custom_toggle_negative));
-            negative.setTextColor(Color.BLACK);
-        }else{
-            negative.setBackground(getResources().getDrawable(R.drawable.custom_toggle_negative_selected));
-            negative.setTextColor(Color.WHITE);
-            positive.setBackground(getResources().getDrawable(R.drawable.custom_toggle_positive));
-            positive.setTextColor(Color.BLACK);
-        }
-        isChecked = checked;
-        isSelected = true;
-    }
-
-    public void deselected(){
-        isSelected = false;
-        positive.setBackground(getResources().getDrawable(R.drawable.custom_toggle_positive));
-        positive.setTextColor(Color.BLACK);
-        negative.setBackground(getResources().getDrawable(R.drawable.custom_toggle_negative));
-        negative.setTextColor(Color.BLACK);
-    }
-
-    public boolean isSelected(){
-        return isSelected;
-    }
-
+    /**
+     * Initialize the layout that contains the buttons for the boolean component
+     */
     private void initView() {
         View v = inflate(getContext(), R.layout.custom_toggle, this);
         positive = v.findViewById(R.id.positive_button);
@@ -115,5 +88,54 @@ public class CustomToggleView extends FrameLayout {
             }
         });
     }
+
+
+    /**
+     * Check the current value of the component
+     * @return true if positive option selected, false otherwise
+     */
+    public boolean isChecked(){
+        return isChecked;
+    }
+
+    /**
+     * Change the selected button based on the argument
+     * @param checked: selection
+     */
+    public void setChecked(boolean checked){
+        if(checked){
+            positive.setBackground(getResources().getDrawable(R.drawable.custom_toggle_positive_selected));
+            positive.setTextColor(Color.WHITE);
+            negative.setBackground(getResources().getDrawable(R.drawable.custom_toggle_negative));
+            negative.setTextColor(Color.BLACK);
+        }else{
+            negative.setBackground(getResources().getDrawable(R.drawable.custom_toggle_negative_selected));
+            negative.setTextColor(Color.WHITE);
+            positive.setBackground(getResources().getDrawable(R.drawable.custom_toggle_positive));
+            positive.setTextColor(Color.BLACK);
+        }
+        isChecked = checked;
+        isSelected = true;
+    }
+
+    /**
+     * Deselected the view, disabling both buttons
+     */
+    public void deselected(){
+        isSelected = false;
+        positive.setBackground(getResources().getDrawable(R.drawable.custom_toggle_positive));
+        positive.setTextColor(Color.BLACK);
+        negative.setBackground(getResources().getDrawable(R.drawable.custom_toggle_negative));
+        negative.setTextColor(Color.BLACK);
+    }
+
+    /**
+     * Checks if the user selected any of the buttons
+     * @return true if the user selected any one of the buttons, false otherwise
+     */
+    public boolean isSelected(){
+        return isSelected;
+    }
+
 
 }
