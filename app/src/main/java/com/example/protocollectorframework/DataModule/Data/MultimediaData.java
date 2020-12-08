@@ -1,5 +1,7 @@
 package com.example.protocollectorframework.DataModule.Data;
 
+import org.jetbrains.annotations.NotNull;
+
 public class MultimediaData {
     private String ID;
     private String type;
@@ -116,9 +118,10 @@ public class MultimediaData {
         this.path = path;
     }
 
+    @NotNull
     public String toString() {
         if(location != null)
             return type + " " + location.getLat() + " " + location.getLng() + " " + location.getElevation() + " " + location.getAccuracy() + " " + location.getSat_number();
         else return type + " " + path;
     }
-    }
+}

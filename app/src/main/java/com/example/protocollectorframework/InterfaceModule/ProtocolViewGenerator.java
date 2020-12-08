@@ -117,10 +117,11 @@ public class ProtocolViewGenerator {
     /**
      * Process the protocol configuration file and extracts the data depending on the plot
      * @param plotData: plot object data
+     * @param protocols_tag: tag associated with the protocols in the extra information of the plot
      * @param protocols_file_path: protocol's configuration file path
      * @return
      */
-    public int processProtocolsForPlot(PlotData plotData, String protocols_file_path) {
+    public int processProtocolsForPlot(PlotData plotData, String protocols_tag, String protocols_file_path) {
 
         int eois = 0;
 
@@ -136,10 +137,13 @@ public class ProtocolViewGenerator {
 
             try {
 
-                String[] mp = plotData.getProtocols();
-                if (mp != null)
-                    mainProtocols = Arrays.asList(mp);
-
+                 JSONArray protocols = plotData.getArrayField(protocols_tag);
+                 if(protocols != null) {
+                     mainProtocols = new ArrayList<>(protocols.length());
+                     for (int i = 0; i < protocols.length(); i++) {
+                         mainProtocols.add(protocols.getString(i));
+                     }
+                 }
 
                 for (int y = 0; y < jsonArray.length(); y++) {
                     JSONObject protocol = jsonArray.getJSONObject(y);

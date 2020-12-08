@@ -10,7 +10,6 @@ public class VisitData implements Serializable {
     private long start_time;
     private long end_time;
     private String eoi_json;
-    private String trap_json;
     private String info_json;
 
     public VisitData(String id, String plot_id, HashMap<String, String> route_path, long start_time, long end_time) {
@@ -21,14 +20,13 @@ public class VisitData implements Serializable {
         this.end_time = end_time;
     }
 
-    public VisitData(String id, String plot_id, HashMap<String, String> route_path, long start_time, long end_time, String eoi_json, String trap_json, String info_json) {
+    public VisitData(String id, String plot_id, HashMap<String, String> route_path, long start_time, long end_time, String eoi_json, String info_json) {
         this.id = id;
         this.plot_id = plot_id;
         this.route_path = route_path;
         this.start_time = start_time;
         this.end_time = end_time;
         this.eoi_json = eoi_json;
-        this.trap_json = trap_json;
         this.info_json = info_json;
     }
 
@@ -46,14 +44,6 @@ public class VisitData implements Serializable {
 
     public void setInfo_json(String info_json) {
         this.info_json = info_json;
-    }
-
-    public String getTrap_json() {
-        return trap_json;
-    }
-
-    public void setTrap_json(String trap_json) {
-        this.trap_json = trap_json;
     }
 
     public String getId() {

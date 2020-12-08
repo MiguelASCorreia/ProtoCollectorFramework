@@ -6,42 +6,22 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
+/**
+ * Object used to save the data associated to the interface components
+ */
 public class ComponentData implements Serializable {
     private int type;
     private String description;
     private String value;
-    private String conflicted_value;
     private String units;
     private SortedSet<String> owners;
 
-
-    public ComponentData(String value){
-        this.description = null;
-        this.value = value;
-        this.owners = new TreeSet<>();
-        units = null;
-        type = ComponentsAPI.COMPONENT_NUMBER;
-    }
-
-    public ComponentData(String description, String value, int type, String owner){
-        this.description = description;
-        this.value = value;
-        this.owners = new TreeSet<>();
-        this.owners.add(owner);
-        units = null;
-        this.type = type;
-    }
-
-    public ComponentData(String value, int type, String owner){
-        this.description = null;
-        this.value = value;
-        this.owners = new TreeSet<>();
-        this.owners.add(owner);
-        units = null;
-        this.type = type;
-    }
-
+    /**
+     * Constructor
+     * @param type: component type identifier
+     * @param description: component description
+     * @param value: component value
+     */
     public ComponentData(int type, String description, String value) {
         this.type = type;
         this.description = description;
@@ -49,6 +29,13 @@ public class ComponentData implements Serializable {
         this.owners = new TreeSet<>();
     }
 
+    /**
+     * Constructor
+     * @param type: component type identifier
+     * @param description: component description
+     * @param value: component value
+     * @param units: value's units
+     */
     public ComponentData(int type, String description, String value, String units) {
         this.type = type;
         this.description = description;
@@ -57,68 +44,110 @@ public class ComponentData implements Serializable {
         this.owners = new TreeSet<>();
     }
 
-    public String getConflicted_value() {
-        return conflicted_value;
-    }
-
-    public void setConflicted_value(String conflicted_value) {
-        this.conflicted_value = conflicted_value;
-    }
-
+    /**
+     * Sets component owners
+     * @param owners: component owners
+     */
     public void setOwners(SortedSet<String> owners) {
         this.owners = owners;
     }
 
+    /**
+     * Sets the only owner of the component
+     * @param owner: component owner
+     */
     public void setOnlyOwner(String owner){
         owners = new TreeSet<>();
         owners.add(owner);
     }
+
+    /**
+     * Returns the component owners
+     * @return component owners
+     */
     public Set<String> getOwners() {
         return owners;
     }
 
-    public void setOwners(TreeSet<String> owners) {
-        this.owners = owners;
-    }
-
+    /**
+     * Adds a new owner to the component
+     * @param owner: new component owner
+     */
     public void addOwner(String owner){
         if(owners != null && owner != null)
             owners.add(owner);
     }
 
-    public void addOwner(Set<String> newOwners){
+    /**
+     * Adds multiple owners to the component
+     * @param newOwners: set of owners
+     */
+
+    public void addOwners(Set<String> newOwners){
         if(owners != null && newOwners != null)
             owners.addAll(newOwners);
     }
 
+    /**
+     * Returns the units associated to the component data
+     * @return units associated to the component data
+     */
     public String getUnits() {
         return units;
     }
 
+    /**
+     * Sets the units of the component data
+     * @param units: units of the component data
+     */
     public void setUnits(String units) {
         this.units = units;
     }
 
+    /**
+     * Returns the component type
+     * @return component type identifier
+     */
     public int getType() {
         return type;
     }
 
+    /**
+     * Sets the component type
+     * @param type: component type identifier
+     */
     public void setType(int type) {
         this.type = type;
     }
 
+    /**
+     * Returns the component description
+     * @return component description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Sets the component description
+     * @param description: component description
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Returns the current value of the component
+     * @return value of the component
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Sets the current value of the component
+     * @param value: value of the component
+     */
     public void setValue(String value) {
         this.value = value;
     }

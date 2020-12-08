@@ -32,7 +32,6 @@ public class VisitTable {
     public static final String VISIT_DELETE_TIME = "Visit_delete_time";
     public static final String VISIT_SYNC = "Visit_sync";
 
-    public static final String VISIT_TRAPS_JSON = "Visit_traps";
     public static final String VISIT_INFO_JSON = "Visit_info";
     public static final String VISIT_EOI_JSON = "Visit_EOI";
 
@@ -58,7 +57,6 @@ public class VisitTable {
                 VISIT_DELETE_TIME + " TEXT, " +
                 VISIT_SYNC + " INTEGER DEFAULT 0," +
                 VISIT_EOI_JSON + " TEXT, " +
-                VISIT_TRAPS_JSON + " TEXT," +
                 VISIT_INFO_JSON + " TEXT," +
                 VISIT_VERSION + " INTEGER DEFAULT 1," +
                 "FOREIGN KEY(" + VISIT_PLOT + ") " + "REFERENCES " + PlotTable.TABLE_NAME + "(" + PlotTable.PLOT_ID + "))";
@@ -179,10 +177,10 @@ public class VisitTable {
     }
 
 
-    public long editVisit(String visit_id, String eoi_json, String trap_json, String info_json){
+    public long editVisit(String visit_id, String eoi_json, String info_json){
         SQLiteDatabase db = this.db.getWritableDatabase();
         try{
-            return edit_visit(visit_id, eoi_json, trap_json,info_json, db);
+            return edit_visit(visit_id, eoi_json,info_json, db);
         }catch(SQLException e){
             Log.e("error", e.toString());
             return -1;
@@ -191,10 +189,10 @@ public class VisitTable {
         }
     }
 
-    public String downloadVisit(List<String> gps_path, String start_time, String end_time, String eoi_json, String trap_json, String info_json, long plot_id, int version){
+    public String downloadVisit(List<String> gps_path, String start_time, String end_time, String eoi_json, String info_json, long plot_id, int version){
         SQLiteDatabase db = this.db.getWritableDatabase();
         try{
-            return downloadVisit(gps_path, start_time, end_time,eoi_json,trap_json,info_json,plot_id,version,db);
+            return downloadVisit(gps_path, start_time, end_time,eoi_json, info_json,plot_id,version,db);
         }catch(SQLException e){
             Log.e("error", e.toString());
             return null;
@@ -203,7 +201,7 @@ public class VisitTable {
         }
     }
 
-    private String downloadVisit(List<String> gps_path, String start_time, String end_time, String eoi_json, String trap_json, String info_json, long plot_id, int version, SQLiteDatabase db){
+    private String downloadVisit(List<String> gps_path, String start_time, String end_time, String eoi_json, String info_json, long plot_id, int version, SQLiteDatabase db){
         try {
             ContentValues cv = new ContentValues();
  //           cv.put(VISIT_ROUTE,gps_path);
@@ -211,7 +209,6 @@ public class VisitTable {
             cv.put(VISIT_START_TIME, start_time);
             cv.put(VISIT_END_TIME,end_time);
             cv.put(VISIT_EOI_JSON,eoi_json);
-            cv.put(VISIT_TRAPS_JSON,trap_json);
             cv.put(VISIT_INFO_JSON,info_json);
             cv.put(VISIT_VERSION,version);
             cv.put(VISIT_SYNC,1);
@@ -271,12 +268,11 @@ public class VisitTable {
 
 
 
-    private long edit_visit(String visit_id, String eoi_json, String trap_json, String info_json, SQLiteDatabase db){
+    private long edit_visit(String visit_id, String eoi_json, String info_json, SQLiteDatabase db){
         try {
             ContentValues cv = new ContentValues();
             cv.put(VISIT_END_TIME, Long.toString(System.currentTimeMillis()));
             cv.put(VISIT_EOI_JSON,eoi_json);
-            cv.put(VISIT_TRAPS_JSON,trap_json);
             cv.put(VISIT_INFO_JSON,info_json);
             cv.put(VISIT_EDIT_TIME, SharedMethods.dateToUTCString(new Date()));
 
@@ -302,7 +298,6 @@ public class VisitTable {
             ContentValues cv = new ContentValues();
             cv.put(VISIT_END_TIME, Long.toString(System.currentTimeMillis()));
             cv.put(VISIT_EOI_JSON,eoi_json);
-            cv.put(VISIT_TRAPS_JSON,trap_json);
             cv.put(VISIT_INFO_JSON,info_json);
 
             return db.update(TABLE_NAME, cv, VISIT_ID + " = ?", new String[]{visit_id});
@@ -391,13 +386,12 @@ public class VisitTable {
             Long start = cursor.getLong(cursor.getColumnIndex(VISIT_START_TIME));
             Long end = cursor.getLong(cursor.getColumnIndex(VISIT_END_TIME));
             String eoi_json = cursor.getString(cursor.getColumnIndex(VISIT_EOI_JSON));
-            String trap_json = cursor.getString(cursor.getColumnIndex(VISIT_TRAPS_JSON));
             String info_json = cursor.getString(cursor.getColumnIndex(VISIT_INFO_JSON));
 
             TrajectoryTable trajectoryTable = new TrajectoryTable(context);
             HashMap<String, String> routes = trajectoryTable.getTrajectories(ID);
 
-            return new VisitData(ID,plot,routes,start,end,eoi_json,trap_json,info_json);
+            return new VisitData(ID,plot,routes,start,end,eoi_json,info_json);
         }catch(Exception e){
             Log.e("error", e.toString());
             return null;

@@ -56,13 +56,12 @@ public class VisitManager {
      * Edits the information of a visit
      * @param visit_id: visit id
      * @param eoi_json: json that contains the registered information from the eois
-     * @param trap_json: json that contains the registered information from the traps
      * @param extra_info: json that contains extra registered information
      * @return true if success, false otherwise
      */
-    public boolean editVisit(String visit_id, String eoi_json, String trap_json, String extra_info){
+    public boolean editVisit(String visit_id, String eoi_json, String extra_info){
         if(mVisitTable != null)
-            return mVisitTable.editVisit(visit_id,eoi_json,trap_json,extra_info) > 0;
+            return mVisitTable.editVisit(visit_id,eoi_json,extra_info) > 0;
         return  false;
     }
     /**
@@ -168,15 +167,14 @@ public class VisitManager {
      * @param start: visit start timestamp
      * @param end: visit end timestamp
      * @param eoi_json: json that contains the registered information from the eois
-     * @param trap_json: json that contains the registered information from the traps
      * @param extra_info: json that contains extra registered information
      * @param plot_id: plot id where visit takes place
      * @param version: visit version
      * @return
      */
-    public String createDownloadedVisit(List<String> paths, String start, String end, String eoi_json, String trap_json, String extra_info, long plot_id, int version){
+    public String createDownloadedVisit(List<String> paths, String start, String end, String eoi_json, String extra_info, long plot_id, int version){
         if(mVisitTable != null)
-            return mVisitTable.downloadVisit(paths,start,end,eoi_json,trap_json,extra_info,plot_id,version);
+            return mVisitTable.downloadVisit(paths,start,end,eoi_json,extra_info,plot_id,version);
         return null;
     }
 
@@ -310,15 +308,15 @@ public class VisitManager {
                 }
             }
 
-            String crops = null;
+            String info = null;
             LocationModule mLocationModule = new LocationModule(context);
             try {
-                crops = mLocationModule.getPlotById(visitData.getPlot_id()).getCulture();
+                info = mLocationModule.getPlotById(visitData.getPlot_id()).getInfo();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            VisitDataForJson v = new VisitDataForJson(visitData.getId(), visitData.getPlot_id(), crops, time_begin, time_end, aux, number_photos, number_voice, visitData.getEoi_json(), visitData.getTrap_json(), visitData.getInfo_json());
+            VisitDataForJson v = new VisitDataForJson(visitData.getId(), visitData.getPlot_id(), info, time_begin, time_end, aux, number_photos, number_voice, visitData.getEoi_json(),visitData.getInfo_json());
 
             return gson.toJson(v);
         }

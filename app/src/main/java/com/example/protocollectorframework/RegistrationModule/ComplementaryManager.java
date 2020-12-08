@@ -182,7 +182,7 @@ public class ComplementaryManager {
         String time_end = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date(end));
 
 
-        ComplementaryDataForJson v = new ComplementaryDataForJson(complementaryData.getId(),complementaryData.getVisit_id(),time_begin,time_end,complementaryData.getEoi_json(),complementaryData.getInfo_json());
+        ComplementaryDataForJson v = new ComplementaryDataForJson(complementaryData.getId(),complementaryData.getVisit_id(),time_begin,time_end,complementaryData.getEoi_json(), complementaryData.getInfo_json());
 
         return gson.toJson(v);
     }
