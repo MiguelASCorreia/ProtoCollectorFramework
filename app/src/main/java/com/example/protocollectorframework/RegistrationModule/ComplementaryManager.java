@@ -175,10 +175,10 @@ public class ComplementaryManager {
     public String complementaryToJson(ComplementaryData complementaryData){
         Gson gson = new Gson();
 
-        long begin = Long.parseLong(complementaryData.getStart_time());
+        long begin = complementaryData.getStart_time();
         String time_begin = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date(begin));
 
-        long end = Long.parseLong(complementaryData.getEnd_time());
+        long end = complementaryData.getEnd_time();
         String time_end = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date(end));
 
 

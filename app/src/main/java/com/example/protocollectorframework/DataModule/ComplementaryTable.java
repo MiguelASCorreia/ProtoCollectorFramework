@@ -318,8 +318,8 @@ public class ComplementaryTable {
             String ID = cursor.getString(cursor.getColumnIndex(COMPLEMENTARY_ID));
 
             String visit_id = cursor.getString(cursor.getColumnIndex(VISIT_ID));
-            String start = cursor.getString(cursor.getColumnIndex(COMPLEMENTARY_START_TIME));
-            String end = cursor.getString(cursor.getColumnIndex(COMPLEMENTARY_END_TIME));
+            long start = cursor.getLong(cursor.getColumnIndex(COMPLEMENTARY_START_TIME));
+            long end = cursor.getLong(cursor.getColumnIndex(COMPLEMENTARY_END_TIME));
             String eoi_json = cursor.getString(cursor.getColumnIndex(COMPLEMENTARY_EOI_JSON));
             String info_json = cursor.getString(cursor.getColumnIndex(COMPLEMENTARY_INFO_JSON));
 

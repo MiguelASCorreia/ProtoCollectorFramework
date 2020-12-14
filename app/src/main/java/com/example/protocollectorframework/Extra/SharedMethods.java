@@ -15,9 +15,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * Class that stores methods that do not fit in any of the other modules
+ */
 public class SharedMethods {
 
 
+    /**
+     * Returns the device id. If there is a google account associeted, the device id is equals to the user name of that account, otherwise the id is build by joining the device build model number with a secure Android unique id
+     * @param context
+     * @return
+     */
     @SuppressLint("HardwareIds")
     public static String getMyId(Context context){
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
@@ -29,17 +37,27 @@ public class SharedMethods {
     }
 
 
+    /**
+     * Converts a date to a string in the format yyyy-MM-dd HH:mm:ss.SSS with the UTC time zone
+     * @param date: desired date
+     * @return string formatted date
+     */
 
-    public static String dateToUTCString(Date d){
-        if(d == null)
+    public static String dateToUTCString(Date date){
+        if(date == null)
             return null;
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        return dateFormat.format(d);
+        return dateFormat.format(date);
     }
 
+    /**
+     * Create an external directory associated to the framework
+     * @param folder_name: directory name
+     * @return created directory file
+     */
 
     public static File createDirectories(String folder_name){
         boolean success = true;
@@ -62,6 +80,11 @@ public class SharedMethods {
 
     }
 
+    /**
+     * Shows a long length toast on the context
+     * @param context: desired context
+     * @param text: text to show on toast
+     */
     public static void showToast(Context context, String text){
         Toast.makeText(context, text, Toast.LENGTH_LONG).show();
     }

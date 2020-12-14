@@ -2,8 +2,11 @@ package com.example.protocollectorframework.DataModule.Data;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Object that stores the information associated to the multimedia files
+ */
 public class MultimediaData {
-    private String ID;
+    private String id;
     private String type;
     private String path;
     private long timestamp;
@@ -11,11 +14,19 @@ public class MultimediaData {
     private String description;
     private String owner;
 
-    public MultimediaData(){}
-
+    /**
+     * Constructor
+     * @param ID: multimedia file identifier
+     * @param type: multimedia file type identifier
+     * @param path: multimedia file external path
+     * @param timestamp: multimedia file creation timestamp in milliseconds
+     * @param location: associated location
+     * @param description: multimedia file description
+     * @param owner: multimedia file owner's identifier
+     */
 
     public MultimediaData(String ID, String type, String path, long timestamp, LocationData location, String description, String owner) {
-        this.ID = ID;
+        this.id = ID;
         this.type = type;
         this.path = path;
         this.location = location;
@@ -24,17 +35,13 @@ public class MultimediaData {
         this.owner = owner;
     }
 
-
-    public MultimediaData(String ID, String type, String path, long timestamp, LocationData location, String description) {
-        this.ID = ID;
-        this.type = type;
-        this.path = path;
-        this.location = location;
-        this.timestamp = timestamp;
-        this.description = description;
-    }
-
-
+    /**
+     * Constructor
+     * @param owner: multimedia file owner's identifier
+     * @param type: multimedia file type identifier
+     * @param path: multimedia file external path
+     * @param location: associated location
+     */
     public MultimediaData(String owner, String type, String path, LocationData location) {
         this.type = type;
         this.path = path;
@@ -44,6 +51,13 @@ public class MultimediaData {
         this.owner = owner;
     }
 
+    /**
+     * Constructor
+     * @param type: multimedia file type identifier
+     * @param path: multimedia file external path
+     * @param location: associated location
+     * @param description: multimedia file description
+     */
     public MultimediaData(String type, String path, LocationData location, String description) {
         this.type = type;
         this.path = path;
@@ -53,67 +67,114 @@ public class MultimediaData {
     }
 
 
-    public MultimediaData(String type, String path, String description) {
-        this.type = type;
-        this.path = path;
-        this.description = description;
-        this.location = null;
-        this.timestamp = 0;
-    }
-
-
+    /**
+     * Returns the file's owner identifier
+     * @return owner identifier
+     */
     public String getOwner() {
         return owner;
     }
 
+    /**
+     * Sets the file owner
+     * @param owner: owner's identifier
+     */
     public void setOwner(String owner) {
         this.owner = owner;
     }
 
+    /**
+     * Returns the file description
+     * @return file's description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Sets the file description
+     * @param description: file's description
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Returns the file identifier
+     * @return file's identifier
+     */
     public String getID() {
-        return ID;
+        return id;
     }
 
+    /**
+     * Sets the file identifier
+     * @param ID: file's identifier
+     */
     public void setID(String ID) {
-        this.ID = ID;
+        this.id = ID;
     }
 
+    /**
+     * Returns the file's creation timestamp in milliseconds
+     * @return creation timestamp in milliseconds
+     */
     public long getTimestamp() {
         return timestamp;
     }
 
+    /**
+     * Sets the file's creation timestamp in milliseconds
+     * @param timestamp: creation timestamp in milliseconds
+     */
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
+    /**
+     * Returns the file's geographical location
+     * @return file's geographical location
+     */
     public LocationData getLocation() {
         return location;
     }
 
+    /**
+     * Sets the file's geographical location
+     * @param location: file's geographical location
+     */
     public void setLocation(LocationData location) {
         this.location = location;
     }
 
+    /**
+     * Returns the file's type identifier
+     * @return file's type identifier
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Sets the file's type identifier
+     * @param type: file's type identifier
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Returns the file's external storage path
+     * @return file's external storage path
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Sets the file's external storage path
+     * @param path: file's external storage path
+     */
     public void setPath(String path) {
         this.path = path;
     }

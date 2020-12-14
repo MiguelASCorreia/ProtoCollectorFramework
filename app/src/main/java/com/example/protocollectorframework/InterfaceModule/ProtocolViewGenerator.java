@@ -329,7 +329,7 @@ public class ProtocolViewGenerator {
                 finalValues = temp_values.toArray(new String[0]);
             }
 
-            return new ComponentBuildInfo(type, units, label, value_type, min, max, finalValues, temporal_type, ob_name, protocol,firstValues,lastValues,unique);
+            return new ComponentBuildInfo(type, units, label, value_type, min, max, finalValues, temporal_type, firstValues,lastValues,unique,ob_name, protocol);
         }catch (Exception e){
             e.printStackTrace();
             return null;

@@ -58,6 +58,9 @@ public class ComponentsAPI {
     public static final String TYPE_DATE  = "date";
     public static final String TYPE_TIME = "datetime";
 
+    public static final String TYPE_REAL = "real";
+    public static final String TYPE_INTEGER = "integer";
+
     private Context context;
     private static boolean saveValues;
     private Handler incomingHandler;
@@ -272,7 +275,7 @@ public class ComponentsAPI {
         String value_type = buildInfo.getValue_type();
         int min = buildInfo.getMin();
         int max = buildInfo.getMax();
-        String[] values = buildInfo.getFinalValues();
+        String[] values = buildInfo.getCountValues();
         String temporal_type = buildInfo.getTemporalType();
         String units = buildInfo.getUnits();
         String observation_name = buildInfo.getObservation_name();
@@ -444,7 +447,7 @@ public class ComponentsAPI {
 
         et.setFilters(new InputFilter[]{ new EditTextInputFilter(min, max),new InputFilter.LengthFilter(8)});
 
-        if(value_type.equals("real"))
+        if(value_type.equals(TYPE_REAL))
             et.setInputType(min < 0 || max < 0 ? InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED: InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         else{
             et.setInputType(min < 0 || max < 0 ? InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED : InputType.TYPE_CLASS_NUMBER);
