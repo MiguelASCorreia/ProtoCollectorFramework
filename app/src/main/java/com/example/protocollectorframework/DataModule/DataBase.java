@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * Database class
+ */
 
 public class DataBase extends SQLiteOpenHelper {
 
@@ -12,11 +15,19 @@ public class DataBase extends SQLiteOpenHelper {
 
     private Context context;
 
+    /**
+     * Constructor
+     * @param context: current context
+     */
     public DataBase(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
         this.context = context;
     }
 
+    /**
+     * Creates all the tables
+     * @param sqLiteDatabase: SQLite database
+     */
     private void createTables(SQLiteDatabase sqLiteDatabase) {
         PlotTable.createTable(sqLiteDatabase);
         VisitTable.createTable(sqLiteDatabase);

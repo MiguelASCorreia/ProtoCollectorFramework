@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * Database table that stores logs from data exchange between devices
+ */
 public class BluetoothSyncTable {
     protected static final String TABLE_NAME = "Bluetooth_sync_table";
     protected static final String SYNC_ID = "_id";
@@ -26,10 +29,18 @@ public class BluetoothSyncTable {
 
     private DataBase db;
 
+    /**
+     * Constructor
+     * @param context: current context
+     */
     public BluetoothSyncTable(Context context){
         db = new DataBase(context);
     }
 
+    /**
+     * Creates the table
+     * @param sqLiteDatabase: SQLite database
+     */
     protected static void createTable(SQLiteDatabase sqLiteDatabase) {
         String createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + SYNC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 VISIT_ID + " INTEGER, " +
@@ -40,13 +51,23 @@ public class BluetoothSyncTable {
         sqLiteDatabase.execSQL(createTable);
     }
 
+    /**
+     * Drops the table
+     * @param sqLiteDatabase: SQLite database
+     */
     protected static void dropTable(SQLiteDatabase sqLiteDatabase) {
         String drop = "DROP TABLE IF EXISTS ";
         sqLiteDatabase.execSQL(drop + TABLE_NAME);
     }
 
-
-
+    /**
+     * Creates a new log
+     * @param visit_id: visit where the data exchange took place
+     * @param timestamp: data exchange timestamp
+     * @param partner: identifier of the source that sent the data
+     * @param endVisitSync: flag that indicates the termination of the visit
+     * @return log identifier
+     */
     public long addSyncLog(String visit_id, long timestamp, String partner, boolean endVisitSync){
         SQLiteDatabase db = this.db.getWritableDatabase();
         try{
@@ -59,7 +80,15 @@ public class BluetoothSyncTable {
         }
     }
 
-
+    /**
+     * Creates a new log
+     * @param visit_id: visit where the data exchange took place
+     * @param timestamp: data exchange timestamp
+     * @param partner: identifier of the source that sent the data
+     * @param endVisitSync: flag that indicates the termination of the visit
+     * @param db: SQLite database
+     * @return log identifier
+     */
     private long addSyncLog(String visit_id, long timestamp, String partner, boolean endVisitSync, SQLiteDatabase db){
         if(visit_id == null || db == null)
             return -1;
@@ -80,6 +109,11 @@ public class BluetoothSyncTable {
     }
 
 
+    /**
+     * Fetchs all the logs associated to a visit
+     * @param id: visit identifier
+     * @return list of logs
+     */
     public List<BluetoothSyncData> getSyncsForVisit(String id){
         java.util.List<BluetoothSyncData> list = new ArrayList<BluetoothSyncData>();
 
@@ -107,6 +141,11 @@ public class BluetoothSyncTable {
         }
     }
 
+    /**
+     * Fetch the data associated with a certain log, given a cursor
+     * @param cursor: query's cursor
+     * @return log data
+     */
     private BluetoothSyncData getSyncLog(Cursor cursor){
         if(cursor == null || cursor.getCount() == 0) {
             return null;
@@ -124,6 +163,11 @@ public class BluetoothSyncTable {
     }
 
 
+    /**
+     * Returns the formatted date given a timestamp in milliseconds
+     * @param milliSeconds: timestamp in milliseconds
+     * @return date string in the format yyyy/MM/dd hh:mm:ss.SSS
+     */
     public static String getLogFormatDate(long milliSeconds){
         @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss.SSS");
         Calendar calendar = Calendar.getInstance();

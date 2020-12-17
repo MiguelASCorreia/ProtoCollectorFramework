@@ -102,7 +102,7 @@ public class ComplementaryManager {
      */
     public boolean finishComplementary(String complementary_id, String eoi_json, String extra_info){
         if(mComplementaryTable != null)
-            return mComplementaryTable.finishComplementary(complementary_id,eoi_json,extra_info) > 0;
+            return mComplementaryTable.finishComplementary(complementary_id,eoi_json,extra_info);
         return false;
     }
 

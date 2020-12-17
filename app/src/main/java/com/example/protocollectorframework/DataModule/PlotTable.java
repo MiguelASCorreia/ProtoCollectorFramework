@@ -17,7 +17,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * Database table that stores the information associated to the plots
+ */
 public class PlotTable {
 
     public static final String TABLE_NAME = "Plot_table";
@@ -36,10 +38,18 @@ public class PlotTable {
 
     private DataBase db;
 
+    /**
+     * Constructor
+     * @param context: current context
+     */
     public PlotTable(Context context){
         db = new DataBase(context);
     }
 
+    /**
+     * Creates the table
+     * @param sqLiteDatabase: SQLite database
+     */
     protected static void createTable(SQLiteDatabase sqLiteDatabase) {
         String createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + PLOT_ID + " INTEGER PRIMARY KEY, " +
                 PLOT_ACRONYM + " TEXT, " +
@@ -54,25 +64,20 @@ public class PlotTable {
         sqLiteDatabase.execSQL(createTable);
     }
 
+    /**
+     * Drops the table
+     * @param sqLiteDatabase: SQLite database
+     */
     protected static void dropTable(SQLiteDatabase sqLiteDatabase) {
         String drop = "DROP TABLE IF EXISTS ";
         sqLiteDatabase.execSQL(drop + TABLE_NAME);
     }
 
-    public void deleteAllViaFlag(){
-        SQLiteDatabase db = this.db.getWritableDatabase();
-        try {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(PLOT_DELETE_TIME, SharedMethods.dateToUTCString(new Date()));
 
-            db.update(TABLE_NAME, contentValues, null, null);
-        }catch(SQLException e){
-            Log.e("error", e.toString());
-        }finally {
-            db.close();
-        }
-    }
-
+    /**
+     * Tags the desired plot as deleted via the deletion timestamp
+     * @param id: plot's identifier
+     */
     public void deletePlotViaFlag(String id){
         SQLiteDatabase db = this.db.getWritableDatabase();
         try {
@@ -87,6 +92,12 @@ public class PlotTable {
         }
     }
 
+    /**
+     * Edits the information of a plot
+     * @param id: plot's identifier
+     * @param info: JSON string containing plot's information
+     * @param acronym: plot's acronym
+     */
     public void editInfo(String id, String info, String acronym){
         SQLiteDatabase db = this.db.getWritableDatabase();
         try {
@@ -103,7 +114,15 @@ public class PlotTable {
         }
     }
 
-
+    /**
+     * Edits the information of a plot
+     * @param id: plot's identifier
+     * @param info: JSON string containing plot's information
+     * @param acronym: plot's acronym
+     * @param polygon: GeoJSON string containing plot's limits
+     * @param lat: center point latitude
+     * @param ln: center point longitude
+     */
     public void editInfo(String id, String info, String acronym, String polygon, double lat, double ln){
         SQLiteDatabase db = this.db.getWritableDatabase();
         try {
@@ -124,7 +143,11 @@ public class PlotTable {
     }
 
 
-
+    /**
+     * Fetch a plot given a cursor
+     * @param cursor: query's cursor
+     * @return plot data object
+     */
     private PlotData getPlot(Cursor cursor){
         if(cursor == null || cursor.getCount() == 0) {
             return null;
@@ -162,6 +185,11 @@ public class PlotTable {
         }
     }
 
+    /**
+     * Fetch the information of a plot given it's identifier
+     * @param id: plot's identifier
+     * @return plot object data
+     */
     public PlotData getPlotById(String id){
         SQLiteDatabase db = this.db.getReadableDatabase();
         Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_NAME + " WHERE " + PLOT_ID + " =?", new String[]{id} );
@@ -179,21 +207,10 @@ public class PlotTable {
         }
     }
 
-    public PlotData getPlotById(String id, SQLiteDatabase db){
-        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_NAME + " WHERE " + PLOT_ID + " =?", new String[]{id} );
-        try {
-            res.moveToFirst();
-
-            return getPlot(res);
-
-        }catch(SQLException e){
-            Log.e("error", e.toString());
-            return null;
-        }finally {
-            res.close();
-        }
-    }
-
+    /**
+     * Fetch all plots in the table that are not tagged as deleted, ordered by name
+     * @return list of all plots
+     */
     public List<PlotData> getPlots() {
         List<PlotData> array_list = new ArrayList<PlotData>();
         SQLiteDatabase db = this.db.getReadableDatabase();
@@ -216,6 +233,10 @@ public class PlotTable {
         }
     }
 
+    /**
+     * Fetch the identifiers of all existing plots that are not tagged as deleted
+     * @return list of identifiers
+     */
     public List<String> getPlotsIds() {
         List<String> array_list = new ArrayList<String>();
         SQLiteDatabase db = this.db.getReadableDatabase();
@@ -238,6 +259,10 @@ public class PlotTable {
         }
     }
 
+    /**
+     * Fetch all plots in the table ordered by name
+     * @return list of all plots
+     */
     public List<PlotData> getPlotsForSelection() {
         List<PlotData> array_list = new ArrayList<PlotData>();
         SQLiteDatabase db = this.db.getReadableDatabase();
@@ -261,11 +286,16 @@ public class PlotTable {
     }
 
 
-
-    public boolean addPlot(PlotData p, String json_limits){
+    /**
+     * Creates a new plot
+     * @param plotData: plot object data
+     * @param polygon: GeoJSON string containing plot's limits
+     * @return true if created with success, false otherwise
+     */
+    public boolean addPlot(PlotData plotData, String polygon){
         SQLiteDatabase db = this.db.getWritableDatabase();
         try{
-            return  addPlot(p,json_limits, db);
+            return  addPlot(plotData,polygon, db);
         }catch(Exception e){
             Log.e("error", e.toString());
             return false;
@@ -274,37 +304,50 @@ public class PlotTable {
         }
     }
 
-    public boolean addPlot(PlotData p, String json_limits, String fruits, String protocols, SQLiteDatabase db){
-        try{
-            JSONObject jsonObject = new JSONObject();
-            JSONArray aux_culture = new JSONArray();
-            JSONArray aux_protocols = new JSONArray();
 
-            aux_culture.put(fruits);
+    /**
+     * Creates a new plot
+     * @param plotData: plot object data
+     * @param polygon: GeoJSON string containing plot's limits
+     * @param db: SQLite database
+     * @return true if created with success, false otherwise
+     */
+    private boolean addPlot(PlotData plotData, String polygon, SQLiteDatabase db){
+        if(plotData == null || db == null)
+            return false;
 
-            if(protocols != null){
-                try{
-                    String[] aux = protocols.split(",");
-                    for(int i = 0 ; i< aux.length; i++){
-                        aux_protocols.put(aux[i]);
-                    }
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put(PLOT_ID, Long.parseLong(plotData.getID()));
+            cv.put(PLOT_NAME, plotData.getName());
+            cv.put(PLOT_ACRONYM,plotData.getAcronym());
+            cv.put(PLOT_POLYGON, polygon);
 
-                }catch (Exception ignores){}
+            cv.put(PLOT_CENTER_LAT, plotData.getCenter().getLat());
+            cv.put(PLOT_CENTER_LN, plotData.getCenter().getLng());
+
+            cv.put(PLOT_INFO,plotData.getInfo());
+
+
+            long result = db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+
+            if (result == -1) {
+                return false;
+            } else {
+                return true;
             }
-
-            jsonObject.put("enemies",aux_protocols);
-            jsonObject.put("cultures",aux_culture);
-
-            p.setInfo(jsonObject.toString());
-
-            return  addPlot(p,json_limits, db);
-
         }catch(Exception e){
             Log.e("error", e.toString());
             return false;
         }
     }
 
+
+    /**
+     * Fetch the edition timestamp of a given plot
+     * @param plot_id: plot's identifier
+     * @return edition timestamp
+     */
     public String getPlotEditTime(String plot_id){
         SQLiteDatabase db = this.db.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT + " + PLOT_EDIT_TIME + " FROM " + TABLE_NAME + " WHERE " + PLOT_ID + " = ?", new String[]{plot_id});
@@ -325,36 +368,6 @@ public class PlotTable {
         return  null;
     }
 
-
-    private boolean addPlot(PlotData p, String json_limits, SQLiteDatabase db){
-        if(p == null || db == null)
-            return false;
-
-        try {
-            ContentValues cv = new ContentValues();
-            cv.put(PLOT_ID, Long.parseLong(p.getID()));
-            cv.put(PLOT_NAME, p.getName());
-            cv.put(PLOT_ACRONYM,p.getAcronym());
-            cv.put(PLOT_POLYGON, json_limits);
-
-            cv.put(PLOT_CENTER_LAT, p.getCenter().getLat());
-            cv.put(PLOT_CENTER_LN, p.getCenter().getLng());
-
-            cv.put(PLOT_INFO,p.getInfo());
-
-
-            long result = db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-
-            if (result == -1) {
-                return false;
-            } else {
-                return true;
-            }
-        }catch(Exception e){
-            Log.e("error", e.toString());
-            return false;
-        }
-    }
 
 
 

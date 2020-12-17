@@ -12,9 +12,11 @@ import com.example.protocollectorframework.DataModule.Data.LocationData;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Database table that stores the information associated to the points that constitute trajectory's segments
+ */
 public class TrajectoryPointTable {
     public static final String TABLE_NAME = "Trajectory_point_table";
-
     public static final String POINT_ID = "_id";
     public static final String SEGMENT_ID = "Segment_id";
     public static final String POINT_TIMESTAMP = "Point_timestamp";
@@ -24,16 +26,23 @@ public class TrajectoryPointTable {
     public static final String POINT_ACCURACY = "Point_acc";
     public static final String POINT_SAT = "Point_sat";
 
-
     private Context context;
 
     private DataBase db;
 
+    /**
+     * Constructor
+     * @param context: current context
+     */
     public TrajectoryPointTable(Context context){
         db = new DataBase(context);
         this.context = context;
     }
 
+    /**
+     * Creates the table
+     * @param sqLiteDatabase: SQLite database
+     */
     protected static void createTable(SQLiteDatabase sqLiteDatabase) {
         String createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + POINT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 SEGMENT_ID + " INTEGER, " +
@@ -49,11 +58,21 @@ public class TrajectoryPointTable {
         sqLiteDatabase.execSQL(createTable);
     }
 
+    /**
+     * Drops the table
+     * @param sqLiteDatabase: SQLite database
+     */
     protected static void dropTable(SQLiteDatabase sqLiteDatabase) {
         String drop = "DROP TABLE IF EXISTS ";
         sqLiteDatabase.execSQL(drop + TABLE_NAME);
     }
 
+    /**
+     * Adds a new point to the table
+     * @param segment_id: segment's identifier
+     * @param locationData: location data object associated to the point
+     * @return point's identifier
+     */
     public long addPoint(String segment_id, LocationData locationData){
         SQLiteDatabase db = this.db.getWritableDatabase();
         try{
@@ -66,7 +85,13 @@ public class TrajectoryPointTable {
         }
     }
 
-
+    /**
+     * Adds a new point to the table
+     * @param segment_id: segment's identifier
+     * @param locationData: location data object associated to the point
+     * @param db: SQLite database
+     * @return point's identifier
+     */
     private long addPoint(String segment_id, LocationData locationData, SQLiteDatabase db){
         if(segment_id == null || locationData == null || db == null)
             return -1;
@@ -90,7 +115,11 @@ public class TrajectoryPointTable {
         }
     }
 
-
+    /**
+     * Fetch the all the points from a given trajectory
+     * @param trajectory_id: trajectory's identifier
+     * @return list of points associated to the given trajectory
+     */
     public List<LocationData> getPointsFromTrajectory(String trajectory_id){
         java.util.List<LocationData> list = new ArrayList<LocationData>();
 
@@ -127,7 +156,11 @@ public class TrajectoryPointTable {
         }
     }
 
-
+    /**
+     * Fetch the information associated to a point given a cursor
+     * @param cursor: query's cursor
+     * @return location data object associated to the point
+     */
     protected LocationData getPoint(Cursor cursor){
         if(cursor == null || cursor.getCount() == 0) {
             return null;

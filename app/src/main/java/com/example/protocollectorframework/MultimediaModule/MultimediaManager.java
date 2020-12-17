@@ -169,7 +169,7 @@ public class MultimediaManager implements Serializable {
      */
     public void addMultimediaToVisit(MultimediaData md, String visit_id){
         if(mMultimediaTable != null)
-            mMultimediaTable.receiveFile(md,visit_id);
+            mMultimediaTable.addFile(md,visit_id,1);
     }
 
     /**
@@ -445,14 +445,14 @@ public class MultimediaManager implements Serializable {
                     LocationData locationData = new LocationData(lat, ln, timeStamp, ele, accuracy, sat);
                     for(MultimediaData multimediaData : multimediaFiles){
                         if(multimediaData.getPath().equals(path)){
-                            mMultimediaTable.addFile(new MultimediaData(type, path, locationData,multimediaData.getDescription()), visit_id);
+                            mMultimediaTable.addFile(new MultimediaData(type, path, locationData,multimediaData.getDescription()), visit_id,0);
                             multimediaFiles.remove(multimediaData);
                             break;
                         }
                     }
                 }
                 for(MultimediaData multimedia : multimediaFiles) {
-                    mMultimediaTable.addFile(multimedia, visit_id);
+                    mMultimediaTable.addFile(multimedia, visit_id,0);
                 }
                 fileInputStream.close();
             } catch (Exception e) {
@@ -462,7 +462,7 @@ public class MultimediaManager implements Serializable {
         }
         else{
             for(MultimediaData multimedia : multimediaFiles) {
-                mMultimediaTable.addFile(multimedia, visit_id);
+                mMultimediaTable.addFile(multimedia, visit_id,0);
             }
         }
 
@@ -499,7 +499,7 @@ public class MultimediaManager implements Serializable {
                     fos = new FileOutputStream(photo.getPath());
                     fos.write(bytes);
                     fos.close();
-                    long id = mMultimediaTable.addFile(new MultimediaData(SharedMethods.getMyId(context),PHOTO,photo.getPath(),mLastKnownLocation),actualVisit);
+                    long id = mMultimediaTable.addFile(new MultimediaData(SharedMethods.getMyId(context),PHOTO,photo.getPath(),mLastKnownLocation),actualVisit,0);
                     if (id == -1)
                         return null;
                     return Long.toString(id);
@@ -574,7 +574,7 @@ public class MultimediaManager implements Serializable {
         if(currentRecord != null && recorder != null) {
             recorder.stop();
             recorder.reset();
-            long id = mMultimediaTable.addFile(new MultimediaData(SharedMethods.getMyId(context),RECORD, currentRecord, mLastKnownLocation), actualVisit);
+            long id = mMultimediaTable.addFile(new MultimediaData(SharedMethods.getMyId(context),RECORD, currentRecord, mLastKnownLocation), actualVisit,0);
             currentRecord = null;
             if(id == -1)
                 return null;
