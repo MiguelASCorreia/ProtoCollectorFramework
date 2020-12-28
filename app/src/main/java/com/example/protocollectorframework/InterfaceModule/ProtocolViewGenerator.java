@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.protocollectorframework.DataModule.Data.ComponentBuildInfo;
 import com.example.protocollectorframework.DataModule.Data.ComponentView;
+import com.example.protocollectorframework.DataModule.Data.HelperData;
 import com.example.protocollectorframework.DataModule.Data.PlotData;
 import com.example.protocollectorframework.RegistrationModule.ConfigurationManager;
 
@@ -14,7 +15,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +37,7 @@ public class ProtocolViewGenerator {
     private HashMap<String, HashMap<String, List<ComponentView>>> viewsPerProtocol;
     private HashMap<String, List<ComponentBuildInfo>> generalObservations;
     private HashMap<String, HashMap<String, List<Integer>>> limitedObservations;
+    private HashMap<String, HashMap<String, List<HelperData>>> helpersPerProtocol;
 
     private ComponentsAPI mComponentAPI;
 
@@ -60,7 +61,7 @@ public class ProtocolViewGenerator {
 
     /**
      * Returns the main protocols for the given plot
-     * @return
+     * @return main protocols for the given plot
      */
     public List<String> getMainProtocols() {
         return mainProtocols;
@@ -115,11 +116,19 @@ public class ProtocolViewGenerator {
     }
 
     /**
+     * Returns the list of helpers associated to an observation for each protocol. Helpers are used to teach the user how to proceed for a given observation
+     * @return  list of helpers associated to an observation for each protocol
+     */
+    public HashMap<String, HashMap<String, List<HelperData>>> getHelpersPerProtocol() {
+        return helpersPerProtocol;
+    }
+
+    /**
      * Process the protocol configuration file and extracts the data depending on the plot
      * @param plotData: plot object data
      * @param protocols_tag: tag associated with the protocols in the extra information of the plot
      * @param protocols_file_path: protocol's configuration file path
-     * @return
+     * @return count of total EOIs
      */
     public int processProtocolsForPlot(PlotData plotData, String protocols_tag, String protocols_file_path) {
 
@@ -134,6 +143,7 @@ public class ProtocolViewGenerator {
             protocolsByTag = new HashMap<>(jsonArray.length());
             numberOfEOIsPerProtocol = new HashMap<>(jsonArray.length());
             typeOfEOIsPerProtocol = new HashMap<>(jsonArray.length());
+            helpersPerProtocol = new HashMap<>(jsonArray.length());
 
             try {
 
@@ -210,6 +220,25 @@ public class ProtocolViewGenerator {
 
 
                 }
+
+                if(ob.has("helper")){
+                    JSONArray array = ob.optJSONArray("helper");
+                    for(int l = 0; l < array.length(); l++){
+                        JSONObject helper = array.getJSONObject(l);
+                        HelperData helperData;
+                        if(helper.has("extra"))
+                            helperData = new HelperData(helper.getInt("position"),helper.getString("title"), helper.getString("message"),helper.getString("extra"));
+                        else
+                            helperData = new HelperData(helper.getInt("position"),helper.getString("title"), helper.getString("message"));
+
+                        if(!helpersPerProtocol.containsKey(protocol))
+                            helpersPerProtocol.put(protocol,new HashMap<>());
+                        if(!helpersPerProtocol.get(protocol).containsKey(name))
+                            helpersPerProtocol.get(protocol).put(name,new ArrayList<>());
+                        helpersPerProtocol.get(protocol).get(name).add(helperData);
+                    }
+                }
+
                 for (int z = 0; z < iterations.length(); z++) {
                     JSONObject iteration_obj = iterations.getJSONObject(z);
 
