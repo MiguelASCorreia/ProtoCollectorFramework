@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.example.protocollectorframework.DataModule.Data.ComponentBuildInfo;
+import com.example.protocollectorframework.DataModule.Data.ComponentData;
 import com.example.protocollectorframework.DataModule.Data.ComponentView;
 import com.example.protocollectorframework.DataModule.Data.HelperData;
 import com.example.protocollectorframework.DataModule.Data.PlotData;
@@ -49,6 +50,32 @@ public class ProtocolViewGenerator {
     public ProtocolViewGenerator(Context context, Handler incomingHandler){
         this.context = context;
         this.mComponentAPI = new ComponentsAPI(context,incomingHandler);
+    }
+
+    /**
+     * Changes the flag that indicates if the values must be sent to the activity handler after the view change
+     * @param flag: true if value must be sent
+     */
+    public void setOnChangeFlag(boolean flag){
+        this.mComponentAPI.setSaveValues(flag);
+    }
+
+    /**
+     * Returns the component data associated to the previously generated view
+     * @param cv: desired component view
+     * @return component data associated to the interface view
+     */
+    public ComponentData getComponent(ComponentView cv){
+        return this.mComponentAPI.getComponent(cv);
+    }
+
+    /**
+     * Sets the component view value based on the corresponding component data
+     * @param cd: corresponding component data
+     * @param cv: desired component view
+     */
+    public void setComponentValue(ComponentData cd, ComponentView cv){
+        this.mComponentAPI.setComponentValue(cd,cv);
     }
 
     /**
@@ -301,13 +328,19 @@ public class ProtocolViewGenerator {
                     if (offset_value.charAt(0) == '(' && offset_value.charAt(offset_value.length() - 1) == ')') {
                         String aux = offset_value.replace("(", "").replace(")", "");
                         String[] tuple = aux.split(",");
-                        try {
-                            int first_value = Integer.parseInt(tuple[0]);
-                            int last_value = Integer.parseInt(tuple[1]);
-                            int step = Integer.parseInt(tuple[2]);
-                            for (int m = first_value; m <= last_value; m += step) {
-                                temp_values.add(Integer.toString(m));
-
+                        try{
+                            if(value_type == null || value_type.equals("integer")) {
+                                int first_value = Integer.parseInt(tuple[0]);
+                                int last_value = Integer.parseInt(tuple[1]);
+                                int step = Integer.parseInt(tuple[2]);
+                                for (int m = first_value; m <= last_value; m += step)
+                                    temp_values.add(Integer.toString(m));
+                            }else{
+                                double first_value = Double.parseDouble(tuple[0]);
+                                double last_value = Double.parseDouble(tuple[1]);
+                                double step =Double.parseDouble(tuple[2]);
+                                for (double m = first_value; m <= last_value; m += step)
+                                    temp_values.add(Double.toString(m));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
