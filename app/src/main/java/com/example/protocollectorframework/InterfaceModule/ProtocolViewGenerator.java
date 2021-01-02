@@ -127,15 +127,15 @@ public class ProtocolViewGenerator {
      * Process the protocol configuration file and extracts the data depending on the plot
      * @param plotData: plot object data
      * @param protocols_tag: tag associated with the protocols in the extra information of the plot
-     * @param protocols_file_path: protocol's configuration file path
+     * @param protocols_file_name: protocol's configuration file name
      * @return count of total EOIs
      */
-    public int processProtocolsForPlot(PlotData plotData, String protocols_tag, String protocols_file_path) {
+    public int processProtocolsForPlot(PlotData plotData, String protocols_tag, String protocols_file_name) {
 
         int eois = 0;
 
         ConfigurationManager cf = new ConfigurationManager(context);
-        JSONArray jsonArray = cf.readProtocols(protocols_file_path);
+        JSONArray jsonArray = cf.readProtocols(protocols_file_name);
 
         if (jsonArray != null) {
 
