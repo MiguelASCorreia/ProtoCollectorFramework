@@ -32,7 +32,6 @@ public class ProtocolViewGenerator {
     private HashMap<String, JSONObject> protocolsByTag;
     private List<String> mainProtocols;
     private HashMap<String, Integer> numberOfEOIsPerProtocol;
-    private HashMap<String, String> typeOfEOIsPerProtocol;
 
     private SortedSet<String> hiddenProtocols;
     private HashMap<String, HashMap<String, List<ComponentView>>> viewsPerProtocol;
@@ -102,13 +101,6 @@ public class ProtocolViewGenerator {
         return numberOfEOIsPerProtocol;
     }
 
-    /**
-     * Returns the name of the EOIs associated with each protocol
-     * @return structure that maps each protocol name to the corresponding EOI count
-     */
-    public HashMap<String, String> getTypeOfEOIsPerProtocol() {
-        return typeOfEOIsPerProtocol;
-    }
 
     /**
      * Returns the protocols that are not enabled on the current type of the year
@@ -155,9 +147,10 @@ public class ProtocolViewGenerator {
      * @param plotData: plot object data
      * @param protocols_tag: tag associated with the protocols in the extra information of the plot
      * @param protocols_file_name: protocol's configuration file name
+     * @param eoi_type: EOIs name type, used to filter the protocols for those EOIs
      * @return count of total EOIs
      */
-    public int processProtocolsForPlot(PlotData plotData, String protocols_tag, String protocols_file_name) {
+    public int processProtocolsForPlot(PlotData plotData, String protocols_tag, String protocols_file_name, String eoi_type) {
 
         int eois = 0;
 
@@ -169,7 +162,6 @@ public class ProtocolViewGenerator {
 
             protocolsByTag = new HashMap<>(jsonArray.length());
             numberOfEOIsPerProtocol = new HashMap<>(jsonArray.length());
-            typeOfEOIsPerProtocol = new HashMap<>(jsonArray.length());
             helpersPerProtocol = new HashMap<>(jsonArray.length());
 
             try {
@@ -184,23 +176,25 @@ public class ProtocolViewGenerator {
 
                 for (int y = 0; y < jsonArray.length(); y++) {
                     JSONObject protocol = jsonArray.getJSONObject(y);
-                    protocolsByTag.put(protocol.getString("name"), protocol);
-                    int numberOfEOIs = 0;
-                    String type = "eoi";
-
-                    if (protocol.getJSONObject("eoi").has("number"))
-                        numberOfEOIs = protocol.getJSONObject("eoi").getInt("number");
-
+                    String type = null;
                     if (protocol.getJSONObject("eoi").has("name"))
                         type = protocol.getJSONObject("eoi").getString("name");
 
-                    numberOfEOIsPerProtocol.put(protocol.getString("name"), numberOfEOIs);
-                    typeOfEOIsPerProtocol.put(protocol.getString("name"), type);
+                    if(type != null && type.equals(eoi_type)) {
 
-                    if (eois < numberOfEOIs)
-                        eois = numberOfEOIs;
+                        protocolsByTag.put(protocol.getString("name"), protocol);
+                        int numberOfEOIs = 0;
+
+                        if (protocol.getJSONObject("eoi").has("number"))
+                            numberOfEOIs = protocol.getJSONObject("eoi").getInt("number");
 
 
+                        numberOfEOIsPerProtocol.put(protocol.getString("name"), numberOfEOIs);
+
+                        if (eois < numberOfEOIs)
+                            eois = numberOfEOIs;
+
+                    }
 
                 }
                 return eois;
