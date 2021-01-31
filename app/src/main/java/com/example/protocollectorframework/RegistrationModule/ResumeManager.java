@@ -33,6 +33,9 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Class that is responsible for processing the resume configuration file and create resumes
+ */
 
 public class ResumeManager {
     private static String VISIT_DATA = "visit_data";
@@ -54,16 +57,40 @@ public class ResumeManager {
 
     private Context context;
 
+    /**
+     * Default constructor
+     * @param context: current context
+     */
+    public ResumeManager(Context context){
+        this.context = context;
+        this.manager = new ConfigurationManager(context);
+    }
+
+
+    /**
+     * Constructor that calls the process method for a given configuration file
+     * @param context: current context
+     * @param resume_file_name: resume configuration file name
+     */
     public ResumeManager(Context context, String resume_file_name){
         this.context = context;
         this.manager = new ConfigurationManager(context);
         processResumeConfigFile(resume_file_name);
     }
 
+    /**
+     * Returns the extracted resume configuration setup
+     * @return resume configuration setup data
+     */
     public ResumeConfig getResumeConfig(){
         return resumeConfig;
     }
 
+    /**
+     * Processes the resume configuration file
+     * @param file_name: resume configuration file name
+     * @return configuration setup data
+     */
     public ResumeConfig processResumeConfigFile(String file_name){
         InputStream is = null;
         String protocol_json_path = manager.getFilePath(file_name);
@@ -129,7 +156,12 @@ public class ResumeManager {
 
     }
 
-
+    /**
+     * Invokes a method given an array of arguments
+     * @param methodData: the desired method
+     * @param args: array of arguments
+     * @return the returned value of the given method
+     */
     public static Object invokeUnknownMethod(MethodData methodData, Object[] args){
         try {
             Class<?> act = Class.forName(methodData.getPackage_class_name());
@@ -142,10 +174,13 @@ public class ResumeManager {
     }
 
 
-    public static int getLength(String s){
-        return s.length();
-    }
-
+    /**
+     *
+     * Processes the resume configuration data at generates and resume object data with the desired information
+     * @param visit_id: visit's identifier
+     * @param argsByMethod: structure that maps for each method and array of arguments
+     * @return resume object data with the desired information
+     */
     public ResumeData getResumeForVisit(String visit_id, HashMap<String,HashMap<String,Object[]>> argsByMethod){
 
         visitManager = new VisitManager(context);
@@ -172,35 +207,35 @@ public class ResumeManager {
 
         VisitData visitData = visitManager.getVisitByID(visit_id);
 
-        if(resumeConfig.isVisit_data()) {
+        if(resumeConfig.isVisitDataAccountable()) {
             visit_start = visitData.getStart_time();
             visit_end = visitData.getEnd_time();
-            if(resumeConfig.isVisit_info())
+            if(resumeConfig.isVisitInfoAccountable())
                 visit_info = visitData.getInfo_json();
         }
 
-        if(resumeConfig.isComplementary_data()) {
+        if(resumeConfig.isComplementaryDataAccountable()) {
             ComplementaryData complementaryData = complementaryManager.getComplementaryByVisitId(visit_id);
             if(complementaryData != null) {
                 complementary_id = complementaryData.getId();
                 complementary_start = complementaryData.getStart_time();
                 complementary_end = complementaryData.getEnd_time();
-                if (resumeConfig.isVisit_info())
+                if (resumeConfig.isComplementaryInfoAccountable())
                     complementary_info = visitData.getInfo_json();
             }
         }
 
-        if(resumeConfig.isPlot_data()){
+        if(resumeConfig.isPlotDataAccountable()){
             PlotData plotData = locationManager.getPlotById(visitData.getPlot_id());
             plot_id = plotData.getID();
             plot_acronym = plotData.getAcronym();
             plot_name = plotData.getName();
-            if(resumeConfig.isPlot_info()){
+            if(resumeConfig.isPlotInfoAccountable()){
                 plot_info = plotData.getInfo();
             }
         }
 
-        if(resumeConfig.isMultimedia_count()) {
+        if(resumeConfig.isMultimediaCountAccountable()) {
             multimediaManager = new MultimediaManager(context, visit_id);
             List<MultimediaData> multimediaDataList = multimediaManager.getVisitMultimedia();
             multimediaCountByType = new HashMap<>(multimediaDataList.size());

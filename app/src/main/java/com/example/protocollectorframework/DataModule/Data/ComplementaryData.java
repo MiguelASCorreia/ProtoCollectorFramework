@@ -1,5 +1,8 @@
 package com.example.protocollectorframework.DataModule.Data;
 
+/**
+ * Objected used to save the information associated to the realization of complementary observations associated to a field visit
+ */
 public class ComplementaryData {
 
     private String id;
@@ -10,7 +13,7 @@ public class ComplementaryData {
     private String info_json;
 
     /**
-     *
+     * Constructor
      * @param id: complementary observations identifier
      * @param visit_id: corresponding visit identifier
      * @param start_time: complementary observations start time in milliseconds
