@@ -1,4 +1,4 @@
-package com.example.protocollectorframework.DataModule;
+package com.example.protocollectorframework.DataModule.DataBase;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,11 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.protocollectorframework.DataModule.Data.LocationData;
-import com.example.protocollectorframework.Extra.SharedMethods;
+import com.example.protocollectorframework.Complements.SharedMethods;
 import com.example.protocollectorframework.DataModule.Data.PlotData;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,8 +31,6 @@ public class PlotTable {
     public static final String PLOT_CREATION_TIME = "plot_creation_time";
     public static final String PLOT_EDIT_TIME = "plot_edit_time";
     public static final String PLOT_DELETE_TIME = "plot_delete_time";
-    public static final String PLOT_CULTURES = "plot_cultures";
-    public static final String PLOT_PROTOCOLS = "plot_protocols";
     public static final String PLOT_INFO = "plot_info";
 
     private DataBase db;

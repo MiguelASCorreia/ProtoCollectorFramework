@@ -2,7 +2,7 @@ package com.example.protocollectorframework.RegistrationModule;
 
 import android.content.Context;
 
-import com.example.protocollectorframework.DataModule.ComplementaryTable;
+import com.example.protocollectorframework.DataModule.DataBase.ComplementaryTable;
 import com.example.protocollectorframework.DataModule.Data.ComplementaryData;
 import com.example.protocollectorframework.DataModule.Data.ComplementaryDataForJson;
 import com.google.gson.Gson;

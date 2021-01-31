@@ -18,7 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 /**
  * Class accountable for necessary UI animations and hardware interactions like vibration
  */
-public class AnimationViews {
+public class AnimationLibrary {
 
     public static AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
     private Context context;
@@ -27,7 +27,7 @@ public class AnimationViews {
      * Constructor
      * @param context: the context of the activity
      */
-    public AnimationViews(Context context){
+    public AnimationLibrary(Context context){
         this.context = context;
     }
 

@@ -20,13 +20,13 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.protocollectorframework.DataModule.Data.LocationData;
 import com.example.protocollectorframework.DataModule.Data.MultimediaData;
-import com.example.protocollectorframework.Extra.SharedMethods;
+import com.example.protocollectorframework.Complements.SharedMethods;
 import com.example.protocollectorframework.DataModule.Data.PlotData;
-import com.example.protocollectorframework.DataModule.PlotTable;
-import com.example.protocollectorframework.DataModule.TrajectoryPointTable;
-import com.example.protocollectorframework.DataModule.TrajectorySegmentTable;
-import com.example.protocollectorframework.DataModule.TrajectoryTable;
-import com.example.protocollectorframework.InterfaceModule.AnimationViews;
+import com.example.protocollectorframework.DataModule.DataBase.PlotTable;
+import com.example.protocollectorframework.DataModule.DataBase.TrajectoryPointTable;
+import com.example.protocollectorframework.DataModule.DataBase.TrajectorySegmentTable;
+import com.example.protocollectorframework.DataModule.DataBase.TrajectoryTable;
+import com.example.protocollectorframework.InterfaceModule.AnimationLibrary;
 import com.example.protocollectorframework.R;
 import com.google.gson.JsonElement;
 import com.mapbox.geojson.Feature;
@@ -123,7 +123,7 @@ public class LocationModule {
     private TrajectoryTable mTrajectoryTable;
     private PlotTable mPlotTable;
 
-    private AnimationViews animationViews;
+    private AnimationLibrary animationLibrary;
 
     private AlertDialog mOutsidePlotDialog;
 
@@ -140,7 +140,7 @@ public class LocationModule {
         this.mTrajectoryTable = new TrajectoryTable(context);
         this.mPointTable = new TrajectoryPointTable(context);
         this.mSegmentsTable = new TrajectorySegmentTable(context);
-        this.animationViews = new AnimationViews(context);
+        this.animationLibrary = new AnimationLibrary(context);
 
     }
 
@@ -154,7 +154,7 @@ public class LocationModule {
     public LocationModule(Activity activity, long refresh_time, long refresh_distance) {
         this.mActivity = activity;
         this.context = activity.getApplicationContext();
-        this.animationViews = new AnimationViews(context);
+        this.animationLibrary = new AnimationLibrary(context);
         this.mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         this.mMapBox = null;
         this.mMapView = null;
@@ -192,7 +192,7 @@ public class LocationModule {
     public LocationModule(Activity activity, long refresh_time, long refresh_distance, PlotData plotData) {
         this.mActivity = activity;
         this.context = activity.getApplicationContext();
-        this.animationViews = new AnimationViews(context);
+        this.animationLibrary = new AnimationLibrary(context);
         this.mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         this.mMapBox = null;
         this.mMapView = null;
@@ -225,7 +225,7 @@ public class LocationModule {
 //    public LocationModule(Activity activity, long refresh_time, long refresh_distance, PlotData plotData, String actualVisit, String mId, List<LocationData> locations) {
 //        this.mActivity = activity;
 //        this.context = activity.getApplicationContext();
-//        this.animationViews = new AnimationViews(context);
+//        this.animationLibrary = new AnimationLibrary(context);
 //        this.mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 //        this.mPlotTable = new PlotTable(activity);
 //        this.mPlots = mPlotTable.getPlots();
@@ -278,7 +278,7 @@ public class LocationModule {
     public LocationModule(Activity activity, PlotData plotData, String actualVisit, String mId, List<LocationData> locations) {
         this.mActivity = activity;
         this.context = activity.getApplicationContext();
-        this.animationViews = new AnimationViews(context);
+        this.animationLibrary = new AnimationLibrary(context);
         this.mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         this.mPlotTable = new PlotTable(activity);
         this.mPlots = mPlotTable.getPlots();
@@ -1114,7 +1114,7 @@ public class LocationModule {
                 }
                 if(current_errors == ACCEPTED_ERRORS){
                     current_errors = 0;
-                    animationViews.vibrate();
+                    animationLibrary.vibrate();
                     if(mOutsidePlotDialog != null && !mOutsidePlotDialog.isShowing())
                         mOutsidePlotDialog.show();
                 }
@@ -1185,11 +1185,11 @@ public class LocationModule {
                         if (actualPlot != null) {
                             if (!infoTextView.getText().toString().equals(actualPlot.getName())) {
                                 infoTextView.setText(actualPlot.getName());
-                                animationViews.showIn(infoTextView, -infoTextView.getWidth(), 0, 500);
+                                animationLibrary.showIn(infoTextView, -infoTextView.getWidth(), 0, 500);
                             }
                         } else if (infoTextView.getVisibility() == View.VISIBLE) {
                             infoTextView.setText("");
-                            animationViews.showOut(infoTextView, -infoTextView.getWidth(), 0, 500);
+                            animationLibrary.showOut(infoTextView, -infoTextView.getWidth(), 0, 500);
                         }
                     }
                     mActualPlot = actualPlot;

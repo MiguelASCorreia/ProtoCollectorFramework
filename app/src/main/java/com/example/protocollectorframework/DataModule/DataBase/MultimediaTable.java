@@ -1,4 +1,4 @@
-package com.example.protocollectorframework.DataModule;
+package com.example.protocollectorframework.DataModule.DataBase;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.example.protocollectorframework.DataModule.Data.LocationData;
 import com.example.protocollectorframework.DataModule.Data.MultimediaData;
-import com.example.protocollectorframework.Extra.SharedMethods;
+import com.example.protocollectorframework.Complements.SharedMethods;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +37,7 @@ public class MultimediaTable {
     protected static final String MULTIMEDIA_SYNC = "multimedia_sync";
     protected static final String MULTIMEDIA_DESCRIPTION = "multimedia_description";
     protected static final String MULTIMEDIA_OWNER = "multimedia_owner";
+    protected static final String MULTIMEDIA_INFO = "multimedia_info";
 
     private DataBase db;
 
@@ -69,6 +70,7 @@ public class MultimediaTable {
                 MULTIMEDIA_OWNER + " TEXT, " +
                 MULTIMEDIA_SYNC + " INTEGER DEFAULT 0," +
                 MULTIMEDIA_DESCRIPTION + " TEXT DEFAULT NULL, " +
+                MULTIMEDIA_INFO + " TEXT DEFAULT NULL, " +
                 "FOREIGN KEY(" + VISIT_ID + ") " + "REFERENCES " + VisitTable.TABLE_NAME + "(" + VisitTable.VISIT_ID + "))";
         sqLiteDatabase.execSQL(createTable);
     }
@@ -106,10 +108,11 @@ public class MultimediaTable {
             long timestamp = cursor.getLong(cursor.getColumnIndex(MULTIMEDIA_CREATION_TIME));
             String description = cursor.getString(cursor.getColumnIndex(MULTIMEDIA_DESCRIPTION));
             String owner = cursor.getString(cursor.getColumnIndex(MULTIMEDIA_OWNER));
+            String info = cursor.getString(cursor.getColumnIndex(MULTIMEDIA_INFO));
 
             LocationData location = new LocationData(lat,ln,point_timestamp,ele,acc,sat);
 
-            return new MultimediaData(id,type,path,timestamp,location,description,owner);
+            return new MultimediaData(id,type,path,timestamp,location,description,owner,info);
         }catch(Exception e){
             Log.e("error", e.toString());
             return null;
@@ -131,6 +134,44 @@ public class MultimediaTable {
             return false;
         }finally {
             db.close();
+        }
+    }
+
+    /**
+     * Adds auxiliary information to a given file
+     * @param multimedia_id: multimedia file identifier
+     * @param info: auxiliary information
+     * @return true if the information was added with success, false otherwise
+     */
+    public boolean addAuxiliaryInfo(String multimedia_id, String info){
+        SQLiteDatabase db = this.db.getWritableDatabase();
+        try{
+            return addAuxiliaryInfo(multimedia_id,info, db);
+        }catch(SQLException e){
+            Log.e("error", e.toString());
+            return false;
+        }finally {
+            db.close();
+        }
+    }
+
+    /**
+     * Adds auxiliary information to a given file
+     * @param multimedia_id: multimedia file identifier
+     * @param info: auxiliary information
+     * @param db: SQLite database
+     * @return true if the information was added with success, false otherwise
+     */
+    private boolean addAuxiliaryInfo(String multimedia_id, String info, SQLiteDatabase db){
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put(MULTIMEDIA_INFO,info);
+
+            return db.update(TABLE_NAME, cv, MULTIMEDIA_ID + " = ?", new String[]{multimedia_id}) > 0;
+
+        }catch(Exception e){
+            Log.e("error", e.toString());
+            return false;
         }
     }
 
@@ -252,6 +293,9 @@ public class MultimediaTable {
 
             if(multimediaData.getDescription() != null)
                 cv.put(MULTIMEDIA_DESCRIPTION,multimediaData.getDescription());
+
+            if(multimediaData.getAuxiliaryInformation() != null)
+                cv.put(MULTIMEDIA_INFO,multimediaData.getAuxiliaryInformation());
 
             if(multimediaData.getOwner() != null)
                 cv.put(MULTIMEDIA_OWNER,multimediaData.getOwner());

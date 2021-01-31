@@ -2,7 +2,7 @@ package com.example.protocollectorframework.RegistrationModule;
 
 import android.content.Context;
 
-import com.example.protocollectorframework.DataModule.ConfigTable;
+import com.example.protocollectorframework.DataModule.DataBase.ConfigTable;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

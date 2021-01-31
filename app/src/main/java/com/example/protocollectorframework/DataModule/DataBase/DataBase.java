@@ -1,4 +1,4 @@
-package com.example.protocollectorframework.DataModule;
+package com.example.protocollectorframework.DataModule.DataBase;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DataBase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "DataBase";
+    public static final String DATABASE_NAME = "ProtoCollectorDataBase";
     private static final int VERSION = 1;
 
     private Context context;
@@ -49,8 +49,6 @@ public class DataBase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-
-
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);

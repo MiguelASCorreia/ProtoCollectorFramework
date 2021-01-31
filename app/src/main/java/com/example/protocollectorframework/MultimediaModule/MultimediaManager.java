@@ -29,9 +29,9 @@ import androidx.core.content.FileProvider;
 
 import com.example.protocollectorframework.DataModule.Data.LocationData;
 import com.example.protocollectorframework.DataModule.Data.MultimediaData;
-import com.example.protocollectorframework.Extra.SharedMethods;
+import com.example.protocollectorframework.Complements.SharedMethods;
 import com.example.protocollectorframework.DataModule.Data.PlotData;
-import com.example.protocollectorframework.DataModule.MultimediaTable;
+import com.example.protocollectorframework.DataModule.DataBase.MultimediaTable;
 import com.example.protocollectorframework.R;
 
 import org.apache.commons.io.FileUtils;
@@ -205,6 +205,16 @@ public class MultimediaManager implements Serializable {
     public void addDescriptionToMultimedia(String id, String description){
         if(mMultimediaTable != null)
             mMultimediaTable.addDescription(id,description);
+    }
+
+    /**
+     * Associates auxiliary information to a multimedia file
+     * @param id: multimedia file id
+     * @param info: auxiliary information
+     */
+    public void addInformationToMultimedia(String id, String info){
+        if(mMultimediaTable != null)
+            mMultimediaTable.addAuxiliaryInfo(id,info);
     }
 
 

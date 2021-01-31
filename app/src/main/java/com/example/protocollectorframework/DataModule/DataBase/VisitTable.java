@@ -1,4 +1,4 @@
-package com.example.protocollectorframework.DataModule;
+package com.example.protocollectorframework.DataModule.DataBase;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.protocollectorframework.Extra.SharedMethods;
+import com.example.protocollectorframework.Complements.SharedMethods;
 import com.example.protocollectorframework.DataModule.Data.VisitData;
 import com.example.protocollectorframework.DataModule.Data.VisitWithPlotData;
 
@@ -26,16 +26,16 @@ public class VisitTable {
 
     public static final String TABLE_NAME = "Visit_table";
     public static final String VISIT_ID = "_id";
-    public static final String VISIT_PLOT = "Visit_plot_id";
-    public static final String VISIT_START_TIME = "Visit_start_time";
-    public static final String VISIT_END_TIME = "Visit_end_time";
-    public static final String VISIT_CREATION_TIME = "Visit_creation_time";
-    public static final String VISIT_EDIT_TIME = "Visit_edit_time";
-    public static final String VISIT_DELETE_TIME = "Visit_delete_time";
-    public static final String VISIT_SYNC = "Visit_sync";
-    public static final String VISIT_INFO_JSON = "Visit_info";
-    public static final String VISIT_EOI_JSON = "Visit_EOI";
-    public static final String VISIT_VERSION = "Visit_version";
+    public static final String VISIT_PLOT = "visit_plot_id";
+    public static final String VISIT_START_TIME = "visit_start_time";
+    public static final String VISIT_END_TIME = "visit_end_time";
+    public static final String VISIT_CREATION_TIME = "visit_creation_time";
+    public static final String VISIT_EDIT_TIME = "visit_edit_time";
+    public static final String VISIT_DELETE_TIME = "visit_delete_time";
+    public static final String VISIT_SYNC = "visit_sync";
+    public static final String VISIT_INFO_JSON = "visit_info";
+    public static final String VISIT_EOI_JSON = "visit_EOI";
+    public static final String VISIT_VERSION = "visit_version";
 
     private Context context;
 

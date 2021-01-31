@@ -24,7 +24,8 @@ import com.example.protocollectorframework.DataModule.Data.ComponentBuildInfo;
 import com.example.protocollectorframework.DataModule.Data.ComponentData;
 import com.example.protocollectorframework.DataModule.Data.ComponentView;
 import com.example.protocollectorframework.DataModule.Data.EditTextInputFilter;
-import com.example.protocollectorframework.Extra.SharedMethods;
+import com.example.protocollectorframework.Complements.SharedMethods;
+import com.example.protocollectorframework.InterfaceModule.Adapter.CategoriesAdapter;
 import com.example.protocollectorframework.InterfaceModule.CustomViews.CustomDatePicker;
 import com.example.protocollectorframework.InterfaceModule.CustomViews.CustomIntervalPicker;
 import com.example.protocollectorframework.InterfaceModule.CustomViews.CustomTimePicker;
@@ -45,7 +46,7 @@ import java.util.Objects;
 /**
  * Class that allows the generation of interface components based on different data types
  */
-public class ComponentsAPI {
+public class ComponentGenerator {
 
     public static final int COMPONENT_BOOLEAN = 0;
     public static final int COMPONENT_NUMBER = 1;
@@ -70,7 +71,7 @@ public class ComponentsAPI {
      * Default constructor
      * @param context: current activity context
      */
-    public ComponentsAPI(Context context){
+    public ComponentGenerator(Context context){
         this.context = context;
         saveValues = true;
     }
@@ -80,7 +81,7 @@ public class ComponentsAPI {
      * @param context: current activity context
      * @param incomingHandler: activity handler to handle the modification of the data fields
      */
-    public ComponentsAPI(Context context, Handler incomingHandler){
+    public ComponentGenerator(Context context, Handler incomingHandler){
         this.context = context;
         saveValues = true;
         this.incomingHandler = incomingHandler;

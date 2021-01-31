@@ -1,4 +1,4 @@
-package com.example.protocollectorframework.DataModule;
+package com.example.protocollectorframework.DataModule.DataBase;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,7 +12,6 @@ import android.util.Log;
 public class TrajectorySegmentTable {
 
     public static final String TABLE_NAME = "Trajectory_segment_table";
-
     public static final String SEGMENT_ID = "_id";
     public static final String TRAJECTORY_ID = "Trajectory_id";
     public static final String SEGMENT_CREATION_TIME = "Segment_creation_time";

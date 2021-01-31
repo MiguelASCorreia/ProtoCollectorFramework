@@ -1,4 +1,4 @@
-package com.example.protocollectorframework.DataModule;
+package com.example.protocollectorframework.DataModule.DataBase;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,24 +7,19 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.protocollectorframework.Extra.SharedMethods;
+import com.example.protocollectorframework.Complements.SharedMethods;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 /**
  * Database table that stores the information of the configuration files
  */
 public class ConfigTable {
 
     public static final String TABLE_NAME = "Config_table";
-
     public static final String CONFIG_NAME = "config_name";
-
     public static final String CONFIG_VERSION = "config_version";
-
     public static final String CONFIG_PATH = "config_path";
-
     public static final String CONFIG_CREATION_TIME = "config_creation_time";
     public static final String CONFIG_EDIT_TIME = "config_edit_time";
     public static final String CONFIG_DELETE_TIME = "config_delete_time";

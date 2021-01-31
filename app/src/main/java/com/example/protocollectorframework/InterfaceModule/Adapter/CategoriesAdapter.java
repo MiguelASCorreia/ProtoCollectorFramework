@@ -1,4 +1,4 @@
-package com.example.protocollectorframework.InterfaceModule;
+package com.example.protocollectorframework.InterfaceModule.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;

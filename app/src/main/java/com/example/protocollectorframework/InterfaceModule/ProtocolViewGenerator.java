@@ -39,7 +39,7 @@ public class ProtocolViewGenerator {
     private HashMap<String, HashMap<String, List<Integer>>> limitedObservations;
     private HashMap<String, HashMap<String, List<HelperData>>> helpersPerProtocol;
 
-    private ComponentsAPI mComponentAPI;
+    private ComponentGenerator mComponentAPI;
 
     /**
      * Constructor with activity's handler
@@ -48,7 +48,7 @@ public class ProtocolViewGenerator {
      */
     public ProtocolViewGenerator(Context context, Handler incomingHandler){
         this.context = context;
-        this.mComponentAPI = new ComponentsAPI(context,incomingHandler);
+        this.mComponentAPI = new ComponentGenerator(context,incomingHandler);
     }
 
     /**
@@ -313,7 +313,7 @@ public class ProtocolViewGenerator {
             if(iteration_obj.has("value_type"))
                 value_type = iteration_obj.getString("value_type");
 
-            if (type == ComponentsAPI.COMPONENT_COUNT) {
+            if (type == ComponentGenerator.COMPONENT_COUNT) {
                 //["(1,20,1)","20+","100"];
                 JSONArray offset = iteration_obj.getJSONArray("offset");
                 temp_values = new ArrayList<>(offset.length());
@@ -346,9 +346,9 @@ public class ProtocolViewGenerator {
                     }
                 }
 
-            } else if (type == ComponentsAPI.COMPONENT_TIME) {
+            } else if (type == ComponentGenerator.COMPONENT_TIME) {
                 temporal_type = iteration_obj.getString("subtype");
-            }else if(type == ComponentsAPI.COMPONENT_CATEGORY){
+            }else if(type == ComponentGenerator.COMPONENT_CATEGORY){
                 JSONArray arr = iteration_obj.getJSONArray("values");
                 temp_values = new ArrayList<>(arr.length());
                 for(int i = 0; i < arr.length(); i++){
@@ -356,7 +356,7 @@ public class ProtocolViewGenerator {
                 }
                 if(iteration_obj.has("unique"))
                     unique = iteration_obj.getBoolean("unique");
-            }else if(type == ComponentsAPI.COMPONENT_INTERVAL){
+            }else if(type == ComponentGenerator.COMPONENT_INTERVAL){
                 JSONArray first = iteration_obj.getJSONArray("first");
                 firstValues = new String[first.length()];
                 for (int x = 0; x < first.length(); x++) {

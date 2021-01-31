@@ -13,6 +13,7 @@ public class MultimediaData {
     private LocationData location;
     private String description;
     private String owner;
+    private String info;
 
     /**
      * Constructor
@@ -23,9 +24,10 @@ public class MultimediaData {
      * @param location: associated location
      * @param description: multimedia file description
      * @param owner: multimedia file owner's identifier
+     * @param info: multimedia file auxiliary information
      */
 
-    public MultimediaData(String ID, String type, String path, long timestamp, LocationData location, String description, String owner) {
+    public MultimediaData(String ID, String type, String path, long timestamp, LocationData location, String description, String owner, String info) {
         this.id = ID;
         this.type = type;
         this.path = path;
@@ -33,6 +35,7 @@ public class MultimediaData {
         this.timestamp = timestamp;
         this.description = description;
         this.owner = owner;
+        this.info = info;
     }
 
     /**
@@ -99,6 +102,21 @@ public class MultimediaData {
         this.description = description;
     }
 
+    /**
+     * Returns the file auxiliary information
+     * @return file's auxiliary information
+     */
+    public String getAuxiliaryInformation() {
+        return info;
+    }
+
+    /**
+     * Sets the file auxiliary information
+     * @param description: file's auxiliary information
+     */
+    public void setAuxiliaryInformation(String description) {
+        this.info = info;
+    }
     /**
      * Returns the file identifier
      * @return file's identifier

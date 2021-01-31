@@ -7,7 +7,7 @@ import com.example.protocollectorframework.DataModule.Data.MultimediaData;
 import com.example.protocollectorframework.DataModule.Data.PlotData;
 import com.example.protocollectorframework.DataModule.Data.VisitData;
 import com.example.protocollectorframework.DataModule.Data.VisitDataForJson;
-import com.example.protocollectorframework.DataModule.VisitTable;
+import com.example.protocollectorframework.DataModule.DataBase.VisitTable;
 import com.example.protocollectorframework.LocationModule.LocationModule;
 import com.example.protocollectorframework.MultimediaModule.MultimediaManager;
 import com.google.gson.Gson;

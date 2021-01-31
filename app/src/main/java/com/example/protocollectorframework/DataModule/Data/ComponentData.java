@@ -1,7 +1,5 @@
 package com.example.protocollectorframework.DataModule.Data;
 
-import com.example.protocollectorframework.InterfaceModule.ComponentsAPI;
-
 import java.io.Serializable;
 import java.util.Set;
 import java.util.SortedSet;

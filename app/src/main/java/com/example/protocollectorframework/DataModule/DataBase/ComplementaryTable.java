@@ -1,4 +1,4 @@
-package com.example.protocollectorframework.DataModule;
+package com.example.protocollectorframework.DataModule.DataBase;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.protocollectorframework.DataModule.Data.ComplementaryData;
-import com.example.protocollectorframework.Extra.SharedMethods;
+import com.example.protocollectorframework.Complements.SharedMethods;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,16 +20,16 @@ import java.util.List;
 public class ComplementaryTable {
     public static final String TABLE_NAME = "Complementary_visit_table";
     public static final String COMPLEMENTARY_ID = "_id";
-    public static final String VISIT_ID = "Visit_id";
-    public static final String COMPLEMENTARY_START_TIME = "Complementary_start_time";
-    public static final String COMPLEMENTARY_END_TIME = "Complementary_end_time";
-    public static final String COMPLEMENTARY_CREATION_TIME = "Complementary_creation_time";
-    public static final String COMPLEMENTARY_EDIT_TIME = "Complementary_edit_time";
-    public static final String COMPLEMENTARY_DELETE_TIME = "Complementary_delete_time";
-    public static final String COMPLEMENTARY_EOI_JSON = "Complementary_eoi_json";
-    public static final String COMPLEMENTARY_INFO_JSON = "Complementary_info_json";
-    public static final String COMPLEMENTARY_SYNC = "Complementary_sync";
-    public static final String COMPLEMENTARY_VERSION = "Complementary_version";
+    public static final String VISIT_ID = "visit_id";
+    public static final String COMPLEMENTARY_START_TIME = "complementary_start_time";
+    public static final String COMPLEMENTARY_END_TIME = "complementary_end_time";
+    public static final String COMPLEMENTARY_CREATION_TIME = "complementary_creation_time";
+    public static final String COMPLEMENTARY_EDIT_TIME = "complementary_edit_time";
+    public static final String COMPLEMENTARY_DELETE_TIME = "complementary_delete_time";
+    public static final String COMPLEMENTARY_EOI_JSON = "complementary_eoi_json";
+    public static final String COMPLEMENTARY_INFO_JSON = "complementary_info_json";
+    public static final String COMPLEMENTARY_SYNC = "complementary_sync";
+    public static final String COMPLEMENTARY_VERSION = "complementary_version";
 
     private Context context;
 

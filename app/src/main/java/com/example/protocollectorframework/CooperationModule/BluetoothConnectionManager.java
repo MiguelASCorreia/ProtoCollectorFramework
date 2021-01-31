@@ -30,9 +30,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.protocollectorframework.DataModule.BluetoothSyncTable;
+import com.example.protocollectorframework.DataModule.DataBase.BluetoothSyncTable;
 import com.example.protocollectorframework.DataModule.Data.BluetoothSyncData;
-import com.example.protocollectorframework.Extra.SharedMethods;
+import com.example.protocollectorframework.Complements.SharedMethods;
 import com.example.protocollectorframework.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
