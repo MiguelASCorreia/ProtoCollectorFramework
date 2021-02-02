@@ -3,9 +3,9 @@ package com.example.protocollectorframework.DataModule.Data;
 import java.util.HashMap;
 
 /**
- * Objected used to save the information generated for the resume
+ * Objected used to save the information generated for the abstract
  */
-public class ResumeData {
+public class AbstractData {
     private String visit_id;
     private long visit_start;
     private long visit_end;
@@ -28,7 +28,7 @@ public class ResumeData {
     /**
      * Empty constructor
      */
-    public ResumeData(){
+    public AbstractData(){
 
     }
     /**
@@ -48,7 +48,7 @@ public class ResumeData {
      * @param multimediaCountByType: structure that maps for each multimedia type the corresponding counter
      * @param resultsForMethods: structure that maps for each class the returned value for each assigned method
      */
-    public ResumeData(String visit_id, long visit_start, long visit_end, String visit_info, String complementary_id, long complementary_start, long complementary_end, String complementary_info, String plot_id, String plot_acronym, String plot_name, String plot_info, HashMap<String, Integer> multimediaCountByType, HashMap<String,HashMap<String, Object>> resultsForMethods) {
+    public AbstractData(String visit_id, long visit_start, long visit_end, String visit_info, String complementary_id, long complementary_start, long complementary_end, String complementary_info, String plot_id, String plot_acronym, String plot_name, String plot_info, HashMap<String, Integer> multimediaCountByType, HashMap<String,HashMap<String, Object>> resultsForMethods) {
         this.visit_id = visit_id;
         this.visit_start = visit_start;
         this.visit_end = visit_end;

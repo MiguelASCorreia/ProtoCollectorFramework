@@ -1,21 +1,19 @@
 package com.example.protocollectorframework.RegistrationModule;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.protocollectorframework.DataModule.Data.ComplementaryData;
 import com.example.protocollectorframework.DataModule.Data.MethodData;
 import com.example.protocollectorframework.DataModule.Data.MultimediaData;
 import com.example.protocollectorframework.DataModule.Data.PlotData;
-import com.example.protocollectorframework.DataModule.Data.ResumeConfig;
-import com.example.protocollectorframework.DataModule.Data.ResumeData;
+import com.example.protocollectorframework.DataModule.Data.AbstractConfig;
+import com.example.protocollectorframework.DataModule.Data.AbstractData;
 import com.example.protocollectorframework.DataModule.Data.VisitData;
 import com.example.protocollectorframework.LocationModule.LocationModule;
 import com.example.protocollectorframework.MultimediaModule.MultimediaManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -38,7 +36,7 @@ import java.util.List;
  * The configuration file must respect the template that is shown
  */
 
-public class ResumeManager {
+public class AbstractManager {
     private static String VISIT_DATA = "visit_data";
     private static String VISIT_INFO = "visit_info";
     private static String COMPLEMENTARY_DATA = "complementary_data";
@@ -49,12 +47,12 @@ public class ResumeManager {
     private static String GPS_INFO = "gps_info";
 
     private ConfigurationManager manager;
-    private ResumeConfig resumeConfig;
+    private AbstractConfig abstractConfig;
     private VisitManager visitManager;
     private ComplementaryManager complementaryManager;
     private LocationModule locationManager;
     private MultimediaManager multimediaManager;
-    private ResumeData resumeData;
+    private AbstractData abstractData;
 
     private Context context;
 
@@ -62,7 +60,7 @@ public class ResumeManager {
      * Default constructor
      * @param context: current context
      */
-    public ResumeManager(Context context){
+    public AbstractManager(Context context){
         this.context = context;
         this.manager = new ConfigurationManager(context);
     }
@@ -71,28 +69,28 @@ public class ResumeManager {
     /**
      * Constructor that calls the process method for a given configuration file
      * @param context: current context
-     * @param resume_file_name: resume configuration file name
+     * @param abstract_file_name: abstract configuration file name
      */
-    public ResumeManager(Context context, String resume_file_name){
+    public AbstractManager(Context context, String abstract_file_name){
         this.context = context;
         this.manager = new ConfigurationManager(context);
-        processResumeConfigFile(resume_file_name);
+        processAbstractConfigFile(abstract_file_name);
     }
 
     /**
-     * Returns the extracted resume configuration setup
-     * @return resume configuration setup data
+     * Returns the extracted abstract configuration setup
+     * @return abstract configuration setup data
      */
-    public ResumeConfig getResumeConfig(){
-        return resumeConfig;
+    public AbstractConfig getAbstractConfig(){
+        return abstractConfig;
     }
 
     /**
-     * Processes the resume configuration file
-     * @param file_name: resume configuration file name
+     * Processes the abstract configuration file
+     * @param file_name: abstract configuration file name
      * @return configuration setup data
      */
-    public ResumeConfig processResumeConfigFile(String file_name){
+    public AbstractConfig processAbstractConfigFile(String file_name){
         InputStream is = null;
         String protocol_json_path = manager.getFilePath(file_name);
         if(protocol_json_path != null){
@@ -134,10 +132,10 @@ public class ResumeManager {
             String methods = jsonObject.getString("Methods");
 
             Gson gson = new Gson();
-            Type type = new TypeToken<ResumeConfig>() {
+            Type type = new TypeToken<AbstractConfig>() {
             }.getType();
 
-            ResumeConfig auxConfig =  gson.fromJson(flags_json, type);
+            AbstractConfig auxConfig =  gson.fromJson(flags_json, type);
 
             type = new TypeToken<MethodData[]>() {
             }.getType();
@@ -146,9 +144,9 @@ public class ResumeManager {
 
             auxConfig.setMethods(methodData);
 
-            resumeConfig = auxConfig;
+            abstractConfig = auxConfig;
 
-            return resumeConfig;
+            return abstractConfig;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,12 +175,12 @@ public class ResumeManager {
 
     /**
      *
-     * Processes the resume configuration data at generates and resume object data with the desired information
+     * Processes the abstract configuration data at generates and abstract object data with the desired information
      * @param visit_id: visit's identifier
      * @param argsByMethod: structure that maps for each method and array of arguments
-     * @return resume object data with the desired information
+     * @return abstract object data with the desired information
      */
-    public ResumeData getResumeForVisit(String visit_id, HashMap<String,HashMap<String,Object[]>> argsByMethod){
+    public AbstractData getAbstractForVisit(String visit_id, HashMap<String,HashMap<String,Object[]>> argsByMethod){
 
         visitManager = new VisitManager(context);
         complementaryManager = new ComplementaryManager(context);
@@ -208,35 +206,35 @@ public class ResumeManager {
 
         VisitData visitData = visitManager.getVisitByID(visit_id);
 
-        if(resumeConfig.isVisitDataAccountable()) {
+        if(abstractConfig.isVisitDataAccountable()) {
             visit_start = visitData.getStart_time();
             visit_end = visitData.getEnd_time();
-            if(resumeConfig.isVisitInfoAccountable())
+            if(abstractConfig.isVisitInfoAccountable())
                 visit_info = visitData.getInfo_json();
         }
 
-        if(resumeConfig.isComplementaryDataAccountable()) {
+        if(abstractConfig.isComplementaryDataAccountable()) {
             ComplementaryData complementaryData = complementaryManager.getComplementaryByVisitId(visit_id);
             if(complementaryData != null) {
                 complementary_id = complementaryData.getId();
                 complementary_start = complementaryData.getStart_time();
                 complementary_end = complementaryData.getEnd_time();
-                if (resumeConfig.isComplementaryInfoAccountable())
+                if (abstractConfig.isComplementaryInfoAccountable())
                     complementary_info = visitData.getInfo_json();
             }
         }
 
-        if(resumeConfig.isPlotDataAccountable()){
+        if(abstractConfig.isPlotDataAccountable()){
             PlotData plotData = locationManager.getPlotById(visitData.getPlot_id());
             plot_id = plotData.getID();
             plot_acronym = plotData.getAcronym();
             plot_name = plotData.getName();
-            if(resumeConfig.isPlotInfoAccountable()){
+            if(abstractConfig.isPlotInfoAccountable()){
                 plot_info = plotData.getInfo();
             }
         }
 
-        if(resumeConfig.isMultimediaCountAccountable()) {
+        if(abstractConfig.isMultimediaCountAccountable()) {
             multimediaManager = new MultimediaManager(context, visit_id);
             List<MultimediaData> multimediaDataList = multimediaManager.getVisitMultimedia();
             multimediaCountByType = new HashMap<>(multimediaDataList.size());
@@ -249,9 +247,9 @@ public class ResumeManager {
             }
         }
 
-        if(resumeConfig.getMethods() != null){
-            resultsForMethods = new HashMap<>(resumeConfig.getMethods().length);
-            for(MethodData methodData : resumeConfig.getMethods()){
+        if(abstractConfig.getMethods() != null){
+            resultsForMethods = new HashMap<>(abstractConfig.getMethods().length);
+            for(MethodData methodData : abstractConfig.getMethods()){
                 Object[] args = null;
                 String package_name = methodData.getPackage_class_name();
                 String method_name = methodData.getMethod_name();
@@ -264,7 +262,7 @@ public class ResumeManager {
 
         }
 
-        return new ResumeData(visit_id,visit_start,visit_end,visit_info,complementary_id,complementary_start,complementary_end,complementary_info,plot_id,plot_acronym,plot_name,plot_info,multimediaCountByType,resultsForMethods);
+        return new AbstractData(visit_id,visit_start,visit_end,visit_info,complementary_id,complementary_start,complementary_end,complementary_info,plot_id,plot_acronym,plot_name,plot_info,multimediaCountByType,resultsForMethods);
     }
 
 }
