@@ -72,7 +72,7 @@ This system allows the user to utilize his own configuration files for the neede
 
 ### Iterations
 	
-Each object belonging to this field indicates a value that is to be inputed by the user. For this purpose there were defined different data types that the value can belong to. Each data type is identified by numeric value from 0 to 6. Depending on the type, some addicional fields must be filled. The following table features the different data types and each required field.
+Each object belonging to this field indicates a value that is to be inserted by the user. For this purpose there were defined different data types that the value can belong to. Each data type is identified by numeric value from 0 to 6. Depending on the type, some additional fields must be filled. The following table features the different data types and each required field.
 	
 Identifier | Type | Fields
 ---- | --------- | ---------
