@@ -1,6 +1,6 @@
 # ProtoCollectorFramework
 
-This framework was developed for the purpose of favoring the creation of android mobile application that target the issue of phytosanitary management where the user is in need of collecting data on the field, data which can be supported by auxiliary information on the moment or at a later context.
+This framework was developed for the purpose of favoring the creation of android mobile applications that target the issue of phytosanitary management where the user is in need of collecting data on the field, data which can be supported by auxiliary information on the moment or at a later context.
 
 ----
 
