@@ -4,16 +4,16 @@ This framework was developed for the purpose of favoring the creation of android
 
 ----
 
-Before using this framework there are some types of configuration files that you must understand and reproduce. This files allow not only the generation of the user interface but also the creation of abstracts for each field visit.
-This system allows the user to utilize his own configuration files for the needed purposes however, there are two types of files that are mandatory and must respect a certain template. This files are the following:
+Before using this framework there are some types of configuration files that must be understood and reproduced. These files allow not only the generation of the user interface but also the creation of abstracts for each field visit.
+This system allows the user to utilize their own configuration files for the needed purposes however, there are two types of files that are mandatory and must respect a template. These files are:
  
  1. Protocols configuration file.
  1. Abstract configuration file.
  
  ## Protocols configuration files
- Protocols are the base of data collection in this system. A protocol is applyied a certain time of the year on EOIs (Elements of Interest) and explains to the user the steps that must be done to perform an correct observation and the values that must be registered for a desired target.
+ Protocols are the base of data collection in this system. A protocol is applied during a period of time on EOIs (Elements of Interest) and explains to the user the steps that must be done to perform an correct observation and the values that must be registered for a desired target.
  
- This configuration file is a text file that contains a JSONArray with JSONObjects formed by the following fields:
+ This configuration file is a text file that contains a JSONArray with JSONObjects comprised by the following fields:
  
   1. *name*: the protocol name or identifier.
   1. *date_min*: starting date MM/dd.
