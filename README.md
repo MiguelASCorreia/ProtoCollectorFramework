@@ -72,7 +72,7 @@ This system allows the user to utilize their own configuration files for the nee
 
 ### Iterations
 	
-Each object belonging to this field indicates a value that is to be inserted by the user. For this purpose there were defined different data types that the value can belong to. Each data type is identified by numeric value from 0 to 6. Depending on the type, some additional fields must be filled. The following table features the different data types and each required field. Beyond these fields, the *name* field must be define to identify the value name/description.
+Each object belonging to this field indicates a value that is to be inserted by the user. For this purpose there were defined different data types that the value can belong to. Each data type is identified by a numeric value ranging from 0 to 6. Depending on the type, some additional fields may need to be filled. The following table features the different data types and each required field. Beyond these fields, the *name* field must be defined to identify the value's name/description.
 	
 Identifier | Type | Fields
 ---- | --------- | ---------
