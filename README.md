@@ -72,7 +72,7 @@ This system allows the user to utilize his own configuration files for the neede
 
 ### Iterations
 	
-Each object belonging to this field indicates a value that is to be inserted by the user. For this purpose there were defined different data types that the value can belong to. Each data type is identified by numeric value from 0 to 6. Depending on the type, some additional fields must be filled. The following table features the different data types and each required field.
+Each object belonging to this field indicates a value that is to be inserted by the user. For this purpose there were defined different data types that the value can belong to. Each data type is identified by numeric value from 0 to 6. Depending on the type, some additional fields must be filled. The following table features the different data types and each required field. Beyond these fields, the *name* field must be define to identify the value name/description.
 	
 Identifier | Type | Fields
 ---- | --------- | ---------
@@ -99,5 +99,73 @@ Identifier | Type | Fields
 1. *first*: array of values used to define the left domain of the interval type.
 1. *last*: array of values used to define the right domain of the interval type. If omitted, it assumes the value of *first*.
 
+### Protocol example
+
+For a better understanding, it is presented the definition of one protocol.
+
+```json
+{ 
+"name":"Shoots",
+"date_min":"4/1",
+"date_max":"10/30",
+"eoi":{
+	"name":"Tree",
+	"number":20
+	},
+"observations": [
+		{	
+		"name": "Shoots",
+		"helper": [
+			    {
+			      "position":1,
+			      "title":"Visual observation",
+			      "message":"In each element of interest, analyze the state of the shoots"
+			    },
+			    {
+			      "position":2,
+			      "title":"Disease identification",
+			      "message":"Bruises on the shoots",
+			      "extra":"disease.png"
+			    }
+			  ],
+		"iterations": [
+				{
+				"name": "Número de rebentos atacados",
+				"data_type":1,
+				"value_type":"integer",
+				"max": 5,
+				"min": 0
+				}
+			]
+		}
+	]
+}
+
+```
+
 
  ## Abstract configuration files
+ The abstracts are a way of synthesize all the information of one field visit into an object. The information can be divided into two groups, the data that the app stores in the data base and the data that it can be computed given methods and their arguments. Therefore, the configuration file contains flags that can be turn on/off, depending on the needs of the project and it's possible to associate external methods present in the project where the framework is placed to add the returned values to the abstract object. This file must respect the following template.
+```json
+{
+   "Flags":{
+      "visit_data":true,
+      "visit_info":true,
+      "complementary_data":true,
+      "complementary_info":true,
+      "plot_data":true,
+      "plot_info":true,
+      "multimedia_count":true,
+      "gps_info":true
+   },
+   "Methods":[
+      {
+         "package_class_name":"com.example.fitoagro.Modules.RegistrationModule.ResumeManager",
+         "method_name":"getLength",
+         "args_type":[
+            "java.lang.String"
+         ]
+      }
+   ]
+}
+```
