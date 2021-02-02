@@ -104,48 +104,47 @@ Identifier | Type | Fields
 For a better understanding, it is presented the definition of one protocol.
 
 ```json
-{ 
-"name":"Shoots",
-"date_min":"4/1",
-"date_max":"10/30",
-"eoi":{
-	"name":"Tree",
-	"number":20
-	},
-"observations": [
-		{	
-		"name": "Shoots",
-		"helper": [
-			    {
-			      "position":1,
-			      "title":"Visual observation",
-			      "message":"In each element of interest, analyze the state of the shoots"
-			    },
-			    {
-			      "position":2,
-			      "title":"Disease identification",
-			      "message":"Bruises on the shoots",
-			      "extra":"disease.png"
-			    }
-			  ],
-		"iterations": [
-				{
-				"name": "Número de rebentos atacados",
-				"data_type":1,
-				"value_type":"integer",
-				"max": 5,
-				"min": 0
-				}
-			]
-		}
-	]
+{
+   "name":"Shoots",
+   "date_min":"4/1",
+   "date_max":"10/30",
+   "eoi":{
+      "name":"Tree",
+      "number":20
+   },
+   "observations":[
+      {
+         "name":"Shoots",
+         "helper":[
+            {
+               "position":1,
+               "title":"Visual observation",
+               "message":"In each element of interest, analyze the state of the shoots"
+            },
+            {
+               "position":2,
+               "title":"Disease identification",
+               "message":"Bruises on the shoots",
+               "extra":"disease.png"
+            }
+         ],
+         "iterations":[
+            {
+               "name":"Número de rebentos atacados",
+               "data_type":1,
+               "value_type":"integer",
+               "max":5,
+               "min":0
+            }
+         ]
+      }
+   ]
 }
-
 ```
 
 
  ## Abstract configuration files
- The abstracts are a way of synthesize all the information of one field visit into an object. The information can be divided into two groups, the data that the app stores in the data base and the data that it can be computed given methods and their arguments. Therefore, the configuration file contains flags that can be turn on/off, depending on the needs of the project and it's possible to associate external methods present in the project where the framework is placed to add the returned values to the abstract object. This file must respect the following template.
+ The abstracts are a way of synthesize all the information of one field visit into an object. The information can be divided into two groups, the data that the app stores in the database and the data that it can be computed given methods and their arguments. Therefore, the configuration file contains flags that can be turn on/off, depending on the needs of the project and it's possible to associate external methods present in the project where the framework is placed to add the returned values to the abstract object. This file must respect the following template.
 ```json
 {
    "Flags":{
@@ -160,8 +159,8 @@ For a better understanding, it is presented the definition of one protocol.
    },
    "Methods":[
       {
-         "package_class_name":"com.example.fitoagro.Modules.RegistrationModule.ResumeManager",
-         "method_name":"getLength",
+         "package_class_name":"com.example.myapp.MyClass",
+         "method_name":"myMethod",
          "args_type":[
             "java.lang.String"
          ]
@@ -169,3 +168,15 @@ For a better understanding, it is presented the definition of one protocol.
    ]
 }
 ```
+The first field stores the flags for the different types of information that the framework can fetch from the database. By changing one value to false, that data will not appear in the final abstract object. This flags are the following:
+
+1. *visit_data*: boolean that indicates if the visit data (id, start time and ending time) is to be accountable in the abstract.
+1. *visit_info*: boolean that indicates if the visit information (stored in the info column of the corresponding table) is to be accountable in the abstract.
+1 *complementary_data*: boolean that indicates if the complementary observations data (id, start time and ending time) is to be accountable in the abstract.
+1 *complementary_info*: boolean that indicates if the  complementary observations information (stored in the info column of the corresponding table) is to be accountable in the abstract.
+1. *plot_data*: boolean that indicates if the plot data (id, acronym and name) is to be accountable in the abstract.
+1. *plot_info*: boolean that indicates if the plot information (stored in the info column of the corresponding table) is to be accountable in the abstract.
+1. *multimedia_count*: boolean that indicates if the multimedia file count is to be accountable in the abstract.
+
+The last main field on this file stores the methods that are to be invoked during the abstract generation. Their returned values are stored in the final object mapped by the class package name and the method corresponding method name. This field is an array of objects that contains the package class name, the method signature and an array of types of arguments. In the case shown above, the method *myMethod* from *MyClass* will be called, receiving a string argument, after fetching all the data from the database (since all the flags are set to true), and it's returned value will be store in a structure that maps the value to the corresponding method name that in turn is mapped to the package class name.
+
