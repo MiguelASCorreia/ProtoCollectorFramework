@@ -35,6 +35,7 @@ import java.util.List;
 
 /**
  * Class that is responsible for processing the resume configuration file and create resumes
+ * The configuration file must respect the template that is shown
  */
 
 public class ResumeManager {
