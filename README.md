@@ -4,7 +4,7 @@ This framework was developed for the purpose of favoring the creation of android
 
 ----
 
-Before using this framework there are some types of configuration files that you must understand and reproduce. This files allow no only the generation of the user interface but also the creation of abstracts for each field visit.
+Before using this framework there are some types of configuration files that you must understand and reproduce. This files allow not only the generation of the user interface but also the creation of abstracts for each field visit.
 This system allows the user to utilize his own configuration files for the needed purposes however, there are two types of files that are mandatory and must respect a certain template. This files are the following:
  
  1. Protocols configuration file.
