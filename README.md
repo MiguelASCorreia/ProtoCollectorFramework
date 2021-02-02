@@ -88,20 +88,20 @@ Identifier | Type | Fields
  
  Below is an explanation of the fields, as well as the values they can assume:
 
-1. *units*: textual field used to associate units to the numerical or count. Optional.
+1. *units*: textual field used to associate units to the numerical or count types. Optional.
 1. *value_type*: textual field used to distinguish the values between *integer* (default) and *real* numbers in numeric and count types.
-1. *offset*: array of strings used to indicate the possible values in a count type, express by triples. Each triple contains the initial value, the final value, and the step between those values. If the object in the array is not recognized as a triple, it will be added as it is. For example, if the *offset* is ["(0,20,1)","20+","100+"], the count it's linear, starting at 0 with a step of 1 until it reaches 20. After that the value 20+ and 100+ can be selected.
+1. *offset*: array of strings used to indicate the possible values in a count type, expressed by triplets. Each triplets contains the initial and final values, and the step between those. If the object in the array is not recognized as a triplet, it will be added as it is. For example, if the *offset* is ["(0,20,1)","20+","100+"], the count it's linear, starting at 0 with a step of 1 until it reaches 20. After that the values  20+ and 100+ can be selected.
 1. *min*: used to define the minimum numerical value.
 1. *max*: used to define the maximum numerical value.
 1. *values*: array of strings used to define the possible values in the categorical type.
-1. *unique*: boolean that restrict the selection. If true (default) then only one value can be selected, otherwise multiple can be selected. 
+1. *unique*: boolean that restricts the selection. If true (default) then only one value can be selected, otherwise multiple can be selected. 
 1. *subtype*: textual field used to define the temporal type (datetime or time).
 1. *first*: array of values used to define the left domain of the interval type.
 1. *last*: array of values used to define the right domain of the interval type. If omitted, it assumes the value of *first*.
 
 ### Protocol example
 
-For a better understanding, it is presented the definition of one protocol.
+For a better understanding, it is presented the definition of a protocol.It is applied on twenty different trees across the field plot, between the months of April and October. In each one of the EOIs, the user must observe the state of the shoots and register the number of affected ones (up to a maximum of five). 
 
 ```json
 {
@@ -114,7 +114,7 @@ For a better understanding, it is presented the definition of one protocol.
    },
    "observations":[
       {
-         "name":"Shoots",
+         "name":"Shoots state",
          "helper":[
             {
                "position":1,
@@ -144,7 +144,7 @@ For a better understanding, it is presented the definition of one protocol.
 
 
  ## Abstract configuration files
- The abstracts are a way of synthesize all the information of one field visit into an object. The information can be divided into two groups, the data that the app stores in the database and the data that it can be computed given methods and their arguments. Therefore, the configuration file contains flags that can be turn on/off, depending on the needs of the project and it's possible to associate external methods present in the project where the framework is placed to add the returned values to the abstract object. This file must respect the following template.
+ The abstracts are used to synthesize the information of one field visit into an object. It can be divided into two groups, the data that the application stores in the database and the data that can be computed given methods and their respective arguments. Therefore, the configuration file contains flags that can be turned on or off, depending on the needs of the project and it is possible to associate external methods present in the project where the framework is placed to add the returned values to the abstract object. This file must respect the following template.
 ```json
 {
    "Flags":{
@@ -168,15 +168,15 @@ For a better understanding, it is presented the definition of one protocol.
    ]
 }
 ```
-The first field stores the flags for the different types of information that the framework can fetch from the database. By changing one value to false, that data will not appear in the final abstract object. This flags are the following:
+The first field stores the flags for the different types of information that the framework can fetch from the database. By changing a flag to false, that data will not appear in the final abstract object. These flags are the following:
 
-1. *visit_data*: boolean that indicates if the visit data (id, start time and ending time) is to be accountable in the abstract.
-1. *visit_info*: boolean that indicates if the visit information (stored in the info column of the corresponding table) is to be accountable in the abstract.
-1. *complementary_data*: boolean that indicates if the complementary observations data (id, start time and ending time) is to be accountable in the abstract.
-1. *complementary_info*: boolean that indicates if the  complementary observations information (stored in the info column of the corresponding table) is to be accountable in the abstract.
-1. *plot_data*: boolean that indicates if the plot data (id, acronym and name) is to be accountable in the abstract.
-1. *plot_info*: boolean that indicates if the plot information (stored in the info column of the corresponding table) is to be accountable in the abstract.
-1. *multimedia_count*: boolean that indicates if the multimedia file count is to be accountable in the abstract.
+1. *visit_data*: boolean that indicates if the visit data (id, start time and ending time) is to be inserted into the abstract.
+1. *visit_info*: boolean that indicates if the visit information (stored in the info column of the corresponding table) is to be inserted into the abstract.
+1. *complementary_data*: boolean that indicates if the complementary observations data (id, start time and ending time) is to be inserted into the abstract.
+1. *complementary_info*: boolean that indicates if the  complementary observations information (stored in the info column of the corresponding table) is to be inserted into the abstract.
+1. *plot_data*: boolean that indicates if the plot data (id, acronym and name) is to be inserted into the abstract.
+1. *plot_info*: boolean that indicates if the plot information (stored in the info column of the corresponding table) is to be inserted into the abstract.
+1. *multimedia_count*: boolean that indicates if the multimedia file count is to be inserted into the abstract.
 
-The last main field on this file stores the methods that are to be invoked during the abstract generation. Their returned values are stored in the final object mapped by the class package name and the method corresponding method name. This field is an array of objects that contains the package class name, the method signature and an array of types of arguments. In the case shown above, the method *myMethod* from *MyClass* will be called, receiving a string argument, after fetching all the data from the database (since all the flags are set to true), and it's returned value will be store in a structure that maps the value to the corresponding method name that in turn is mapped to the package class name.
+The last main field on this file stores the methods that are to be invoked during the abstract's generation. Their return values are stored in the final object mapped by the class package name and the method's corresponding method name. This field is an array of objects that contains the package class name, the method signature and an array of types of arguments. In the example above, the method *myMethod* from *MyClass* will be called, receiving a string as an argument,, after fetching the data from the database (since all the flags are set to true), and its return value will be stored in a structure that maps the value to the corresponding method name, which  in turn is mapped to the package class name.
 
