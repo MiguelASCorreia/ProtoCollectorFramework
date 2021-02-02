@@ -31,11 +31,11 @@ This system allows the user to utilize their own configuration files for the nee
     "number":20
 	}
   ```
-  The field *observations* contains an array which stores objects like the one shown in the following piece of code. 
-  Each observation is composed by:
+  The field *observations* contains an array which stores objects like the one shown in the following excerpt of code. 
+  Each observation is composed of:
   1. *name*: the name given to the observation.
-  1. *limited_to*: optional field that restricts the observation to a desired number of EOIs. It's important to notice that the previous shown filed *general_data* has the same structure of the field *iterations* due to the fact of being EOI undependable.
-  1. *helper*: optional field which purpose is to help the user understand what must be done for the observation and can be use to create UI related components like a pop-up for guiding the user.
+  1. *limited_to*: optional field that restricts the observation to a desired number of EOIs. It's important to notice that the previously shown filed *general_data* has the same structure the field *iterations* due to the fact of being EOI independent.
+  1. *helper*: optional field whose purpose is to help the user understand what must be done for the observation and can be used to create UI related components such as pop-ups to guide the user.
   1. *iterations*: JSONArray that indicates a collection of values that must be registered.
   
 ```
@@ -49,10 +49,10 @@ This system allows the user to utilize their own configuration files for the nee
 
 ### Helper
 
-  Like it was mentioned before, this field is used to associate information, that explains the registration process to the user, to the observation. 
-  A helper is divided by steps and, do to the JSON format nature, it's important to identify the position of each step because there's no guarantee that the array order will be maintain.
-  Each step is identified by the position, a title and a message. It can be added an additional field called *extra* that is processed as JSONObject by the framework and allows the association of extra information.
-  In the following example, the first step explains what the visual observation consists of and the following step is used to illustrate an image, by using the field *extra* to point to an image file on the application resources.
+  As mentioned above, this field is used to associate information to the observation that explains the registration process to the user.
+  A helper is divided by steps and, due to the JSON format's nature, it's important to identify the position of each step because there's no guarantee that the array order will be maintained.
+  Each step is identified by it's position, a title and a message. An additional field called *extra* can be added, that is processed as a JSONObject by the framework and allows the association of extra information.
+  In the following example, the first step explains what the visual observation consists of and the following step is used to illustrate an image, by using the field *extra* to point to an image file on the application's resources.
 
 ```json
   "helper": [
