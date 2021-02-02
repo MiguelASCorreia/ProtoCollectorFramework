@@ -80,7 +80,24 @@ Identifier | Type | Fields
  1|Numeric|*value_type*, *units*, *min*, *max*
  2|Textual|- 
  3|Temporal|*subtype*
- 4|Categoric|*values*, *unique*
+ 4|Categorical|*values*, *unique*
  5|Count|*value_type*, *offset*
  6|Interval|*first*, *last*
+ 
+ 
+ 
+ Below is an explanation of the fields, as well as the values they can assume:
+
+1. *units*: textual field used to associate units to the numerical or count. Optional.
+1. *value_type*: textual field used to distinguish the values between *integer* (default) and *real* numbers in numeric and count types.
+1. *offset*: array of strings used to indicate the possible values in a count type, express by triples. Each triple contains the initial value, the final value, and the step between those values. If the object in the array is not recognized as a triple, it will be added as it is. For example, if the *offset* is ["(0,20,1)","20+","100+"], the count it's linear, starting at 0 with a step of 1 until it reaches 20. After that the value 20+ and 100+ can be selected.
+1. *min*: used to define the minimum numerical value.
+1. *max*: used to define the maximum numerical value.
+1. *values*: array of strings used to define the possible values in the categorical type.
+1. *unique*: boolean that restrict the selection. If true (default) then only one value can be selected, otherwise multiple can be selected. 
+1. *subtype*: textual field used to define the temporal type (datetime or time).
+1. *first*: array of values used to define the left domain of the interval type.
+1. *last*: array of values used to define the right domain of the interval type. If omitted, it assumes the value of *first*.
+
+
  ## Abstract configuration files
