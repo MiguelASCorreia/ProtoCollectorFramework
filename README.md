@@ -22,8 +22,8 @@ This system allows the user to utilize their own configuration files for the nee
   1. *observations*: JSONArray field that indicates the observations that must be held on the EOIs.
   1. *general_data*: optional JSONArray field that indicates the data that must be registered independent of EOIs.
   
-  The first three fields are direct and self explainatory. If one of the dates is missing the protocol will be applied all the year. The field *eoi* deserves a little more explanation. 
-  Lets imagine that the protocol we are trying to define is applyed on twenty different trees accross a plot. In this case, this field will defined the following way:
+  The first three fields are direct and self explanatory. If one of the dates is missing the protocol will be applied for the entirety of given year. The field *eoi* deserves a more detailed explanation, however. 
+  Lets consider that a protocol is being defined to apply to twenty different trees across a plot. As such, this field will be defined in the following way:
   
   ```json
   "eoi":{
