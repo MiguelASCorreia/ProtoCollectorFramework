@@ -130,7 +130,7 @@ For a better understanding, it is presented the definition of one protocol.
          ],
          "iterations":[
             {
-               "name":"Número de rebentos atacados",
+               "name":"Number of affected shoots",
                "data_type":1,
                "value_type":"integer",
                "max":5,
