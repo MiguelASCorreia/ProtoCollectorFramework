@@ -172,8 +172,8 @@ The first field stores the flags for the different types of information that the
 
 1. *visit_data*: boolean that indicates if the visit data (id, start time and ending time) is to be accountable in the abstract.
 1. *visit_info*: boolean that indicates if the visit information (stored in the info column of the corresponding table) is to be accountable in the abstract.
-1 *complementary_data*: boolean that indicates if the complementary observations data (id, start time and ending time) is to be accountable in the abstract.
-1 *complementary_info*: boolean that indicates if the  complementary observations information (stored in the info column of the corresponding table) is to be accountable in the abstract.
+1. *complementary_data*: boolean that indicates if the complementary observations data (id, start time and ending time) is to be accountable in the abstract.
+1. *complementary_info*: boolean that indicates if the  complementary observations information (stored in the info column of the corresponding table) is to be accountable in the abstract.
 1. *plot_data*: boolean that indicates if the plot data (id, acronym and name) is to be accountable in the abstract.
 1. *plot_info*: boolean that indicates if the plot information (stored in the info column of the corresponding table) is to be accountable in the abstract.
 1. *multimedia_count*: boolean that indicates if the multimedia file count is to be accountable in the abstract.
