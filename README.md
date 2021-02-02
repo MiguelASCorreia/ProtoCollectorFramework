@@ -16,8 +16,8 @@ This system allows the user to utilize their own configuration files for the nee
  This configuration file is a text file that contains a JSONArray with JSONObjects comprised by the following fields:
  
   1. *name*: the protocol name or identifier.
-  1. *date_min*: starting date MM/dd.
-  1. *date_max*: ending data MM/dd.
+  1. *date_min*: starting date using MM/dd format.
+  1. *date_max*: ending date using MM/dd format.
   1. *eoi*: JSONObject field that contains the name and the number given to the EOIs of the protocol.
   1. *observations*: JSONArray field that indicates the observations that must be held on the EOIs.
   1. *general_data*: optional JSONArray field that indicates the data that must be registered independent of EOIs.
