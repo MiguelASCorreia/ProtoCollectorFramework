@@ -66,25 +66,15 @@ public class BluetoothConnectionManager {
     public static final String SETTINGS_SEND_MULTIMEDIA = "SETTINGS_SEND_MULTIMEDIA";
 
     public static final int MESSAGE_RECEIVE = 0;
-    public static final int MESSAGE_SAVE_STATE = 1;
-    public static final int MESSAGE_ENABLED = 2;
-    public static final int MESSAGE_CONNECTED = 3;
-    public static final int MESSAGE_ERROR = 4;
-    public static final int MESSAGE_CONFLICT_ACK = 5;
-    public static final int MESSAGE_RECEIVE_MULTIMEDIA = 6;
-    public static final int MESSAGE_SHOW_PROGRESS = 7;
-    public static final int MESSAGE_HOSTING = 8;
-    public static final int MESSAGE_FINISH_ACK = 9;
+    public static final int MESSAGE_ENABLED = 1;
+    public static final int MESSAGE_CONNECTED = 2;
+    public static final int MESSAGE_ERROR = 3;
+    public static final int MESSAGE_HOSTING = 4;
+    public static String ALERT_CONNECTION = "c0";
 
-
-    private static final String ALERT_CONNECTION = "C0";
-    public static final String ACK = "ACK";
-    public static final String FINAL_ACK = "FINAL_ACK";
-
-
-    public static final int BUFFER_SIZE = 1024 * 1024 * 5; // 5 MB
+    public static final int BUFFER_SIZE = 1024 * 1024;
     private static final String TAG = "Bluetooth";
-    private static final String SECURE_NAME = "SECURE_FITOAGRO";
+    private static final String SECURE_NAME = "SECURE_PROTOCOLLECTOR";
     public static final int DISCOVERY_TIME = 60 * 5;
     public static final int REQUEST_ENABLE_BT = 200;
     public static final int REQUEST_ENABLE_DISCOVERY = 201;
@@ -186,10 +176,10 @@ public class BluetoothConnectionManager {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setCancelable(false);
         builder.setTitle(mActivity.getString(R.string.bluetooth_connection_preferences));
-        String[] animals = {mActivity.getString(R.string.bluetooth_check_multimedia)};
+        String[] options = {mActivity.getString(R.string.bluetooth_check_multimedia)};
         boolean[] checkedItems = {mSettingsPrefs.getBoolean(SETTINGS_SEND_MULTIMEDIA, false)};
         final boolean[] send = {mSettingsPrefs.getBoolean(SETTINGS_SEND_MULTIMEDIA, false)};
-        builder.setMultiChoiceItems(animals, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+        builder.setMultiChoiceItems(options, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                 send[0] = isChecked;
@@ -222,7 +212,7 @@ public class BluetoothConnectionManager {
     /**
      * Fetch the device MAC address
      *
-     * @return
+     * @return device MAC address
      */
     @SuppressLint("HardwareIds")
     public String getMyAddress() {
@@ -394,7 +384,6 @@ public class BluetoothConnectionManager {
 
             try {
                 connectToDevice(mHost);
-                return;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -753,72 +742,29 @@ public class BluetoothConnectionManager {
          * thread's run method. Waiting for messages to process
          */
         public void run() {
-            // mmBuffer store for the stream
             byte[] mmBuffer = new byte[BUFFER_SIZE];
-            int numBytes; // bytes returned from read()
-            String message = "";
-            // Keep listening to the InputStream until an exception occurs.
+            int numBytes;
+            StringBuilder message = new StringBuilder();
+
             while (true) {
                 try {
-                    // Read from the InputStream.
                     numBytes = mmInStream.read(mmBuffer);
                     if (numBytes > 0) {
                         String received_message = new String(mmBuffer, 0, numBytes);
-
-                        if (received_message.equals(ALERT_CONNECTION)) {
-                            Message message1 = new Message();
-                            message1.what = MESSAGE_CONNECTED;
-
-
-                            if (mIncomingHandler != null)
-                                mIncomingHandler.sendMessage(message1);
-
-                            continue;
-                        } else if (received_message.equals(ACK)) {
-                            Message message1 = new Message();
-                            message1.what = MESSAGE_CONFLICT_ACK;
-
-
-                            if (mIncomingHandler != null)
-                                mIncomingHandler.sendMessage(message1);
-
-                            continue;
-                        } else if (message.isEmpty() && mIncomingHandler != null) {
-                            Message message1 = new Message();
-                            message1.what = MESSAGE_SHOW_PROGRESS;
-                            mIncomingHandler.sendMessage(message1);
-                        }
-                        if (received_message.contains(FINAL_ACK)) {
-                            Message message1 = new Message();
-                            message1.what = MESSAGE_FINISH_ACK;
-                            if (mIncomingHandler != null)
-                                mIncomingHandler.sendMessage(message1);
-
-                            received_message = received_message.replace(FINAL_ACK, "");
-                        }
-
-                        message += received_message;
-                        Log.e("RECEIVE", message);
-
+                        message.append(received_message);
                         try {
 
-                            JSONObject jsonObject = new JSONObject(message);
+                            JSONObject jsonObject = new JSONObject(message.toString());
 
-                            Log.e("RECEIVE_FINAL", message);
-
-                            //message = "";
                             Message finalMessage = new Message();
-                            if (jsonObject.has("multimedia_files") || jsonObject.has("locations") || jsonObject.has("effective_duration") || jsonObject.has("note"))
-                                finalMessage.what = MESSAGE_RECEIVE_MULTIMEDIA;
-                            else
-                                finalMessage.what = MESSAGE_RECEIVE;
+                            finalMessage.what = MESSAGE_RECEIVE;
                             finalMessage.obj = jsonObject;
 
                             if (mIncomingHandler != null)
                                 mIncomingHandler.sendMessage(finalMessage);
 
                             mmBuffer = new byte[BUFFER_SIZE];
-                            message = "";
+                            message = new StringBuilder();
 
                         } catch (Exception e) {
                             e.printStackTrace();
