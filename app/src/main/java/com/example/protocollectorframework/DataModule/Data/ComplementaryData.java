@@ -14,12 +14,13 @@ public class ComplementaryData {
 
     /**
      * Constructor
-     * @param id: complementary observations identifier
-     * @param visit_id: corresponding visit identifier
+     *
+     * @param id:         complementary observations identifier
+     * @param visit_id:   corresponding visit identifier
      * @param start_time: complementary observations start time in milliseconds
-     * @param end_time: complementary observations ending time in milliseconds
-     * @param eoi_json: JSON string corresponding to the data obtained over the EOIs
-     * @param info_json: JSON string corresponding to the extra data
+     * @param end_time:   complementary observations ending time in milliseconds
+     * @param eoi_json:   JSON string corresponding to the data obtained over the EOIs
+     * @param info_json:  JSON string corresponding to the extra data
      */
     public ComplementaryData(String id, String visit_id, long start_time, long end_time, String eoi_json, String info_json) {
         this.id = id;
@@ -33,6 +34,7 @@ public class ComplementaryData {
 
     /**
      * Returns the complementary observations identifier
+     *
      * @return complementary observations identifier
      */
     public String getId() {
@@ -41,6 +43,7 @@ public class ComplementaryData {
 
     /**
      * Sets the complementary observations identifier
+     *
      * @param id: complementary observations identifier
      */
     public void setId(String id) {
@@ -50,6 +53,7 @@ public class ComplementaryData {
 
     /**
      * Returns the visit identifier
+     *
      * @return visit's identifier
      */
     public String getVisit_id() {
@@ -58,6 +62,7 @@ public class ComplementaryData {
 
     /**
      * Sets the visit identifier
+     *
      * @param visit_id: visit's identifier
      */
     public void setVisit_id(String visit_id) {
@@ -66,6 +71,7 @@ public class ComplementaryData {
 
     /**
      * Returns the JSON string corresponding to the data obtained over the EOIs
+     *
      * @return data obtained over the EOIs
      */
     public String getEoi_json() {
@@ -74,6 +80,7 @@ public class ComplementaryData {
 
     /**
      * Sets the data obtained over the EOIs
+     *
      * @param eoi_json: JSON string corresponding to the data obtained over the EOIs
      */
     public void setEoi_json(String eoi_json) {
@@ -82,6 +89,7 @@ public class ComplementaryData {
 
     /**
      * Returns JSON string corresponding to the extra data
+     *
      * @return extra data
      */
     public String getInfo_json() {
@@ -90,6 +98,7 @@ public class ComplementaryData {
 
     /**
      * Sets the extra data
+     *
      * @param info_json: JSON string corresponding to the extra data
      */
     public void setInfo_json(String info_json) {
@@ -98,6 +107,7 @@ public class ComplementaryData {
 
     /**
      * Returns the complementary observations start time
+     *
      * @return complementary observations start time in milliseconds
      */
     public long getStart_time() {
@@ -106,14 +116,16 @@ public class ComplementaryData {
 
     /**
      * Sets the complementary observations start time
+     *
      * @param start_time: complementary observations start time in milliseconds
      */
-    public void setStart_time(long start_time){
+    public void setStart_time(long start_time) {
         this.start_time = start_time;
     }
 
     /**
      * Returns the complementary observations ending time
+     *
      * @return complementary observations ending time in milliseconds
      */
     public long getEnd_time() {
@@ -122,9 +134,10 @@ public class ComplementaryData {
 
     /**
      * Sets the complementary observations ending time
+     *
      * @param end_time: complementary observations ending time in milliseconds
      */
-    public void setEnd_time(long end_time){
+    public void setEnd_time(long end_time) {
         this.end_time = end_time;
     }
 

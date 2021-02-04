@@ -17,6 +17,7 @@ public class DataBase extends SQLiteOpenHelper {
 
     /**
      * Constructor
+     *
      * @param context: current context
      */
     public DataBase(Context context) {
@@ -26,6 +27,7 @@ public class DataBase extends SQLiteOpenHelper {
 
     /**
      * Creates all the tables
+     *
      * @param sqLiteDatabase: SQLite database
      */
     private void createTables(SQLiteDatabase sqLiteDatabase) {
@@ -49,6 +51,7 @@ public class DataBase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);

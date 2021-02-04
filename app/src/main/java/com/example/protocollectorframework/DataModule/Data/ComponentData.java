@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
 /**
  * Object used to save the data associated to the interface components
  */
@@ -16,9 +17,10 @@ public class ComponentData implements Serializable {
 
     /**
      * Constructor
-     * @param type: component type identifier
+     *
+     * @param type:        component type identifier
      * @param description: component description
-     * @param value: component value
+     * @param value:       component value
      */
     public ComponentData(int type, String description, String value) {
         this.type = type;
@@ -29,10 +31,11 @@ public class ComponentData implements Serializable {
 
     /**
      * Constructor
-     * @param type: component type identifier
+     *
+     * @param type:        component type identifier
      * @param description: component description
-     * @param value: component value
-     * @param units: value's units
+     * @param value:       component value
+     * @param units:       value's units
      */
     public ComponentData(int type, String description, String value, String units) {
         this.type = type;
@@ -44,6 +47,7 @@ public class ComponentData implements Serializable {
 
     /**
      * Sets component owners
+     *
      * @param owners: component owners
      */
     public void setOwners(SortedSet<String> owners) {
@@ -52,15 +56,17 @@ public class ComponentData implements Serializable {
 
     /**
      * Sets the only owner of the component
+     *
      * @param owner: component owner
      */
-    public void setOnlyOwner(String owner){
+    public void setOnlyOwner(String owner) {
         owners = new TreeSet<>();
         owners.add(owner);
     }
 
     /**
      * Returns the component owners
+     *
      * @return component owners
      */
     public Set<String> getOwners() {
@@ -69,25 +75,28 @@ public class ComponentData implements Serializable {
 
     /**
      * Adds a new owner to the component
+     *
      * @param owner: new component owner
      */
-    public void addOwner(String owner){
-        if(owners != null && owner != null)
+    public void addOwner(String owner) {
+        if (owners != null && owner != null)
             owners.add(owner);
     }
 
     /**
      * Adds multiple owners to the component
+     *
      * @param newOwners: set of owners
      */
 
-    public void addOwners(Set<String> newOwners){
-        if(owners != null && newOwners != null)
+    public void addOwners(Set<String> newOwners) {
+        if (owners != null && newOwners != null)
             owners.addAll(newOwners);
     }
 
     /**
      * Returns the units associated to the component data
+     *
      * @return units associated to the component data
      */
     public String getUnits() {
@@ -96,6 +105,7 @@ public class ComponentData implements Serializable {
 
     /**
      * Sets the units of the component data
+     *
      * @param units: units of the component data
      */
     public void setUnits(String units) {
@@ -104,6 +114,7 @@ public class ComponentData implements Serializable {
 
     /**
      * Returns the component type
+     *
      * @return component type identifier
      */
     public int getType() {
@@ -112,6 +123,7 @@ public class ComponentData implements Serializable {
 
     /**
      * Sets the component type
+     *
      * @param type: component type identifier
      */
     public void setType(int type) {
@@ -120,6 +132,7 @@ public class ComponentData implements Serializable {
 
     /**
      * Returns the component description
+     *
      * @return component description
      */
     public String getDescription() {
@@ -128,6 +141,7 @@ public class ComponentData implements Serializable {
 
     /**
      * Sets the component description
+     *
      * @param description: component description
      */
     public void setDescription(String description) {
@@ -136,6 +150,7 @@ public class ComponentData implements Serializable {
 
     /**
      * Returns the current value of the component
+     *
      * @return value of the component
      */
     public String getValue() {
@@ -144,6 +159,7 @@ public class ComponentData implements Serializable {
 
     /**
      * Sets the current value of the component
+     *
      * @param value: value of the component
      */
     public void setValue(String value) {

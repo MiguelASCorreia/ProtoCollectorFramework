@@ -1,7 +1,6 @@
 package com.example.protocollectorframework.DataModule.Data;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -20,12 +19,13 @@ public class PlotData implements Serializable {
 
     /**
      * Constructor
-     * @param ID: plot's identifier
+     *
+     * @param ID:      plot's identifier
      * @param acronym: plot's acronym
-     * @param name: plot's name
-     * @param limits: plot's limits
+     * @param name:    plot's name
+     * @param limits:  plot's limits
      */
-    public PlotData(String ID, String acronym, String name, List<LocationData> limits){
+    public PlotData(String ID, String acronym, String name, List<LocationData> limits) {
         this.ID = ID;
         this.acronym = acronym;
         this.name = name;
@@ -36,13 +36,14 @@ public class PlotData implements Serializable {
 
     /**
      * Constructor
-     * @param ID: plot's identifier
+     *
+     * @param ID:      plot's identifier
      * @param acronym: plot's acronym
-     * @param name: plot's name
-     * @param center: plot's center
-     * @param limits: plot's limits
+     * @param name:    plot's name
+     * @param center:  plot's center
+     * @param limits:  plot's limits
      */
-    public PlotData(String ID, String acronym, String name, LocationData center, List<LocationData> limits){
+    public PlotData(String ID, String acronym, String name, LocationData center, List<LocationData> limits) {
         this.ID = ID;
         this.name = name;
         this.acronym = acronym;
@@ -54,14 +55,15 @@ public class PlotData implements Serializable {
 
     /**
      * Constructor
-     * @param ID: plot's identifier
+     *
+     * @param ID:      plot's identifier
      * @param acronym: plot's acronym
-     * @param name: plot's name
-     * @param center: plot's center
-     * @param limits: plot's limits
-     * @param info: extra information
+     * @param name:    plot's name
+     * @param center:  plot's center
+     * @param limits:  plot's limits
+     * @param info:    extra information
      */
-    public PlotData(String ID, String acronym, String name, LocationData center, List<LocationData> limits, String info){
+    public PlotData(String ID, String acronym, String name, LocationData center, List<LocationData> limits, String info) {
         this.ID = ID;
         this.name = name;
         this.acronym = acronym;
@@ -72,17 +74,18 @@ public class PlotData implements Serializable {
 
     /**
      * Fetch the desired field from the extra information
+     *
      * @param tag: field's tag
      * @return object associated to the tag
      */
-    public Object getField(String tag){
-        if(info != null){
-            try{
+    public Object getField(String tag) {
+        if (info != null) {
+            try {
                 JSONObject jsonObject = new JSONObject(info);
-                if(jsonObject.has(tag))
+                if (jsonObject.has(tag))
                     return jsonObject.get(tag);
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -91,17 +94,18 @@ public class PlotData implements Serializable {
 
     /**
      * Fetch the desired field from the extra information in the JSONArray format
+     *
      * @param tag: field's tag
      * @return JSONArray associated to the tag
      */
-    public JSONArray getArrayField(String tag){
-        if(info != null){
-            try{
+    public JSONArray getArrayField(String tag) {
+        if (info != null) {
+            try {
                 JSONObject jsonObject = new JSONObject(info);
-                if(jsonObject.has(tag))
+                if (jsonObject.has(tag))
                     return jsonObject.getJSONArray(tag);
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -110,6 +114,7 @@ public class PlotData implements Serializable {
 
     /**
      * Returns plot's acronym
+     *
      * @return plot's acronym
      */
     public String getAcronym() {
@@ -118,6 +123,7 @@ public class PlotData implements Serializable {
 
     /**
      * Sets the plot's acronym
+     *
      * @param acronym: plot's acronym
      */
     public void setAcronym(String acronym) {
@@ -126,6 +132,7 @@ public class PlotData implements Serializable {
 
     /**
      * Returns plot's center
+     *
      * @return plot's center
      */
     public LocationData getCenter() {
@@ -134,6 +141,7 @@ public class PlotData implements Serializable {
 
     /**
      * Sets plot's center
+     *
      * @param center: plot's center
      */
     public void setCenter(LocationData center) {
@@ -142,6 +150,7 @@ public class PlotData implements Serializable {
 
     /**
      * Returns plot's identifier
+     *
      * @return plot's identifier
      */
     public String getID() {
@@ -150,6 +159,7 @@ public class PlotData implements Serializable {
 
     /**
      * Sets plot's identifier
+     *
      * @param ID: plot's identifier
      */
     public void setID(String ID) {
@@ -158,6 +168,7 @@ public class PlotData implements Serializable {
 
     /**
      * Returns plot's name
+     *
      * @return plot's name
      */
     public String getName() {
@@ -166,6 +177,7 @@ public class PlotData implements Serializable {
 
     /**
      * Sets plot's name
+     *
      * @param name: plot's name
      */
     public void setName(String name) {
@@ -174,6 +186,7 @@ public class PlotData implements Serializable {
 
     /**
      * Returns plot's limits
+     *
      * @return plot's limits
      */
     public List<LocationData> getLimits() {
@@ -182,6 +195,7 @@ public class PlotData implements Serializable {
 
     /**
      * Sets plot's limits
+     *
      * @param limits: plot's limits
      */
     public void setLimits(List<LocationData> limits) {
@@ -190,6 +204,7 @@ public class PlotData implements Serializable {
 
     /**
      * Returns plot's extra information
+     *
      * @return plot's extra information
      */
     public String getInfo() {
@@ -198,6 +213,7 @@ public class PlotData implements Serializable {
 
     /**
      * Sets plot's extra information
+     *
      * @param info: plot's extra information
      */
     public void setInfo(String info) {

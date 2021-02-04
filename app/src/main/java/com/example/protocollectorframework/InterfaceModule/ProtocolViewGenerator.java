@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -43,42 +44,47 @@ public class ProtocolViewGenerator {
 
     /**
      * Constructor with activity's handler
-     * @param context: current activity context
+     *
+     * @param context:         current activity context
      * @param incomingHandler: activity handler to handle the modification of the data fields
      */
-    public ProtocolViewGenerator(Context context, Handler incomingHandler){
+    public ProtocolViewGenerator(Context context, Handler incomingHandler) {
         this.context = context;
-        this.mComponentAPI = new ComponentGenerator(context,incomingHandler);
+        this.mComponentAPI = new ComponentGenerator(context, incomingHandler);
     }
 
     /**
      * Changes the flag that indicates if the values must be sent to the activity handler after the view change
+     *
      * @param flag: true if value must be sent
      */
-    public void setOnChangeFlag(boolean flag){
+    public void setOnChangeFlag(boolean flag) {
         this.mComponentAPI.setSaveValues(flag);
     }
 
     /**
      * Returns the component data associated to the previously generated view
+     *
      * @param cv: desired component view
      * @return component data associated to the interface view
      */
-    public ComponentData getComponent(ComponentView cv){
+    public ComponentData getComponent(ComponentView cv) {
         return this.mComponentAPI.getComponent(cv);
     }
 
     /**
      * Sets the component view value based on the corresponding component data
+     *
      * @param cd: corresponding component data
      * @param cv: desired component view
      */
-    public void setComponentValue(ComponentData cd, ComponentView cv){
-        this.mComponentAPI.setComponentValue(cd,cv);
+    public void setComponentValue(ComponentData cd, ComponentView cv) {
+        this.mComponentAPI.setComponentValue(cd, cv);
     }
 
     /**
      * Returns the JSONObject data associated with each protocol
+     *
      * @return structure that maps each protocol name to the corresponding JSONObject
      */
     public HashMap<String, JSONObject> getProtocolsByTag() {
@@ -87,6 +93,7 @@ public class ProtocolViewGenerator {
 
     /**
      * Returns the main protocols for the given plot
+     *
      * @return main protocols for the given plot
      */
     public List<String> getMainProtocols() {
@@ -95,6 +102,7 @@ public class ProtocolViewGenerator {
 
     /**
      * Returns the number of EOIs associated with each protocol
+     *
      * @return structure that maps each protocol name to the corresponding EOI count
      */
     public HashMap<String, Integer> getNumberOfEOIsPerProtocol() {
@@ -104,6 +112,7 @@ public class ProtocolViewGenerator {
 
     /**
      * Returns the protocols that are not enabled on the current type of the year
+     *
      * @return structure that contains the protocols not enabled
      */
     public SortedSet<String> getHiddenProtocols() {
@@ -112,6 +121,7 @@ public class ProtocolViewGenerator {
 
     /**
      * Returns each view associated with each observation with each protocol
+     *
      * @return structure that maps each protocol name to the observations and associated views
      */
     public HashMap<String, HashMap<String, List<ComponentView>>> getViewsPerProtocol() {
@@ -120,6 +130,7 @@ public class ProtocolViewGenerator {
 
     /**
      * Returns the component build info that is necessary to generate the general observation data fields
+     *
      * @return structure that maps the protocol name to the observations component build info
      */
     public HashMap<String, List<ComponentBuildInfo>> getGeneralObservations() {
@@ -128,6 +139,7 @@ public class ProtocolViewGenerator {
 
     /**
      * Returns the observations that are limited to certain EOIs in each protocol
+     *
      * @return structure that maps each protocol name to the observations and associated limited EOIs
      */
     public HashMap<String, HashMap<String, List<Integer>>> getLimitedObservations() {
@@ -136,7 +148,8 @@ public class ProtocolViewGenerator {
 
     /**
      * Returns the list of helpers associated to an observation for each protocol. Helpers are used to teach the user how to proceed for a given observation
-     * @return  list of helpers associated to an observation for each protocol
+     *
+     * @return list of helpers associated to an observation for each protocol
      */
     public HashMap<String, HashMap<String, List<HelperData>>> getHelpersPerProtocol() {
         return helpersPerProtocol;
@@ -144,10 +157,11 @@ public class ProtocolViewGenerator {
 
     /**
      * Process the protocol configuration file and extracts the data depending on the plot
-     * @param plotData: plot object data
-     * @param protocols_tag: tag associated with the protocols in the extra information of the plot
+     *
+     * @param plotData:            plot object data
+     * @param protocols_tag:       tag associated with the protocols in the extra information of the plot
      * @param protocols_file_name: protocol's configuration file name
-     * @param eoi_type: EOIs name type, used to filter the protocols for those EOIs
+     * @param eoi_type:            EOIs name type, used to filter the protocols for those EOIs
      * @return count of total EOIs
      */
     public int processProtocolsForPlot(PlotData plotData, String protocols_tag, String protocols_file_name, String eoi_type) {
@@ -166,13 +180,13 @@ public class ProtocolViewGenerator {
 
             try {
 
-                 JSONArray protocols = plotData.getArrayField(protocols_tag);
-                 if(protocols != null) {
-                     mainProtocols = new ArrayList<>(protocols.length());
-                     for (int i = 0; i < protocols.length(); i++) {
-                         mainProtocols.add(protocols.getString(i));
-                     }
-                 }
+                JSONArray protocols = plotData.getArrayField(protocols_tag);
+                if (protocols != null) {
+                    mainProtocols = new ArrayList<>(protocols.length());
+                    for (int i = 0; i < protocols.length(); i++) {
+                        mainProtocols.add(protocols.getString(i));
+                    }
+                }
 
                 for (int y = 0; y < jsonArray.length(); y++) {
                     JSONObject protocol = jsonArray.getJSONObject(y);
@@ -180,7 +194,7 @@ public class ProtocolViewGenerator {
                     if (protocol.getJSONObject("eoi").has("name"))
                         type = protocol.getJSONObject("eoi").getString("name");
 
-                    if(type != null && type.equals(eoi_type)) {
+                    if (type != null && type.equals(eoi_type)) {
 
                         protocolsByTag.put(protocol.getString("name"), protocol);
                         int numberOfEOIs = 0;
@@ -209,15 +223,16 @@ public class ProtocolViewGenerator {
 
     /**
      * Returns the views associated to the protocol observations
-     * @param protocol: protocol's name
+     *
+     * @param protocol:     protocol's name
      * @param observations: observations structure
      * @return views associated to the protocol observations
      */
-    private HashMap<String, List<ComponentView>> getViews(String protocol, JSONArray observations){
+    private HashMap<String, List<ComponentView>> getViews(String protocol, JSONArray observations) {
         HashMap<String, List<ComponentView>> observations_map = new HashMap<>(observations.length());
 
 
-        for(int w = 0; w < observations.length(); w++){
+        for (int w = 0; w < observations.length(); w++) {
             try {
                 JSONObject ob = observations.getJSONObject(w);
 
@@ -230,54 +245,54 @@ public class ProtocolViewGenerator {
                         continue;
 
                     List<Integer> limited_to = new ArrayList<>(array.length());
-                    for(int l = 0; l < array.length(); l++){
-                        limited_to.add(l,array.getInt(l));
+                    for (int l = 0; l < array.length(); l++) {
+                        limited_to.add(l, array.getInt(l));
                     }
 
-                    if(limitedObservations.get(protocol) == null)
-                        limitedObservations.put(protocol,new HashMap<String, List<Integer>>());
+                    if (limitedObservations.get(protocol) == null)
+                        limitedObservations.put(protocol, new HashMap<String, List<Integer>>());
 
-                    limitedObservations.get(protocol).put(name,limited_to);
+                    Objects.requireNonNull(limitedObservations.get(protocol)).put(name, limited_to);
 
 
                 }
 
-                if(ob.has("helper")){
+                if (ob.has("helper")) {
                     JSONArray array = ob.optJSONArray("helper");
-                    for(int l = 0; l < array.length(); l++){
+                    for (int l = 0; l < array.length(); l++) {
                         JSONObject helper = array.getJSONObject(l);
                         HelperData helperData;
-                        if(helper.has("extra"))
-                            helperData = new HelperData(helper.getInt("position"),helper.getString("title"), helper.getString("message"),helper.getString("extra"));
+                        if (helper.has("extra"))
+                            helperData = new HelperData(helper.getInt("position"), helper.getString("title"), helper.getString("message"), helper.getString("extra"));
                         else
-                            helperData = new HelperData(helper.getInt("position"),helper.getString("title"), helper.getString("message"));
+                            helperData = new HelperData(helper.getInt("position"), helper.getString("title"), helper.getString("message"));
 
-                        if(!helpersPerProtocol.containsKey(protocol))
-                            helpersPerProtocol.put(protocol,new HashMap<>());
-                        if(!helpersPerProtocol.get(protocol).containsKey(name))
-                            helpersPerProtocol.get(protocol).put(name,new ArrayList<>());
-                        helpersPerProtocol.get(protocol).get(name).add(helperData);
+                        if (!helpersPerProtocol.containsKey(protocol))
+                            helpersPerProtocol.put(protocol, new HashMap<>());
+                        if (!Objects.requireNonNull(helpersPerProtocol.get(protocol)).containsKey(name))
+                            Objects.requireNonNull(helpersPerProtocol.get(protocol)).put(name, new ArrayList<>());
+                        Objects.requireNonNull(Objects.requireNonNull(helpersPerProtocol.get(protocol)).get(name)).add(helperData);
                     }
                 }
 
                 for (int z = 0; z < iterations.length(); z++) {
                     JSONObject iteration_obj = iterations.getJSONObject(z);
 
-                    ComponentBuildInfo buildInfo = setComponent(iteration_obj,name,protocol);
+                    ComponentBuildInfo buildInfo = setComponent(iteration_obj, name, protocol);
                     if (buildInfo == null)
                         continue;
 
                     ComponentView cv = mComponentAPI.setComponent(buildInfo);
-                    if(cv == null)
+                    if (cv == null)
                         continue;
 
                     if (!observations_map.containsKey(name) || observations_map.get(name) == null)
                         observations_map.put(name, new ArrayList<>());
 
-                    if(observations_map.get(name) != null)
-                        observations_map.get(name).add(cv);
+                    if (observations_map.get(name) != null)
+                        Objects.requireNonNull(observations_map.get(name)).add(cv);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -286,12 +301,13 @@ public class ProtocolViewGenerator {
 
     /**
      * Returns the component build info based on the observation's iteration associated to the protocol
+     *
      * @param iteration_obj: observation's iteration structure
-     * @param ob_name: observation's name
-     * @param protocol: protocol's name
+     * @param ob_name:       observation's name
+     * @param protocol:      protocol's name
      * @return component build info extracted from the protocol data field
      */
-    private ComponentBuildInfo setComponent(JSONObject iteration_obj, String ob_name, String protocol){
+    private ComponentBuildInfo setComponent(JSONObject iteration_obj, String ob_name, String protocol) {
 
         List<String> temp_values = null;
         String temporal_type = null;
@@ -307,10 +323,10 @@ public class ProtocolViewGenerator {
 
             int type = iteration_obj.getInt("data_type");
             String units = null;
-            if(iteration_obj.has("units"))
+            if (iteration_obj.has("units"))
                 units = iteration_obj.getString("units");
 
-            if(iteration_obj.has("value_type"))
+            if (iteration_obj.has("value_type"))
                 value_type = iteration_obj.getString("value_type");
 
             if (type == ComponentGenerator.COMPONENT_COUNT) {
@@ -322,17 +338,17 @@ public class ProtocolViewGenerator {
                     if (offset_value.charAt(0) == '(' && offset_value.charAt(offset_value.length() - 1) == ')') {
                         String aux = offset_value.replace("(", "").replace(")", "");
                         String[] tuple = aux.split(",");
-                        try{
-                            if(value_type == null || value_type.equals("integer")) {
+                        try {
+                            if (value_type == null || value_type.equals("integer")) {
                                 int first_value = Integer.parseInt(tuple[0]);
                                 int last_value = Integer.parseInt(tuple[1]);
                                 int step = Integer.parseInt(tuple[2]);
                                 for (int m = first_value; m <= last_value; m += step)
                                     temp_values.add(Integer.toString(m));
-                            }else{
+                            } else {
                                 double first_value = Double.parseDouble(tuple[0]);
                                 double last_value = Double.parseDouble(tuple[1]);
-                                double step =Double.parseDouble(tuple[2]);
+                                double step = Double.parseDouble(tuple[2]);
                                 for (double m = first_value; m <= last_value; m += step)
                                     temp_values.add(Double.toString(m));
                             }
@@ -348,15 +364,15 @@ public class ProtocolViewGenerator {
 
             } else if (type == ComponentGenerator.COMPONENT_TIME) {
                 temporal_type = iteration_obj.getString("subtype");
-            }else if(type == ComponentGenerator.COMPONENT_CATEGORY){
+            } else if (type == ComponentGenerator.COMPONENT_CATEGORY) {
                 JSONArray arr = iteration_obj.getJSONArray("values");
                 temp_values = new ArrayList<>(arr.length());
-                for(int i = 0; i < arr.length(); i++){
+                for (int i = 0; i < arr.length(); i++) {
                     temp_values.add(arr.getString(i));
                 }
-                if(iteration_obj.has("unique"))
+                if (iteration_obj.has("unique"))
                     unique = iteration_obj.getBoolean("unique");
-            }else if(type == ComponentGenerator.COMPONENT_INTERVAL){
+            } else if (type == ComponentGenerator.COMPONENT_INTERVAL) {
                 JSONArray first = iteration_obj.getJSONArray("first");
                 firstValues = new String[first.length()];
                 for (int x = 0; x < first.length(); x++) {
@@ -364,8 +380,7 @@ public class ProtocolViewGenerator {
                 }
 
 
-
-                if( iteration_obj.has("last")) {
+                if (iteration_obj.has("last")) {
                     JSONArray last = iteration_obj.getJSONArray("last");
                     lastValues = new String[last.length()];
                     for (int x = 0; x < last.length(); x++) {
@@ -385,8 +400,8 @@ public class ProtocolViewGenerator {
                 finalValues = temp_values.toArray(new String[0]);
             }
 
-            return new ComponentBuildInfo(type, units, label, value_type, min, max, finalValues, temporal_type, firstValues,lastValues,unique,ob_name, protocol);
-        }catch (Exception e){
+            return new ComponentBuildInfo(type, units, label, value_type, min, max, finalValues, temporal_type, firstValues, lastValues, unique, ob_name, protocol);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -394,15 +409,16 @@ public class ProtocolViewGenerator {
 
     /**
      * Create all views for the current protocols
+     *
      * @return true if success, false otherwise
      */
-    public boolean fillViews(){
+    public boolean fillViews() {
         hiddenProtocols = new TreeSet<>();
         viewsPerProtocol = new HashMap<>();
         generalObservations = new HashMap<>();
         limitedObservations = new HashMap<>();
 
-        for(String key : protocolsByTag.keySet()) {
+        for (String key : protocolsByTag.keySet()) {
             JSONObject protocol = protocolsByTag.get(key);
             if (protocol == null)
                 continue;
@@ -432,13 +448,11 @@ public class ProtocolViewGenerator {
                     }
                 }
 
-                JSONObject target = protocol;
-
                 viewsPerProtocol.put(key, getViews(key, protocol.getJSONArray("observations")));
 
 
-                if (target.has("general_data")) {
-                    JSONArray observations_for_visit_for_protocol = target.getJSONArray("general_data");
+                if (protocol.has("general_data")) {
+                    JSONArray observations_for_visit_for_protocol = protocol.getJSONArray("general_data");
                     List<ComponentBuildInfo> observations_for_visit_data = new ArrayList<>(observations_for_visit_for_protocol.length());
                     for (int z = 0; z < observations_for_visit_for_protocol.length(); z++) {
                         JSONObject ob = observations_for_visit_for_protocol.getJSONObject(z);
@@ -449,7 +463,7 @@ public class ProtocolViewGenerator {
                     }
                     generalObservations.put(key, observations_for_visit_data);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
@@ -457,11 +471,6 @@ public class ProtocolViewGenerator {
 
         return true;
     }
-
-
-
-
-
 
 
 }

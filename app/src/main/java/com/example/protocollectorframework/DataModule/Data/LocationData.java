@@ -16,6 +16,7 @@ public class LocationData implements Serializable {
 
     /**
      * Constructor
+     *
      * @param lat: point's latitude
      * @param lng: point's longitude
      */
@@ -29,8 +30,9 @@ public class LocationData implements Serializable {
 
     /**
      * Constructor
-     * @param lat: point's latitude
-     * @param lng: point's longitude
+     *
+     * @param lat:       point's latitude
+     * @param lng:       point's longitude
      * @param timestamp: point's capture timestamp
      */
     public LocationData(double lat, double lng, long timestamp) {
@@ -44,8 +46,9 @@ public class LocationData implements Serializable {
 
     /**
      * Constructor
-     * @param lat: point's latitude
-     * @param lng: point's longitude
+     *
+     * @param lat:       point's latitude
+     * @param lng:       point's longitude
      * @param elevation: point's elevation
      */
     public LocationData(double lat, double lng, double elevation) {
@@ -60,8 +63,9 @@ public class LocationData implements Serializable {
 
     /**
      * Constructor
-     * @param lat: point's latitude
-     * @param lng: point's longitude
+     *
+     * @param lat:       point's latitude
+     * @param lng:       point's longitude
      * @param timestamp: point's capture timestamp
      * @param elevation: point's elevation
      */
@@ -77,11 +81,12 @@ public class LocationData implements Serializable {
 
     /**
      * Constructor
-     * @param lat: point's latitude
-     * @param lng: point's longitude
+     *
+     * @param lat:       point's latitude
+     * @param lng:       point's longitude
      * @param timestamp: point's capture timestamp
      * @param elevation: point's elevation
-     * @param accuracy: point's horizontal accuracy
+     * @param accuracy:  point's horizontal accuracy
      */
     public LocationData(double lat, double lng, long timestamp, double elevation, float accuracy) {
         this.lat = lat;
@@ -94,11 +99,12 @@ public class LocationData implements Serializable {
 
     /**
      * Constructor
-     * @param lat: point's latitude
-     * @param lng: point's longitude
-     * @param timestamp: point's capture timestamp
-     * @param elevation: point's elevation
-     * @param accuracy: point's horizontal accuracy
+     *
+     * @param lat:        point's latitude
+     * @param lng:        point's longitude
+     * @param timestamp:  point's capture timestamp
+     * @param elevation:  point's elevation
+     * @param accuracy:   point's horizontal accuracy
      * @param sat_number: number of satellites used to get the point
      */
     public LocationData(double lat, double lng, long timestamp, double elevation, float accuracy, int sat_number) {
@@ -112,6 +118,7 @@ public class LocationData implements Serializable {
 
     /**
      * Returns the number of satellites used to get the point
+     *
      * @return number os satellites
      */
     public int getSat_number() {
@@ -120,6 +127,7 @@ public class LocationData implements Serializable {
 
     /**
      * Sets the number of satellites used to get the point
+     *
      * @param sat_number number of satellites
      */
     public void setSat_number(int sat_number) {
@@ -128,6 +136,7 @@ public class LocationData implements Serializable {
 
     /**
      * Returns the horizontal accuracy in meters
+     *
      * @return horizontal accuracy
      */
     public float getAccuracy() {
@@ -136,6 +145,7 @@ public class LocationData implements Serializable {
 
     /**
      * Sets the horizontal accuracy
+     *
      * @param accuracy: horizontal accuracy in meters
      */
     public void setAccuracy(float accuracy) {
@@ -144,6 +154,7 @@ public class LocationData implements Serializable {
 
     /**
      * Returns the point's latitude
+     *
      * @return point's latitude
      */
     public double getLat() {
@@ -152,6 +163,7 @@ public class LocationData implements Serializable {
 
     /**
      * Sets the point latitude
+     *
      * @param lat: point's latitude
      */
     public void setLat(double lat) {
@@ -160,7 +172,8 @@ public class LocationData implements Serializable {
 
     /**
      * Returns the point's longitude
-     * @return  point's longitude
+     *
+     * @return point's longitude
      */
     public double getLng() {
         return lng;
@@ -168,6 +181,7 @@ public class LocationData implements Serializable {
 
     /**
      * Sets the point longitude
+     *
      * @param lng: point's longitude
      */
     public void setLng(double lng) {
@@ -176,6 +190,7 @@ public class LocationData implements Serializable {
 
     /**
      * Returns the point capture timestamp
+     *
      * @return
      */
     public long getTimestamp() {
@@ -184,6 +199,7 @@ public class LocationData implements Serializable {
 
     /**
      * Sets the point capture timestamp
+     *
      * @param time: capture timestamp
      */
     public void setTimestamp(long time) {
@@ -192,6 +208,7 @@ public class LocationData implements Serializable {
 
     /**
      * Returns the point elevation in meters
+     *
      * @return point's elevation
      */
     public double getElevation() {
@@ -200,6 +217,7 @@ public class LocationData implements Serializable {
 
     /**
      * Sets the point elevation
+     *
      * @param elevation: point's elevation
      */
     public void setElevation(double elevation) {

@@ -43,7 +43,7 @@ public class MethodData {
                 String packageNameClass = args_type[i];
                 classes[i] = Class.forName(packageNameClass);
 
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

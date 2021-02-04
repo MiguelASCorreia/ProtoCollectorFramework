@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Database table that stores the information associated to visits
@@ -43,15 +44,17 @@ public class VisitTable {
 
     /**
      * Constructor
+     *
      * @param context: current context
      */
-    public VisitTable(Context context){
+    public VisitTable(Context context) {
         db = new DataBase(context);
         this.context = context;
     }
 
     /**
      * Creates the table
+     *
      * @param sqLiteDatabase: SQLite database
      */
     protected static void createTable(SQLiteDatabase sqLiteDatabase) {
@@ -74,6 +77,7 @@ public class VisitTable {
 
     /**
      * Drops the table
+     *
      * @param sqLiteDatabase: SQLite database
      */
     protected static void dropTable(SQLiteDatabase sqLiteDatabase) {
@@ -83,60 +87,63 @@ public class VisitTable {
 
     /**
      * Fetch the creation timestamp from a visit
+     *
      * @param visit_id: visit's identifier
      * @return visit's creation timestamp
      */
-    public String getVisitCreationTime(String visit_id){
+    public String getVisitCreationTime(String visit_id) {
         SQLiteDatabase db = this.db.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT + " + VISIT_CREATION_TIME + " FROM " + TABLE_NAME + " WHERE " + VISIT_ID + " = ?", new String[]{visit_id});
 
-        try{
+        try {
             if (res != null) {
                 res.moveToFirst();
                 return res.getString(0);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             res.close();
             db.close();
 
         }
 
-        return  null;
+        return null;
     }
 
     /**
      * Adds a new visit to the table
+     *
      * @param plot_id: plot's identifier where the visits takes place
      * @return visit's identifier
      */
-    public String addVisit(String plot_id){
+    public String addVisit(String plot_id) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
+        try {
             return addVisit(plot_id, db);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Adds a new visit to the table
+     *
      * @param plot_id: plot's identifier where the visits takes place
-     * @param db: SQLite database
+     * @param db:      SQLite database
      * @return visit's identifier
      */
-    private String addVisit(String plot_id, SQLiteDatabase db){
+    private String addVisit(String plot_id, SQLiteDatabase db) {
         try {
             ContentValues cv = new ContentValues();
             cv.put(VISIT_PLOT, plot_id);
             cv.put(VISIT_START_TIME, System.currentTimeMillis());
             long id = db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
             return Long.toString(id);
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
         }
@@ -144,14 +151,15 @@ public class VisitTable {
 
     /**
      * Cancels a visit deleting it from the table
+     *
      * @param visit_id: visit's identifier
      * @return true if deleted with success, false otherwise
      */
     public boolean cancelVisit(String visit_id) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return db.delete(TABLE_NAME, VISIT_ID +" = ?",new String[]{visit_id}) > 0;
-        }catch (SQLException e){
+        try {
+            return db.delete(TABLE_NAME, VISIT_ID + " = ?", new String[]{visit_id}) > 0;
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return false;
         }
@@ -159,52 +167,55 @@ public class VisitTable {
 
     /**
      * Changes the visit sync status to "uploaded"
+     *
      * @param visit_id: visit's identifier
      * @return true if changed with success, false otherwise
      */
-    public long uploadVisit(String visit_id){
+    public long uploadVisit(String visit_id) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
+        try {
             return updateVisitFlag(visit_id, 1, db);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return -1;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Changes the visit sync status to "error on upload"
+     *
      * @param visit_id: visit's identifier
      * @return true if changed with success, false otherwise
      */
-    public boolean errorOnUpload(String visit_id){
+    public boolean errorOnUpload(String visit_id) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return updateVisitFlag(visit_id,-1, db) > 0;
-        }catch(SQLException e){
+        try {
+            return updateVisitFlag(visit_id, -1, db) > 0;
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return false;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Updates the sync flag of a given visit
-     * @param visit_id: visit's identifier
+     *
+     * @param visit_id:  visit's identifier
      * @param sync_flag: sync flag
-     * @param db: SQLite database
+     * @param db:        SQLite database
      * @return number of rows affected (bigger than zero if success)
      */
-    private long updateVisitFlag(String visit_id, int sync_flag, SQLiteDatabase db){
+    private long updateVisitFlag(String visit_id, int sync_flag, SQLiteDatabase db) {
         try {
             ContentValues cv = new ContentValues();
             cv.put(VISIT_SYNC, sync_flag);
             return db.update(TABLE_NAME, cv, VISIT_ID + " = ?", new String[]{visit_id});
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return -1;
         }
@@ -212,106 +223,110 @@ public class VisitTable {
 
     /**
      * Concludes an ongoing visit
-     * @param visit_id: visit's identifier
-     * @param eoi_json: JSON string with the information from the EOIs
+     *
+     * @param visit_id:  visit's identifier
+     * @param eoi_json:  JSON string with the information from the EOIs
      * @param info_json: JSON string with extra information
      * @return true if updated with success, false otherwise
      */
-    public boolean finishVisit(String visit_id, String eoi_json, String info_json){
+    public boolean finishVisit(String visit_id, String eoi_json, String info_json) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return finishVisit(visit_id,eoi_json,info_json, db) > 0;
-        }catch(SQLException e){
+        try {
+            return finishVisit(visit_id, eoi_json, info_json, db) > 0;
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return false;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Edits a visit
-     * @param visit_id: visit's identifier
-     * @param eoi_json: JSON string with the information from the EOIs
+     *
+     * @param visit_id:  visit's identifier
+     * @param eoi_json:  JSON string with the information from the EOIs
      * @param info_json: JSON string with extra information
      * @return true if edited with success, false otherwise
      */
-    public boolean editVisit(String visit_id, String eoi_json, String info_json){
+    public boolean editVisit(String visit_id, String eoi_json, String info_json) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return edit_visit(visit_id, eoi_json,info_json, db) > 0;
-        }catch(SQLException e){
+        try {
+            return edit_visit(visit_id, eoi_json, info_json, db) > 0;
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return false;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Creates a visit with all it's information
-     * @param gps_path: list of paths to the gps files
+     *
+     * @param gps_path:   list of paths to the gps files
      * @param start_time: visit start time in milliseconds
-     * @param end_time: visit ending time in milliseconds
-     * @param eoi_json: JSON string with the information from the EOIs
-     * @param info_json: JSON string with extra information
-     * @param plot_id: plot's identifier
-     * @param version: visit's version
+     * @param end_time:   visit ending time in milliseconds
+     * @param eoi_json:   JSON string with the information from the EOIs
+     * @param info_json:  JSON string with extra information
+     * @param plot_id:    plot's identifier
+     * @param version:    visit's version
      * @return visit's identifier
      */
-    public String downloadVisit(List<String> gps_path, long start_time, long end_time, String eoi_json, String info_json, long plot_id, int version){
+    public String downloadVisit(List<String> gps_path, long start_time, long end_time, String eoi_json, String info_json, long plot_id, int version) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return downloadVisit(gps_path, start_time, end_time,eoi_json, info_json,plot_id,version,db);
-        }catch(SQLException e){
+        try {
+            return downloadVisit(gps_path, start_time, end_time, eoi_json, info_json, plot_id, version, db);
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Creates a visit with all it's information
-     * @param gps_path: list of paths to the gps files
+     *
+     * @param gps_path:   list of paths to the gps files
      * @param start_time: visit start time in milliseconds
-     * @param end_time: visit ending time in milliseconds
-     * @param eoi_json: JSON string with the information from the EOIs
-     * @param info_json: JSON string with extra information
-     * @param plot_id: plot's identifier
-     * @param version: visit's version
-     * @param db: SQLite database
+     * @param end_time:   visit ending time in milliseconds
+     * @param eoi_json:   JSON string with the information from the EOIs
+     * @param info_json:  JSON string with extra information
+     * @param plot_id:    plot's identifier
+     * @param version:    visit's version
+     * @param db:         SQLite database
      * @return visit's identifier
      */
-    private String downloadVisit(List<String> gps_path, long start_time, long end_time, String eoi_json, String info_json, long plot_id, int version, SQLiteDatabase db){
+    private String downloadVisit(List<String> gps_path, long start_time, long end_time, String eoi_json, String info_json, long plot_id, int version, SQLiteDatabase db) {
         try {
             ContentValues cv = new ContentValues();
             cv.put(VISIT_PLOT, plot_id);
             cv.put(VISIT_START_TIME, start_time);
-            cv.put(VISIT_END_TIME,end_time);
-            cv.put(VISIT_EOI_JSON,eoi_json);
-            cv.put(VISIT_INFO_JSON,info_json);
-            cv.put(VISIT_VERSION,version);
-            cv.put(VISIT_SYNC,1);
+            cv.put(VISIT_END_TIME, end_time);
+            cv.put(VISIT_EOI_JSON, eoi_json);
+            cv.put(VISIT_INFO_JSON, info_json);
+            cv.put(VISIT_VERSION, version);
+            cv.put(VISIT_SYNC, 1);
 
             long id = db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-            if(id != -1) {
+            if (id != -1) {
                 TrajectoryTable trajectoryTable = new TrajectoryTable(context);
-                for(String path : gps_path){
-                    try{
+                for (String path : gps_path) {
+                    try {
                         String[] aux = path.split("_");
-                        String owner = aux[aux.length-3];
-                        if(owner.equals("track"))
+                        String owner = aux[aux.length - 3];
+                        if (owner.equals("track"))
                             owner = SharedMethods.getMyId(context);
-                        trajectoryTable.addTrajectory(Long.toString(id),path,owner);
+                        trajectoryTable.addTrajectory(Long.toString(id), path, owner);
 
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
             return Long.toString(id);
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
         }
@@ -319,38 +334,41 @@ public class VisitTable {
 
     /**
      * Fetch the version of a given visit
+     *
      * @param visit_id: visit's identifier
      * @return visit's version
      */
-    public int getVisitVersion(String visit_id){
+    public int getVisitVersion(String visit_id) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return getVersion(visit_id,db);
-        }catch(SQLException e){
+        try {
+            return getVersion(visit_id, db);
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return 0;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Fetch the version of a given visit
+     *
      * @param visit_id: visit's identifier
-     * @param db: SQLite database
+     * @param db:       SQLite database
      * @return visit's version
      */
     private int getVersion(String visit_id, SQLiteDatabase db) {
+        Cursor res = db.rawQuery("SELECT + " + VISIT_VERSION + " FROM " + TABLE_NAME + " WHERE " + VISIT_ID + " = ?", new String[]{visit_id});
         try {
-
-            Cursor res = db.rawQuery("SELECT + " + VISIT_VERSION + " FROM " + TABLE_NAME + " WHERE " + VISIT_ID + " = ?", new String[]{visit_id});
-
             if (res != null) {
                 res.moveToFirst();
                 return res.getInt(0);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            if(res != null)
+                res.close();
         }
 
         return 0;
@@ -360,31 +378,32 @@ public class VisitTable {
 
     /**
      * Edits a visit
-     * @param visit_id: visit's identifier
-     * @param eoi_json: JSON string with the information from the EOIs
+     *
+     * @param visit_id:  visit's identifier
+     * @param eoi_json:  JSON string with the information from the EOIs
      * @param info_json: JSON string with extra information
-     * @param db: SQLite database
+     * @param db:        SQLite database
      * @return number of rows affected (bigger than zero if success)
      */
-    private long edit_visit(String visit_id, String eoi_json, String info_json, SQLiteDatabase db){
+    private long edit_visit(String visit_id, String eoi_json, String info_json, SQLiteDatabase db) {
         try {
             ContentValues cv = new ContentValues();
             cv.put(VISIT_END_TIME, Long.toString(System.currentTimeMillis()));
-            cv.put(VISIT_EOI_JSON,eoi_json);
-            cv.put(VISIT_INFO_JSON,info_json);
+            cv.put(VISIT_EOI_JSON, eoi_json);
+            cv.put(VISIT_INFO_JSON, info_json);
             cv.put(VISIT_EDIT_TIME, SharedMethods.dateToUTCString(new Date()));
 
-            int oldVersion = getVersion(visit_id,db);
-            if(oldVersion > 0) {
+            int oldVersion = getVersion(visit_id, db);
+            if (oldVersion > 0) {
                 int newVersion = oldVersion + 1;
                 cv.put(VISIT_VERSION, newVersion);
             }
 
-            cv.put(VISIT_SYNC,2);
+            cv.put(VISIT_SYNC, 2);
 
             return db.update(TABLE_NAME, cv, VISIT_ID + " = ?", new String[]{visit_id});
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return -1;
         }
@@ -393,22 +412,23 @@ public class VisitTable {
 
     /**
      * Concludes an ongoing visit
-     * @param visit_id: visit's identifier
-     * @param eoi_json: JSON string with the information from the EOIs
+     *
+     * @param visit_id:  visit's identifier
+     * @param eoi_json:  JSON string with the information from the EOIs
      * @param info_json: JSON string with extra information
-     * @param db: SQLite database
+     * @param db:        SQLite database
      * @return number of rows affected (bigger than zero if success)
      */
-    private long finishVisit(String visit_id, String eoi_json, String info_json, SQLiteDatabase db){
+    private long finishVisit(String visit_id, String eoi_json, String info_json, SQLiteDatabase db) {
         try {
             ContentValues cv = new ContentValues();
             cv.put(VISIT_END_TIME, Long.toString(System.currentTimeMillis()));
-            cv.put(VISIT_EOI_JSON,eoi_json);
-            cv.put(VISIT_INFO_JSON,info_json);
+            cv.put(VISIT_EOI_JSON, eoi_json);
+            cv.put(VISIT_INFO_JSON, info_json);
 
             return db.update(TABLE_NAME, cv, VISIT_ID + " = ?", new String[]{visit_id});
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return -1;
         }
@@ -416,28 +436,29 @@ public class VisitTable {
 
     /**
      * Fetch the list of visits that took place in the given plot
-     * @param plot_id: plot's identifier
+     *
+     * @param plot_id:  plot's identifier
      * @param visit_id: visit's identifier (used to ignore one visit)
      * @return list of visits that took place in the given plot except the one passed as argument
      */
-    public List<VisitData> getVisitsOnPlot(String plot_id, String visit_id){
-        List<VisitData> array_list = new ArrayList<VisitData>();
+    public List<VisitData> getVisitsOnPlot(String plot_id, String visit_id) {
+        List<VisitData> array_list = new ArrayList<>();
         SQLiteDatabase db = this.db.getReadableDatabase();
 
-        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_NAME + " WHERE " + VISIT_PLOT + "= ? AND " + VISIT_END_TIME + " is not null AND " + VISIT_DELETE_TIME + " is null AND " + VISIT_ID + " != ?"   +  " ORDER BY " + VISIT_CREATION_TIME + " DESC", new String[]{plot_id,visit_id} );
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + VISIT_PLOT + "= ? AND " + VISIT_END_TIME + " is not null AND " + VISIT_DELETE_TIME + " is null AND " + VISIT_ID + " != ?" + " ORDER BY " + VISIT_CREATION_TIME + " DESC", new String[]{plot_id, visit_id});
         try {
             res.moveToFirst();
 
-            while (res.isAfterLast() == false) {
+            while (!res.isAfterLast()) {
                 array_list.add(getVisit(res));
                 res.moveToNext();
             }
 
             return array_list;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             res.close();
             db.close();
         }
@@ -446,21 +467,22 @@ public class VisitTable {
 
     /**
      * Fetch the sync status from a given visit
+     *
      * @param visit_id: visit's identifier
      * @return sync status
      */
-    public int getSyncStatus(String visit_id){
+    public int getSyncStatus(String visit_id) {
         int status = Integer.MIN_VALUE;
         SQLiteDatabase db = this.db.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT "+ VISIT_SYNC +" FROM " + TABLE_NAME + " WHERE "  + VISIT_ID + " = ? ", new String[]{visit_id} );
-        try{
+        Cursor res = db.rawQuery("SELECT " + VISIT_SYNC + " FROM " + TABLE_NAME + " WHERE " + VISIT_ID + " = ? ", new String[]{visit_id});
+        try {
             res.moveToFirst();
 
             status = res.getInt(res.getColumnIndex(VISIT_SYNC));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             res.close();
             db.close();
         }
@@ -469,25 +491,26 @@ public class VisitTable {
 
     /**
      * Fetch all the visit that were concluded
+     *
      * @return list of concluded visit data objects
      */
     public List<VisitData> getVisits() {
-        List<VisitData> array_list = new ArrayList<VisitData>();
+        List<VisitData> array_list = new ArrayList<>();
         SQLiteDatabase db = this.db.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_NAME + " WHERE "  + VISIT_END_TIME + " is not null AND " + VISIT_DELETE_TIME + " is null ORDER BY " + VISIT_START_TIME + " DESC", null );
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + VISIT_END_TIME + " is not null AND " + VISIT_DELETE_TIME + " is null ORDER BY " + VISIT_START_TIME + " DESC", null);
         try {
             res.moveToFirst();
 
-            while (res.isAfterLast() == false) {
+            while (!res.isAfterLast()) {
                 array_list.add(getVisit(res));
                 res.moveToNext();
             }
 
             return array_list;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             res.close();
             db.close();
         }
@@ -495,27 +518,28 @@ public class VisitTable {
 
     /**
      * Fetch the information of a visit given a cursor
+     *
      * @param cursor: query's cursor
      * @return visit data object
      */
-    private VisitData getVisit(Cursor cursor){
-        if(cursor == null || cursor.getCount() == 0) {
+    private VisitData getVisit(Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) {
             return null;
         }
 
         try {
             String ID = cursor.getString(cursor.getColumnIndex(VISIT_ID));
             String plot = cursor.getString(cursor.getColumnIndex(VISIT_PLOT));
-            Long start = cursor.getLong(cursor.getColumnIndex(VISIT_START_TIME));
-            Long end = cursor.getLong(cursor.getColumnIndex(VISIT_END_TIME));
+            long start = cursor.getLong(cursor.getColumnIndex(VISIT_START_TIME));
+            long end = cursor.getLong(cursor.getColumnIndex(VISIT_END_TIME));
             String eoi_json = cursor.getString(cursor.getColumnIndex(VISIT_EOI_JSON));
             String info_json = cursor.getString(cursor.getColumnIndex(VISIT_INFO_JSON));
 
             TrajectoryTable trajectoryTable = new TrajectoryTable(context);
             HashMap<String, String> routes = trajectoryTable.getTrajectories(ID);
 
-            return new VisitData(ID,plot,routes,start,end,eoi_json,info_json);
-        }catch(Exception e){
+            return new VisitData(ID, plot, routes, start, end, eoi_json, info_json);
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
         }
@@ -523,25 +547,26 @@ public class VisitTable {
 
     /**
      * Fetch the list of not uploaded visits (sync status != 1)
+     *
      * @return list of not uploaded visits
      */
     public List<VisitData> getNotUploadedVisits() {
-        List<VisitData> array_list = new ArrayList<VisitData>();
+        List<VisitData> array_list = new ArrayList<>();
         SQLiteDatabase db = this.db.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_NAME + " WHERE "  + VISIT_END_TIME + " is not null AND " + VISIT_DELETE_TIME + " is null AND " + VISIT_SYNC + " != 1", null );
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + VISIT_END_TIME + " is not null AND " + VISIT_DELETE_TIME + " is null AND " + VISIT_SYNC + " != 1", null);
         try {
             res.moveToFirst();
 
-            while (res.isAfterLast() == false) {
+            while (!res.isAfterLast()) {
                 array_list.add(getVisit(res));
                 res.moveToNext();
             }
 
             return array_list;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             res.close();
             db.close();
         }
@@ -549,41 +574,50 @@ public class VisitTable {
 
     /**
      * Fetch the plot identifier where the given visit took place
+     *
      * @param visit_id: visit's identifier
      * @return plot's identifier
      */
-    public String getPlotIdForVisit(String visit_id){
+    public String getPlotIdForVisit(String visit_id) {
         SQLiteDatabase db = this.db.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT " +  VISIT_PLOT+ " FROM " + TABLE_NAME + " WHERE " + VISIT_DELETE_TIME + " is null AND " + VISIT_ID + " = ?", new String[]{visit_id} );
-        res.moveToFirst();
-        if(res.getCount() != 0)
-            return res.getString(res.getColumnIndex(VISIT_PLOT));
-        else return null;
+        Cursor res = db.rawQuery("SELECT " + VISIT_PLOT + " FROM " + TABLE_NAME + " WHERE " + VISIT_DELETE_TIME + " is null AND " + VISIT_ID + " = ?", new String[]{visit_id});
 
+        try {
+            res.moveToFirst();
+            if (res.getCount() != 0)
+                return res.getString(res.getColumnIndex(VISIT_PLOT));
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(res != null)
+                res.close();
+        }
+        return  null;
     }
 
     /**
      * Fetch the information of a given visit that is concluded
+     *
      * @param visit_id: visit's identifier
      * @return concluded visit data object
      */
-    public VisitData getVisitByID(String visit_id){
-        List<VisitData> array_list = new ArrayList<VisitData>();
+    public VisitData getVisitByID(String visit_id) {
+        List<VisitData> array_list = new ArrayList<>();
         SQLiteDatabase db = this.db.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_NAME + " WHERE " + VISIT_DELETE_TIME + " is null AND " + VISIT_ID + " = ?", new String[]{visit_id} );
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + VISIT_DELETE_TIME + " is null AND " + VISIT_ID + " = ?", new String[]{visit_id});
         try {
             res.moveToFirst();
 
-            while (res.isAfterLast() == false) {
+            while (!res.isAfterLast()) {
                 array_list.add(getVisit(res));
                 res.moveToNext();
             }
 
             return array_list.get(0);
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             res.close();
             db.close();
         }
@@ -591,26 +625,27 @@ public class VisitTable {
 
     /**
      * Fetch the information of a given visit that is concluded
+     *
      * @param visit_id: visit's identifier
      * @return concluded visit data object
      */
-    public VisitData getFinishedVisitByID(String visit_id){
-        List<VisitData> array_list = new ArrayList<VisitData>();
+    public VisitData getFinishedVisitByID(String visit_id) {
+        List<VisitData> array_list = new ArrayList<>();
         SQLiteDatabase db = this.db.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_NAME + " WHERE " + VISIT_DELETE_TIME + " is null AND "  + VISIT_END_TIME  +" is not null AND " + VISIT_ID + " = ?", new String[]{visit_id} );
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + VISIT_DELETE_TIME + " is null AND " + VISIT_END_TIME + " is not null AND " + VISIT_ID + " = ?", new String[]{visit_id});
         try {
             res.moveToFirst();
 
-            while (res.isAfterLast() == false) {
+            while (!res.isAfterLast()) {
                 array_list.add(getVisit(res));
                 res.moveToNext();
             }
 
             return array_list.get(0);
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             res.close();
             db.close();
         }
@@ -619,61 +654,61 @@ public class VisitTable {
 
     /**
      * Returns a cursor resulting from the query that fetch the combined information of visits and plots
+     *
      * @param plot_name: plot's name
-     * @param start: visit start time as Calendar
-     * @param end: visit ending time as Calendar
+     * @param start:     visit start time as Calendar
+     * @param end:       visit ending time as Calendar
      * @param sync_flag: desired sync flag
      * @return cursor resulting from the query that fetch the combined information of visits and plots
      */
-    public Cursor getVisitsWithPlotCursor(String plot_name, Calendar start, Calendar end, int sync_flag){
-        List<VisitWithPlotData> array_list = new ArrayList<>();
+    public Cursor getVisitsWithPlotCursor(String plot_name, Calendar start, Calendar end, int sync_flag) {
         SQLiteDatabase db = this.db.getReadableDatabase();
-        String select = TABLE_NAME +"."+ VISIT_ID + "," + TABLE_NAME +"."+ VISIT_START_TIME + "," + TABLE_NAME +"."+ VISIT_END_TIME + "," + TABLE_NAME +"."+ VISIT_PLOT + "," + TABLE_NAME +"."+ VISIT_SYNC + ","+ PlotTable.TABLE_NAME + "." + PlotTable.PLOT_NAME;
+        String select = TABLE_NAME + "." + VISIT_ID + "," + TABLE_NAME + "." + VISIT_START_TIME + "," + TABLE_NAME + "." + VISIT_END_TIME + "," + TABLE_NAME + "." + VISIT_PLOT + "," + TABLE_NAME + "." + VISIT_SYNC + "," + PlotTable.TABLE_NAME + "." + PlotTable.PLOT_NAME;
         try {
             String where_plot = "";
             String where_date = "";
             String where_state = "";
             String[] args = null;
-            if(plot_name != null) {
+            if (plot_name != null) {
                 args = new String[]{plot_name};
                 where_plot = " AND " + PlotTable.TABLE_NAME + "." + PlotTable.PLOT_NAME + " = ?";
             }
-            if(start != null){
-                if(end != null){
-                    end.add(Calendar.DATE,1);
+            if (start != null) {
+                if (end != null) {
+                    end.add(Calendar.DATE, 1);
                     where_date = " AND " + VISIT_START_TIME + " BETWEEN " + start.getTime().getTime() + " AND " + end.getTime().getTime();
 
-                }else{
+                } else {
                     Calendar nextDay = Calendar.getInstance();
                     nextDay.setTime(start.getTime());
-                    nextDay.add(Calendar.DATE,1);
+                    nextDay.add(Calendar.DATE, 1);
                     where_date = " AND " + VISIT_START_TIME + " BETWEEN " + start.getTime().getTime() + " AND " + nextDay.getTime().getTime();
                 }
             }
-            if(sync_flag == 0 || sync_flag == 1 || sync_flag == -1 || sync_flag == 2){
-                where_state = " AND " +  VISIT_SYNC + " = " + sync_flag;
+            if (sync_flag == 0 || sync_flag == 1 || sync_flag == -1 || sync_flag == 2) {
+                where_state = " AND " + VISIT_SYNC + " = " + sync_flag;
             }
 
             return db.rawQuery("SELECT " + select + " FROM " + TABLE_NAME +
                     " INNER JOIN " + PlotTable.TABLE_NAME + " ON " + VISIT_PLOT + " = " + PlotTable.TABLE_NAME + "." + PlotTable.PLOT_ID +
                     " WHERE " + VISIT_END_TIME + " is not null AND " + VISIT_DELETE_TIME + " is null" + where_plot + where_date + where_state + " ORDER BY " + VISIT_START_TIME + " DESC", args);
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
-
 
 
     }
 
     /**
      * Check if there is any visit on a given date and plot
-     * @param date: date string in the format yyyy.mm.dd.hh.mm
+     *
+     * @param date:    date string in the format yyyy.mm.dd.hh.mm
      * @param acronym: plot's acronym
      * @return true if there is at least one visit on the given date and plot, false otherwise
      */
-    public boolean hasVisitOnDateAndPlot(String date, String acronym){
-        long timeInMilliseconds = -1;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm");
+    public boolean hasVisitOnDateAndPlot(String date, String acronym) {
+        long timeInMilliseconds;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm", Locale.getDefault());
         try {
             Date mDate = sdf.parse(date);
             timeInMilliseconds = mDate.getTime();
@@ -683,12 +718,20 @@ public class VisitTable {
         }
 
         SQLiteDatabase db = this.db.getReadableDatabase();
-        String select = TABLE_NAME +"."+ VISIT_ID + "," + TABLE_NAME +"."+ VISIT_START_TIME + "," + TABLE_NAME +"."+ VISIT_END_TIME + "," + TABLE_NAME +"."+ VISIT_PLOT + "," + PlotTable.TABLE_NAME + "." + PlotTable.PLOT_ACRONYM;
-        Cursor res  = db.rawQuery("SELECT " + select + " FROM " + TABLE_NAME +
+        String select = TABLE_NAME + "." + VISIT_ID + "," + TABLE_NAME + "." + VISIT_START_TIME + "," + TABLE_NAME + "." + VISIT_END_TIME + "," + TABLE_NAME + "." + VISIT_PLOT + "," + PlotTable.TABLE_NAME + "." + PlotTable.PLOT_ACRONYM;
+        Cursor res = db.rawQuery("SELECT " + select + " FROM " + TABLE_NAME +
                 " INNER JOIN " + PlotTable.TABLE_NAME + " ON " + VISIT_PLOT + " = " + PlotTable.TABLE_NAME + "." + PlotTable.PLOT_ID +
                 " WHERE " + VISIT_END_TIME + " is not null AND " + VISIT_DELETE_TIME + " is null AND " + PlotTable.TABLE_NAME + "." + PlotTable.PLOT_ACRONYM + " = ? AND " + VISIT_START_TIME + " BETWEEN " + timeInMilliseconds + " AND " + (timeInMilliseconds + 60000), new String[]{acronym});
 
-        return res.getCount() != 0;
+        try {
+            return res.getCount() != 0;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(res != null)
+                res.close();
+        }
+        return false;
     }
 
 }

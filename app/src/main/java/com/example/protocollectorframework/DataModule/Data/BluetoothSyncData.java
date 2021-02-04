@@ -12,8 +12,9 @@ public class BluetoothSyncData {
 
     /**
      * Constructor
-     * @param partner: partner identifier
-     * @param timestamp: data exchange timestamp
+     *
+     * @param partner:      partner identifier
+     * @param timestamp:    data exchange timestamp
      * @param endVisitSync: last visit sync indicator
      */
     public BluetoothSyncData(String partner, String timestamp, boolean endVisitSync) {
@@ -24,6 +25,7 @@ public class BluetoothSyncData {
 
     /**
      * Returns the partner identifier
+     *
      * @return partner identifier
      */
     public String getPartner() {
@@ -32,6 +34,7 @@ public class BluetoothSyncData {
 
     /**
      * Sets the partner identifier
+     *
      * @param partner: partner identifier
      */
     public void setPartner(String partner) {
@@ -40,6 +43,7 @@ public class BluetoothSyncData {
 
     /**
      * Returns the data exchange timestamp
+     *
      * @return data exchange timestamp
      */
     public String getTimestamp() {
@@ -48,6 +52,7 @@ public class BluetoothSyncData {
 
     /**
      * Sets the data exchange timestamp
+     *
      * @param timestamp: data exchange timestamp
      */
     public void setTimestamp(String timestamp) {
@@ -56,6 +61,7 @@ public class BluetoothSyncData {
 
     /**
      * Checks if it's the last synchronization moment
+     *
      * @return true if th's the last synchronization log, false otherwise
      */
     public boolean isEndVisitSync() {
@@ -64,6 +70,7 @@ public class BluetoothSyncData {
 
     /**
      * Sets the indicator for the last visit sync
+     *
      * @param endVisitSync: indicator
      */
     public void setEndVisitSync(boolean endVisitSync) {
@@ -72,6 +79,7 @@ public class BluetoothSyncData {
 
     /**
      * Returns the log associated with the data object
+     *
      * @return synchronization log
      */
     @NotNull

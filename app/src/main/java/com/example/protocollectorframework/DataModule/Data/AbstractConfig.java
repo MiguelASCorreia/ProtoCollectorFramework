@@ -19,20 +19,21 @@ public class AbstractConfig implements Serializable {
     /**
      * Empty constructor
      */
-    public AbstractConfig(){
+    public AbstractConfig() {
 
     }
 
     /**
      * Default constructor
-     * @param visit_data: boolean that indicates if the visit data (id, start time and ending time) is to be inserted into the abstract
-     * @param visit_info: boolean that indicates if the visit information (stored in the info column of the corresponding table) is to be inserted into the abstract
+     *
+     * @param visit_data:         boolean that indicates if the visit data (id, start time and ending time) is to be inserted into the abstract
+     * @param visit_info:         boolean that indicates if the visit information (stored in the info column of the corresponding table) is to be inserted into the abstract
      * @param complementary_data: boolean that indicates if the complementary observations data (id, start time and ending time) is to be inserted into the abstract
      * @param complementary_info: boolean that indicates if the  complementary observations information (stored in the info column of the corresponding table) is to be inserted into the abstract
-     * @param plot_data: boolean that indicates if the plot data (id, acronym and name) is to be inserted into the abstract
-     * @param plot_info: boolean that indicates if the plot information (stored in the info column of the corresponding table) is to be inserted into the abstract
-     * @param multimedia_count: boolean that indicates if the multimedia file count is to be inserted into the abstract
-     * @param methods: array of methods which the returned value is to be inserted into the abstract
+     * @param plot_data:          boolean that indicates if the plot data (id, acronym and name) is to be inserted into the abstract
+     * @param plot_info:          boolean that indicates if the plot information (stored in the info column of the corresponding table) is to be inserted into the abstract
+     * @param multimedia_count:   boolean that indicates if the multimedia file count is to be inserted into the abstract
+     * @param methods:            array of methods which the returned value is to be inserted into the abstract
      */
     public AbstractConfig(boolean visit_data, boolean visit_info, boolean complementary_data, boolean complementary_info, boolean plot_data, boolean plot_info, boolean multimedia_count, MethodData[] methods) {
         this.visit_data = visit_data;
@@ -47,6 +48,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Checks if the visit data is to be inserted into the abstract
+     *
      * @return true if the visit data is to be inserted into the abstract, false otherwise
      */
     public boolean isVisitDataAccountable() {
@@ -55,6 +57,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Sets if the visit data is to be inserted into the abstract
+     *
      * @param accountable: true if is to be accountable, false otherwise
      */
     public void setVisitDataFlag(boolean accountable) {
@@ -63,14 +66,16 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Checks if the visit information is to be inserted into the abstract
+     *
      * @return true if the visit information is to be inserted into the abstract, false otherwise
      */
-    public boolean isVisitInfoAccountable () {
+    public boolean isVisitInfoAccountable() {
         return visit_info;
     }
 
     /**
      * Sets if the visit information is to be inserted into the abstract
+     *
      * @param accountable: true if is to be accountable, false otherwise
      */
     public void setVisitInfoFlag(boolean accountable) {
@@ -79,6 +84,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Checks if the complementary data is to be inserted into the abstract
+     *
      * @return true if the complementary data is to be inserted into the abstract, false otherwise
      */
     public boolean isComplementaryDataAccountable() {
@@ -87,6 +93,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Sets if the complementary data is to be inserted into the abstract
+     *
      * @param accountable: true if is to be accountable, false otherwise
      */
     public void setComplementaryDataFlag(boolean accountable) {
@@ -95,6 +102,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Checks if the complementary info is to be inserted into the abstract
+     *
      * @return true if the complementary info is to be inserted into the abstract, false otherwise
      */
     public boolean isComplementaryInfoAccountable() {
@@ -103,6 +111,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Sets if the complementary info is to be inserted into the abstract
+     *
      * @param accountable: true if is to be accountable, false otherwise
      */
     public void setComplementaryInfoFlag(boolean accountable) {
@@ -111,6 +120,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Checks if the plot data is to be inserted into the abstract
+     *
      * @return true if the plot data is to be inserted into the abstract, false otherwise
      */
     public boolean isPlotDataAccountable() {
@@ -119,6 +129,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Sets if the plot data is to be inserted into the abstract
+     *
      * @param accountable: true if is to be accountable, false otherwise
      */
     public void setPlotDataFlag(boolean accountable) {
@@ -127,6 +138,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Checks if the plot info is to be inserted into the abstract
+     *
      * @return true if the plot info is to be inserted into the abstract, false otherwise
      */
     public boolean isPlotInfoAccountable() {
@@ -135,6 +147,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Sets if the plot info is to be inserted into the abstract
+     *
      * @param accountable: true if is to be accountable, false otherwise
      */
     public void setPlotInfoFlag(boolean accountable) {
@@ -143,6 +156,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Checks if the multimedia count is to be inserted into the abstract
+     *
      * @return true if the multimedia count is to be inserted into the abstract, false otherwise
      */
     public boolean isMultimediaCountAccountable() {
@@ -151,6 +165,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Sets if the multimedia count is to be inserted into the abstract
+     *
      * @param accountable: true if is to be accountable, false otherwise
      */
     public void setMultimediaCountFlag(boolean accountable) {
@@ -159,6 +174,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Returns the array of methods that the returned value is to be inserted into the abstract
+     *
      * @return methods to be accountable
      */
     public MethodData[] getMethods() {
@@ -167,6 +183,7 @@ public class AbstractConfig implements Serializable {
 
     /**
      * Sets the array of methods that the returned value is to be inserted into the abstract
+     *
      * @param methods: methods to be accountable
      */
     public void setMethods(MethodData[] methods) {

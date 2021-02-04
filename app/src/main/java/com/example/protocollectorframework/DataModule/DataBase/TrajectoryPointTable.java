@@ -32,15 +32,17 @@ public class TrajectoryPointTable {
 
     /**
      * Constructor
+     *
      * @param context: current context
      */
-    public TrajectoryPointTable(Context context){
+    public TrajectoryPointTable(Context context) {
         db = new DataBase(context);
         this.context = context;
     }
 
     /**
      * Creates the table
+     *
      * @param sqLiteDatabase: SQLite database
      */
     protected static void createTable(SQLiteDatabase sqLiteDatabase) {
@@ -60,6 +62,7 @@ public class TrajectoryPointTable {
 
     /**
      * Drops the table
+     *
      * @param sqLiteDatabase: SQLite database
      */
     protected static void dropTable(SQLiteDatabase sqLiteDatabase) {
@@ -69,31 +72,33 @@ public class TrajectoryPointTable {
 
     /**
      * Adds a new point to the table
-     * @param segment_id: segment's identifier
+     *
+     * @param segment_id:   segment's identifier
      * @param locationData: location data object associated to the point
      * @return point's identifier
      */
-    public long addPoint(String segment_id, LocationData locationData){
+    public long addPoint(String segment_id, LocationData locationData) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
+        try {
             return addPoint(segment_id, locationData, db);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return -1;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Adds a new point to the table
-     * @param segment_id: segment's identifier
+     *
+     * @param segment_id:   segment's identifier
      * @param locationData: location data object associated to the point
-     * @param db: SQLite database
+     * @param db:           SQLite database
      * @return point's identifier
      */
-    private long addPoint(String segment_id, LocationData locationData, SQLiteDatabase db){
-        if(segment_id == null || locationData == null || db == null)
+    private long addPoint(String segment_id, LocationData locationData, SQLiteDatabase db) {
+        if (segment_id == null || locationData == null || db == null)
             return -1;
 
         try {
@@ -109,7 +114,7 @@ public class TrajectoryPointTable {
 
             return db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return -1;
         }
@@ -117,26 +122,27 @@ public class TrajectoryPointTable {
 
     /**
      * Fetch the all the points from a given trajectory
+     *
      * @param trajectory_id: trajectory's identifier
      * @return list of points associated to the given trajectory
      */
-    public List<LocationData> getPointsFromTrajectory(String trajectory_id){
+    public List<LocationData> getPointsFromTrajectory(String trajectory_id) {
         java.util.List<LocationData> list = new ArrayList<LocationData>();
 
         SQLiteDatabase db = this.db.getReadableDatabase();
 
-        String select = TABLE_NAME +"."+ POINT_LAT + "," +
-                        TABLE_NAME +"."+ POINT_LN + "," +
-                        TABLE_NAME +"."+ POINT_ELEVATION + "," +
-                        TABLE_NAME +"."+ POINT_ACCURACY + "," +
-                        TABLE_NAME +"."+ POINT_SAT + "," +
-                        TABLE_NAME +"."+ POINT_TIMESTAMP;
+        String select = TABLE_NAME + "." + POINT_LAT + "," +
+                TABLE_NAME + "." + POINT_LN + "," +
+                TABLE_NAME + "." + POINT_ELEVATION + "," +
+                TABLE_NAME + "." + POINT_ACCURACY + "," +
+                TABLE_NAME + "." + POINT_SAT + "," +
+                TABLE_NAME + "." + POINT_TIMESTAMP;
 
 
-        Cursor res = db.rawQuery("SELECT "+ select +
-                " FROM " + TABLE_NAME  + " INNER JOIN " + TrajectorySegmentTable.TABLE_NAME +
+        Cursor res = db.rawQuery("SELECT " + select +
+                " FROM " + TABLE_NAME + " INNER JOIN " + TrajectorySegmentTable.TABLE_NAME +
                 " ON " + TABLE_NAME + "." + SEGMENT_ID + " = " + TrajectorySegmentTable.TABLE_NAME + "." + TrajectorySegmentTable.SEGMENT_ID +
-                " WHERE " + TrajectorySegmentTable.TRAJECTORY_ID  + " = ?" + " ORDER BY " + POINT_TIMESTAMP + " ASC", new String[]{trajectory_id});
+                " WHERE " + TrajectorySegmentTable.TRAJECTORY_ID + " = ?" + " ORDER BY " + POINT_TIMESTAMP + " ASC", new String[]{trajectory_id});
 
         try {
             res.moveToFirst();
@@ -147,10 +153,10 @@ public class TrajectoryPointTable {
             }
 
             return list;
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             res.close();
             db.close();
         }
@@ -158,11 +164,12 @@ public class TrajectoryPointTable {
 
     /**
      * Fetch the information associated to a point given a cursor
+     *
      * @param cursor: query's cursor
      * @return location data object associated to the point
      */
-    protected LocationData getPoint(Cursor cursor){
-        if(cursor == null || cursor.getCount() == 0) {
+    protected LocationData getPoint(Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) {
             return null;
         }
 
@@ -174,9 +181,9 @@ public class TrajectoryPointTable {
             int sat = cursor.getInt(cursor.getColumnIndex(POINT_SAT));
             long timestamp = cursor.getLong(cursor.getColumnIndex(POINT_TIMESTAMP));
 
-            return new LocationData(lat,ln,timestamp,ele,acc,sat);
+            return new LocationData(lat, ln, timestamp, ele, acc, sat);
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
         }

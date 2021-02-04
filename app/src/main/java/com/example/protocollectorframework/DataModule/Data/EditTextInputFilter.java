@@ -9,6 +9,7 @@ public class EditTextInputFilter implements InputFilter {
 
     /**
      * Constructor that defines the minimum and maximum value
+     *
      * @param min: minimum value
      * @param max: maximum value
      */
@@ -19,6 +20,7 @@ public class EditTextInputFilter implements InputFilter {
 
     /**
      * Constructor that defines the minimum and maximum value received as a string value
+     *
      * @param min: minimum value
      * @param max: maximum value
      */
@@ -34,23 +36,26 @@ public class EditTextInputFilter implements InputFilter {
 
             try {
                 double old = Double.parseDouble(dest.toString());
-                if(old == max)
+                if (old == max)
                     return "";
-            }catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
 
-            if(source.toString().equals(".") || (min < 0 && source.toString().equals("-")))
+            if (source.toString().equals(".") || (min < 0 && source.toString().equals("-")))
                 return null;
 
             double input = Double.parseDouble(dest.toString() + source.toString());
 
             if (isInRange(min, max, input))
                 return null;
-        } catch (NumberFormatException nfe) { }
+        } catch (NumberFormatException nfe) {
+        }
         return "";
     }
 
     /**
      * Checks if value c is contained in the interval [a,b]
+     *
      * @param a: interval's left value
      * @param b: interval's right value
      * @param c: value to compare

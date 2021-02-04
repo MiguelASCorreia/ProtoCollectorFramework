@@ -3,7 +3,6 @@ package com.example.protocollectorframework.MultimediaModule;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -20,19 +19,18 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.example.protocollectorframework.Complements.SharedMethods;
 import com.example.protocollectorframework.DataModule.Data.LocationData;
 import com.example.protocollectorframework.DataModule.Data.MultimediaData;
-import com.example.protocollectorframework.Complements.SharedMethods;
 import com.example.protocollectorframework.DataModule.Data.PlotData;
 import com.example.protocollectorframework.DataModule.DataBase.MultimediaTable;
-import com.example.protocollectorframework.R;
 
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
@@ -51,7 +49,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -64,6 +62,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 public class MultimediaManager implements Serializable {
 
+    private final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
     public static final String DIR_IMAGES = "Images";
     public static final String DIR_AUDIO = "Audio";
     public static final String PHOTO = "Photo";
@@ -80,8 +79,8 @@ public class MultimediaManager implements Serializable {
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_VOICE_INPUT = 2;
 
-    private  static EditText actualEditText;
-    private  static SpeechRecognizer mSpeechRecognizer;
+    private static View targetView;
+    private static SpeechRecognizer mSpeechRecognizer;
 
     private MediaRecorder recorder;
     private String currentPhoto;
@@ -95,14 +94,15 @@ public class MultimediaManager implements Serializable {
 
     /**
      * Constructor
+     *
      * @param context: the context of the activity
      */
 
-    public MultimediaManager(Context context){
+    public MultimediaManager(Context context) {
         this.context = context;
-        try{
+        try {
             activity = (Activity) context;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         this.mMultimediaTable = new MultimediaTable(context);
@@ -110,14 +110,15 @@ public class MultimediaManager implements Serializable {
 
     /**
      * Constructor
-     * @param context: the context of the activity
+     *
+     * @param context:     the context of the activity
      * @param actualVisit: actual visit id
      */
-    public MultimediaManager(Context context, String actualVisit){
+    public MultimediaManager(Context context, String actualVisit) {
         this.context = context;
-        try{
+        try {
             activity = (Activity) context;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         this.actualVisit = actualVisit;
@@ -125,22 +126,23 @@ public class MultimediaManager implements Serializable {
         this.currentPhoto = null;
         this.currentRecord = null;
         this.recorder = new MediaRecorder();
-        actualEditText = null;
+        targetView = null;
 
         mSpeechRecognizer = null;
     }
 
     /**
      * Constructor
-     * @param context: the context of the activity
+     *
+     * @param context:     the context of the activity
      * @param actualVisit: actual visit id
-     * @param plotData: actual plot
+     * @param plotData:    actual plot
      */
-    public MultimediaManager(Context context, String actualVisit, PlotData plotData){
+    public MultimediaManager(Context context, String actualVisit, PlotData plotData) {
         this.context = context;
-        try{
+        try {
             activity = (Activity) context;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         this.actualVisit = actualVisit;
@@ -149,164 +151,178 @@ public class MultimediaManager implements Serializable {
         this.currentPhoto = null;
         currentRecord = null;
         this.recorder = new MediaRecorder();
-        actualEditText = null;
+        targetView = null;
         mSpeechRecognizer = null;
     }
 
     /**
      * Delete all multimedia associated to a specific visit
+     *
      * @param visit_id: visit id
      */
-    public void deleteAllMultimediaFromVisit(String visit_id){
-        if(mMultimediaTable != null)
+    public void deleteAllMultimediaFromVisit(String visit_id) {
+        if (mMultimediaTable != null)
             mMultimediaTable.deleteAllMultimediaFromVisit(visit_id);
     }
 
     /**
      * Creates a new multimedia file associated to the actualVisit
-     * @param md: multimedia to add
+     *
+     * @param md:       multimedia to add
      * @param visit_id: visit id
      */
-    public void addMultimediaToVisit(MultimediaData md, String visit_id){
-        if(mMultimediaTable != null)
-            mMultimediaTable.addFile(md,visit_id,1);
+    public void addMultimediaToVisit(MultimediaData md, String visit_id) {
+        if (mMultimediaTable != null)
+            mMultimediaTable.addFile(md, visit_id, 1);
     }
 
     /**
      * Get all photos associated to the visit
+     *
      * @param visit_id: visit id
      * @return list of photos associated to the visit
      */
-    public List<MultimediaData> getVisitPhotos(String visit_id){
+    public List<MultimediaData> getVisitPhotos(String visit_id) {
         List<MultimediaData> list = new ArrayList<>();
-        if(mMultimediaTable != null)
-            list = mMultimediaTable.getMultimediaFromVisit(visit_id,PHOTO);
+        if (mMultimediaTable != null)
+            list = mMultimediaTable.getMultimediaFromVisit(visit_id, PHOTO);
         return list;
     }
 
     /**
      * Get all voices records associated to the visit
+     *
      * @param visit_id: visit id
      * @return list of voices records associated to the visit
      */
-    public List<MultimediaData> getVisitVoiceRecords(String visit_id){
+    public List<MultimediaData> getVisitVoiceRecords(String visit_id) {
         List<MultimediaData> list = new ArrayList<>();
-        if(mMultimediaTable != null)
-            list = mMultimediaTable.getMultimediaFromVisit(visit_id,RECORD);
+        if (mMultimediaTable != null)
+            list = mMultimediaTable.getMultimediaFromVisit(visit_id, RECORD);
         return list;
     }
 
 
     /**
      * Associates an text description to a multimedia file
-     * @param id: multimedia file id
+     *
+     * @param id:          multimedia file id
      * @param description: text description
      */
-    public void addDescriptionToMultimedia(String id, String description){
-        if(mMultimediaTable != null)
-            mMultimediaTable.addDescription(id,description);
+    public void addDescriptionToMultimedia(String id, String description) {
+        if (mMultimediaTable != null)
+            mMultimediaTable.addDescription(id, description);
     }
 
     /**
      * Associates auxiliary information to a multimedia file
-     * @param id: multimedia file id
+     *
+     * @param id:   multimedia file id
      * @param info: auxiliary information
      */
-    public void addInformationToMultimedia(String id, String info){
-        if(mMultimediaTable != null)
-            mMultimediaTable.addAuxiliaryInfo(id,info);
+    public void addInformationToMultimedia(String id, String info) {
+        if (mMultimediaTable != null)
+            mMultimediaTable.addAuxiliaryInfo(id, info);
     }
 
 
     /**
      * Get not uploades multimedia from visit current visit
+     *
      * @return list of not uploaded multimedia
      */
-    public List<MultimediaData> getNotSendMultimedia(){
+    public List<MultimediaData> getNotSendMultimedia() {
         return mMultimediaTable.getNotSyncedMultimediaFromVisit(actualVisit);
     }
 
     /**
      * tag multimedia files as uploaded
      */
-    public void tagAsSent(){
+    public void tagAsSent() {
         mMultimediaTable.markFileAsSync(actualVisit);
     }
 
     /**
      * Fetch all multimedia for current visit
+     *
      * @return list of multimedia objects
      */
-    public List<MultimediaData> getVisitMultimedia(){
+    public List<MultimediaData> getVisitMultimedia() {
         return mMultimediaTable.getMultimediaFromVisit(actualVisit);
     }
 
     /**
      * Fetch multimedia by id
+     *
      * @param id: multimedia id
      * @return multimedia object
      */
-    public MultimediaData getMultimediaForId(String id){
+    public MultimediaData getMultimediaForId(String id) {
         return mMultimediaTable.getMultimediaForId(id);
 
     }
 
     /**
      * Fetch all photos for current visit
+     *
      * @return list of photo objects
      */
-    public List<MultimediaData> getMultimediaPhotos(){
-        return mMultimediaTable.getMultimediaFromVisit(actualVisit,PHOTO);
+    public List<MultimediaData> getMultimediaPhotos() {
+        return mMultimediaTable.getMultimediaFromVisit(actualVisit, PHOTO);
 
     }
 
     /**
      * Fetch all voice records for current visit
+     *
      * @return list of voice record objects
      */
-    public List<MultimediaData> getMultimediaVoice(){
-        return mMultimediaTable.getMultimediaFromVisit(actualVisit,RECORD);
+    public List<MultimediaData> getMultimediaVoice() {
+        return mMultimediaTable.getMultimediaFromVisit(actualVisit, RECORD);
 
     }
 
     /**
      * Fetch all multimedia files for a specific type for current visit
+     *
      * @return list of voice record objects
      */
-    public List<MultimediaData> getMultimediaForType(String type){
-        return mMultimediaTable.getMultimediaFromVisit(actualVisit,type);
+    public List<MultimediaData> getMultimediaForType(String type) {
+        return mMultimediaTable.getMultimediaFromVisit(actualVisit, type);
 
     }
 
     /**
      * Deletes a multimedia by id
+     *
      * @param id: multimedia id
      * @return true if deleted with success, false otherwise
      */
-    public boolean deleteMultimediaForId(String id){
+    public boolean deleteMultimediaForId(String id) {
         return mMultimediaTable.deleteFile(id);
     }
 
     /**
      * Erases a multimedia by id
+     *
      * @param id: multimedia id
      * @return true if erased with success, false otherwise
      */
-    public boolean eraseMultimedia(String id){
+    public boolean eraseMultimedia(String id) {
         return mMultimediaTable.deleteFileOnCancel(id);
     }
 
 
-
     /**
      * Request camera activity
+     *
      * @param mLastKnownLocation: location to be associated to the photo
      */
     public void dispatchTakePictureIntent(LocationData mLastKnownLocation) {
-        if(mLastKnownLocation != null)
+        if (mLastKnownLocation != null)
             this.mLastKnownLocation = mLastKnownLocation;
         int permissionsOnHold = askCameraPermissions();
-        if(permissionsOnHold == 0){
+        if (permissionsOnHold == 0) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(context.getPackageManager()) != null && (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
                 File photoFile = null;
@@ -333,11 +349,12 @@ public class MultimediaManager implements Serializable {
 
     /**
      * Creates a file from the last taken photo
+     *
      * @return photo file
      * @throws IOException : in case of creating temporary file fails
      */
     private File createImageFile() throws IOException {
-        String timeStamp = getDate_hours();
+        String timeStamp = SIMPLE_DATE_FORMAT.format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -352,9 +369,10 @@ public class MultimediaManager implements Serializable {
 
     /**
      * Turns an image file into a approximated resized bitmap object
-     * @param f: photo file
+     *
+     * @param f:            photo file
      * @param requiredSize: desired size
-     * @return
+     * @return the resulting Bitmap object, false if something goes wrong
      */
     public Bitmap decodeFile(File f, int requiredSize) {
         try {
@@ -364,7 +382,7 @@ public class MultimediaManager implements Serializable {
 
 
             int scale = 1;
-            while(o.outWidth / scale / 2 >= requiredSize &&
+            while (o.outWidth / scale / 2 >= requiredSize &&
                     o.outHeight / scale / 2 >= requiredSize) {
                 scale *= 2;
             }
@@ -372,28 +390,30 @@ public class MultimediaManager implements Serializable {
             BitmapFactory.Options o2 = new BitmapFactory.Options();
             o2.inSampleSize = scale;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException ignored) {}
+        } catch (FileNotFoundException ignored) {
+        }
         return null;
     }
 
 
     /**
      * Associate a list of files to a visit
-     * @param paths: list of file paths
-     * @param visit_id: actual visit
+     *
+     * @param paths:           list of file paths
+     * @param visit_id:        actual visit
      * @param multimediaFiles: list of current multimedia data
      * @return true if success, false otherwise
      */
-    public boolean addMultimediaListToVisit(List<String> paths, String visit_id, List<MultimediaData> multimediaFiles){
+    public boolean addMultimediaListToVisit(List<String> paths, String visit_id, List<MultimediaData> multimediaFiles) {
         File file = null;
         String gpx_path = paths.size() != 0 ? paths.get(0) : null;
-        for(String path : paths){
-            if(path.contains(SharedMethods.getMyId(context))) {
+        for (String path : paths) {
+            if (path.contains(SharedMethods.getMyId(context))) {
                 gpx_path = path;
                 break;
             }
         }
-        if(gpx_path != null && (file = new File(gpx_path)).exists()) {
+        if (gpx_path != null && (file = new File(gpx_path)).exists()) {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             try {
                 DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -418,16 +438,27 @@ public class MultimediaManager implements Serializable {
                     float accuracy = 0;
                     String name = "";
 
-                    for(int w = 0; w < children.getLength(); w++){
+                    for (int w = 0; w < children.getLength(); w++) {
                         Node sub_node = children.item(w);
                         String node_name = sub_node.getNodeName();
-                        switch (node_name){
-                            case "time": time = sub_node.getTextContent(); break;
-                            case "sat": sat = Integer.parseInt(sub_node.getTextContent());break;
-                            case "ele": ele = Double.parseDouble(sub_node.getTextContent());break;
-                            case "accuracy": accuracy = Float.parseFloat(sub_node.getTextContent());break;
-                            case "name" : name = sub_node.getTextContent(); break;
-                            default: break;
+                        switch (node_name) {
+                            case "time":
+                                time = sub_node.getTextContent();
+                                break;
+                            case "sat":
+                                sat = Integer.parseInt(sub_node.getTextContent());
+                                break;
+                            case "ele":
+                                ele = Double.parseDouble(sub_node.getTextContent());
+                                break;
+                            case "accuracy":
+                                accuracy = Float.parseFloat(sub_node.getTextContent());
+                                break;
+                            case "name":
+                                name = sub_node.getTextContent();
+                                break;
+                            default:
+                                break;
                         }
                     }
 
@@ -443,7 +474,7 @@ public class MultimediaManager implements Serializable {
                     }
 
                     long timeStamp = -1;
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault());
                     try {
                         Date mDate = df.parse(time);
                         timeStamp = mDate.getTime();
@@ -453,26 +484,25 @@ public class MultimediaManager implements Serializable {
                     }
 
                     LocationData locationData = new LocationData(lat, ln, timeStamp, ele, accuracy, sat);
-                    for(MultimediaData multimediaData : multimediaFiles){
-                        if(multimediaData.getPath().equals(path)){
-                            mMultimediaTable.addFile(new MultimediaData(type, path, locationData,multimediaData.getDescription()), visit_id,0);
+                    for (MultimediaData multimediaData : multimediaFiles) {
+                        if (multimediaData.getPath().equals(path)) {
+                            mMultimediaTable.addFile(new MultimediaData(type, path, locationData, multimediaData.getDescription()), visit_id, 0);
                             multimediaFiles.remove(multimediaData);
                             break;
                         }
                     }
                 }
-                for(MultimediaData multimedia : multimediaFiles) {
-                    mMultimediaTable.addFile(multimedia, visit_id,0);
+                for (MultimediaData multimedia : multimediaFiles) {
+                    mMultimediaTable.addFile(multimedia, visit_id, 0);
                 }
                 fileInputStream.close();
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
-        }
-        else{
-            for(MultimediaData multimedia : multimediaFiles) {
-                mMultimediaTable.addFile(multimedia, visit_id,0);
+        } else {
+            for (MultimediaData multimedia : multimediaFiles) {
+                mMultimediaTable.addFile(multimedia, visit_id, 0);
             }
         }
 
@@ -480,52 +510,42 @@ public class MultimediaManager implements Serializable {
     }
 
 
-
     /**
      * Processes the latest taken photo and associates it to the current visit
+     *
      * @param requestCode: request code
-     * @param resultCode: result code
-     * @param data: data
+     * @param resultCode:  result code
      * @return photo id
      */
-    public String onPhotoResult(int requestCode, int resultCode, Intent data) {
+    public String onPhotoResult(int requestCode, int resultCode) {
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == Activity.RESULT_OK) {
-
-
                 File dir = SharedMethods.createDirectories(DIR_IMAGES);
-                if(dir == null){
-                    showError();
+                if (dir == null) {
+                    return null;
                 }
 
-                String date = getDate_hours();
+                String date = SIMPLE_DATE_FORMAT.format(new Date());
 
-                File photo=new File(dir, mPlot.getID() + "_" + mPlot.getAcronym() + "_" + SharedMethods.getMyId(activity) + "_photo_" + date +".jpg");
+                File photo = new File(dir, mPlot.getID() + "_" + mPlot.getAcronym() + "_" + SharedMethods.getMyId(activity) + "_photo_" + date + ".jpg");
                 File original = new File(currentPhoto);
-                Uri contentUri = Uri.fromFile(original);
-                FileOutputStream fos= null;
+                FileOutputStream fos = null;
                 try {
                     byte bytes[] = FileUtils.readFileToByteArray(original);
                     fos = new FileOutputStream(photo.getPath());
                     fos.write(bytes);
                     fos.close();
-                    long id = mMultimediaTable.addFile(new MultimediaData(SharedMethods.getMyId(context),PHOTO,photo.getPath(),mLastKnownLocation),actualVisit,0);
+                    long id = mMultimediaTable.addFile(new MultimediaData(SharedMethods.getMyId(context), PHOTO, photo.getPath(), mLastKnownLocation), actualVisit, 0);
                     if (id == -1)
                         return null;
                     return Long.toString(id);
 
 
                 } catch (Exception e) {
-                    showError();
                     e.printStackTrace();
                 }
 
 
-
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                // User cancelled the image capture
-            } else {
-                showError();
             }
         }
         return null;
@@ -534,21 +554,19 @@ public class MultimediaManager implements Serializable {
 
     /**
      * Request voice record
+     *
      * @return true if success, false otherwise
      */
-    public boolean requestVoiceRecord(){
+    public boolean requestVoiceRecord() {
         if (ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             askRecordWithStoragePermissions(activity);
             return false;
-        }
-
-        else {
-            Date currentTime = Calendar.getInstance().getTime();
+        } else {
             File dir = SharedMethods.createDirectories(DIR_AUDIO);
-            if(dir == null){
-                showError();
+            if (dir == null) {
+                return false;
             }
-            String date = getDate_hours();
+            String date = SIMPLE_DATE_FORMAT.format(new Date());
             String fileName = mPlot.getID() + "_" + mPlot.getAcronym() + "_" + SharedMethods.getMyId(context) + "_audio_" + date + ".mp3";
             File audioFile = new File(dir, fileName);
             currentRecord = audioFile.getPath();
@@ -564,7 +582,6 @@ public class MultimediaManager implements Serializable {
                 toneG.startTone(ToneGenerator.TONE_PROP_BEEP, 200);
                 return true;
             } catch (IOException e) {
-                showError();
                 e.printStackTrace();
                 toneG.startTone(ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE, 200);
 
@@ -576,20 +593,21 @@ public class MultimediaManager implements Serializable {
 
     /**
      * Stops the current recording
+     *
      * @param mLastKnownLocation: location to be associated with the current recording
      * @return if success voice record id, null otherwise
      */
     public String stopRecording(LocationData mLastKnownLocation) {
         this.mLastKnownLocation = mLastKnownLocation;
-        if(currentRecord != null && recorder != null) {
+        if (currentRecord != null && recorder != null) {
             recorder.stop();
             recorder.reset();
-            long id = mMultimediaTable.addFile(new MultimediaData(SharedMethods.getMyId(context),RECORD, currentRecord, mLastKnownLocation), actualVisit,0);
+            long id = mMultimediaTable.addFile(new MultimediaData(SharedMethods.getMyId(context), RECORD, currentRecord, mLastKnownLocation), actualVisit, 0);
             currentRecord = null;
-            if(id == -1)
+            if (id == -1)
                 return null;
             return Long.toString(id);
-        }else{
+        } else {
             return null;
 
         }
@@ -598,27 +616,28 @@ public class MultimediaManager implements Serializable {
 
     /**
      * Request voice input for edittext view
+     *
      * @param activity: requesting activity
-     * @param editText
+     * @param view:     target view whose the result is to be shown to. Must be an instance of TextView
      */
-    public void requestVoiceInput(Activity activity, EditText editText) {
+    public void requestVoiceInput(Activity activity, View view) {
         askVoicePermissions(activity);
         if (SpeechRecognizer.isRecognitionAvailable(activity)) {
             ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
             boolean hasInternet = cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
 
-            if(hasInternet) {
+            if (hasInternet) {
                 mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity);
                 mSpeechRecognizer.setRecognitionListener(recognitionListener);
-                actualEditText = editText;
+                targetView = view;
                 Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                         RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
                 intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
                 mSpeechRecognizer.startListening(intent);
-            }else{
-                SharedMethods.showToast(activity,"Sem internet");
+            } else {
+                SharedMethods.showToast(activity, "Sem internet");
             }
         }
     }
@@ -626,9 +645,10 @@ public class MultimediaManager implements Serializable {
 
     /**
      * Request for the necessary permission for audio recording
-     * @param activity
+     *
+     * @param activity: activity from where the permissions are being required
      */
-    private static void askVoicePermissions(Activity activity){
+    private static void askVoicePermissions(Activity activity) {
         if (ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -639,17 +659,17 @@ public class MultimediaManager implements Serializable {
         }
     }
 
-    private int askCameraPermissions(){
+    private int askCameraPermissions() {
         List<String> permissions = new ArrayList<String>(3);
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.CAMERA);
         }
-        if(ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
             permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
-        if(permissions.size() > 0)
-            ActivityCompat.requestPermissions(activity,  permissions.toArray(new String[0]), CAMERA_PERMISSIONS);
+        if (permissions.size() > 0)
+            ActivityCompat.requestPermissions(activity, permissions.toArray(new String[0]), CAMERA_PERMISSIONS);
 
         return permissions.size();
 
@@ -657,97 +677,82 @@ public class MultimediaManager implements Serializable {
 
     /**
      * Request for the necessary permissions for a voice record
+     *
      * @param activity: activity where the record is going to take place
      */
-    private static void askRecordWithStoragePermissions(Activity activity){
+    private static void askRecordWithStoragePermissions(Activity activity) {
         List<String> permissions = new ArrayList<String>(3);
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.RECORD_AUDIO);
 
         }
-        if(ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
             permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         }
-        if(permissions.size() > 0)
-            ActivityCompat.requestPermissions(activity,  permissions.toArray(new String[0]), RECORD_WITH_STORAGE_PERMISSIONS);
+        if (permissions.size() > 0)
+            ActivityCompat.requestPermissions(activity, permissions.toArray(new String[0]), RECORD_WITH_STORAGE_PERMISSIONS);
 
     }
-
 
     /**
-     * Show unknown error on current activity
-     */
-    private void showError(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Ocorreu um erro!").setMessage("Não foi possível guardar o ficheiro. Tente novamente.")
-                .setCancelable(false)
-                .setPositiveButton(context.getResources().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-
-    public static String getDate_hours(){
-        return new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-
-    }
-
-
-    /**
-     * Speech recognition listener
+     * Speech recognition listener that fetchs the best result and concatenate it to the provided view
      */
     private static RecognitionListener recognitionListener = new RecognitionListener() {
         @Override
         public void onReadyForSpeech(Bundle params) {
-
+            Log.e("Listener Ready", params.toString());
         }
 
         @Override
         public void onBeginningOfSpeech() {
-
+            Log.e("Listener Beginning", "onBeginningOfSpeech");
         }
 
         @Override
         public void onRmsChanged(float rmsdB) {
-
+            Log.e("Rms Changed", String.valueOf(rmsdB));
         }
 
         @Override
         public void onBufferReceived(byte[] buffer) {
-
+            Log.e("Buffer Received", Arrays.toString(buffer));
         }
 
         @Override
         public void onEndOfSpeech() {
-
+            Log.e("Listener End", "onEndOfSpeech");
         }
 
         @Override
         public void onError(int error) {
-            Log.e("error",error + " ");
+            Log.e("error", error + " ");
         }
 
         @Override
         public void onResults(Bundle results) {
             List<String> resultsList = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
             String best_result = resultsList.get(0).concat(". ");
-            String old_text = actualEditText.getText().toString();
-            actualEditText.setText(old_text + best_result);
+
+            if (targetView instanceof TextView) {
+                TextView textView = (TextView) targetView;
+                String old_text = textView.getText().toString();
+                textView.setText(old_text + best_result);
+            } else {
+                Log.e("View presentation error", "The provided view must be an instance of TextView");
+            }
+
         }
 
         @Override
         public void onPartialResults(Bundle partialResults) {
-
+            Log.e("Partial Results", partialResults.toString());
         }
 
         @Override
         public void onEvent(int eventType, Bundle params) {
+            Log.e("Listener Event", "Event type: " + eventType + ", " + params.toString());
 
         }
     };

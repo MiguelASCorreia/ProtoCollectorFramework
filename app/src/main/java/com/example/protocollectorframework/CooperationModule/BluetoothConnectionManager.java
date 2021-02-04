@@ -30,9 +30,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.protocollectorframework.DataModule.DataBase.BluetoothSyncTable;
-import com.example.protocollectorframework.DataModule.Data.BluetoothSyncData;
 import com.example.protocollectorframework.Complements.SharedMethods;
+import com.example.protocollectorframework.DataModule.Data.BluetoothSyncData;
+import com.example.protocollectorframework.DataModule.DataBase.BluetoothSyncTable;
 import com.example.protocollectorframework.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -77,20 +77,17 @@ public class BluetoothConnectionManager {
     public static final int MESSAGE_FINISH_ACK = 9;
 
 
-
     private static final String ALERT_CONNECTION = "C0";
     public static final String ACK = "ACK";
     public static final String FINAL_ACK = "FINAL_ACK";
 
 
-    public static final int BUFFER_SIZE = 1024*1024*5; // 5 MB
+    public static final int BUFFER_SIZE = 1024 * 1024 * 5; // 5 MB
     private static final String TAG = "Bluetooth";
     private static final String SECURE_NAME = "SECURE_FITOAGRO";
     public static final int DISCOVERY_TIME = 60 * 5;
     public static final int REQUEST_ENABLE_BT = 200;
     public static final int REQUEST_ENABLE_DISCOVERY = 201;
-
-
 
 
     private ExecutorService mHosting = Executors.newSingleThreadExecutor();
@@ -120,32 +117,34 @@ public class BluetoothConnectionManager {
 
     /**
      * Constructor
+     *
      * @param context: current activity context
      */
-    public BluetoothConnectionManager(Context context){
+    public BluetoothConnectionManager(Context context) {
         this.mContext = context;
         mBluetoothSyncTable = new BluetoothSyncTable(mContext);
     }
 
     /**
      * Constructor
-     * @param activity: current activity
+     *
+     * @param activity:         current activity
      * @param mIncomingHandler: activity incoming handler that handles all received messages
-     * @param uuid: identifier for the connection
+     * @param uuid:             identifier for the connection
      */
-    public BluetoothConnectionManager(Activity activity, Handler mIncomingHandler, UUID uuid){
+    public BluetoothConnectionManager(Activity activity, Handler mIncomingHandler, UUID uuid) {
         this.mActivity = activity;
         this.mIncomingHandler = mIncomingHandler;
         mContext = activity.getApplicationContext();
         mBluetoothSyncTable = new BluetoothSyncTable(mContext);
 
         mUUID = uuid;
-        mRecoveryPrefs = activity.getSharedPreferences(RECOVERY_PREFS,0);
-        mSettingsPrefs = activity.getSharedPreferences(SETTINGS,0);
+        mRecoveryPrefs = activity.getSharedPreferences(RECOVERY_PREFS, 0);
+        mSettingsPrefs = activity.getSharedPreferences(SETTINGS, 0);
         try {
             IntentFilter intent = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
             mContext.registerReceiver(mPairReceiver, intent);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -153,14 +152,15 @@ public class BluetoothConnectionManager {
 
     /**
      * Creates a sync entry on data base
-     * @param visit_id: visit id
+     *
+     * @param visit_id:                 visit id
      * @param effective_sync_timestamp: agreed timestamp
-     * @param mPartnerId: other device id
-     * @param last: if the connection will be the last one
+     * @param mPartnerId:               other device id
+     * @param last:                     if the connection will be the last one
      * @return sync log id
      */
-    public long addSyncLog(String visit_id, long effective_sync_timestamp, String mPartnerId, boolean last){
-        if(mBluetoothSyncTable != null)
+    public long addSyncLog(String visit_id, long effective_sync_timestamp, String mPartnerId, boolean last) {
+        if (mBluetoothSyncTable != null)
             return mBluetoothSyncTable.addSyncLog(visit_id, effective_sync_timestamp, mPartnerId, last);
         return -1;
     }
@@ -168,12 +168,13 @@ public class BluetoothConnectionManager {
 
     /**
      * Fetch all sync logs associated to a visit
+     *
      * @param visit_id: visit id
      * @return list of sync data
      */
-    public List<BluetoothSyncData> getSyncLogs(String visit_id){
+    public List<BluetoothSyncData> getSyncLogs(String visit_id) {
         List<BluetoothSyncData> list = new ArrayList<>();
-        if(mBluetoothSyncTable != null)
+        if (mBluetoothSyncTable != null)
             list = mBluetoothSyncTable.getSyncsForVisit(visit_id);
         return list;
     }
@@ -181,12 +182,12 @@ public class BluetoothConnectionManager {
     /**
      * Changes the "send multimedia" preferences to enable or disable the sending of multimedia files
      */
-    public void changeMultimediaOption(){
+    public void changeMultimediaOption() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setCancelable(false);
         builder.setTitle(mActivity.getString(R.string.bluetooth_connection_preferences));
         String[] animals = {mActivity.getString(R.string.bluetooth_check_multimedia)};
-        boolean[] checkedItems = {mSettingsPrefs.getBoolean(SETTINGS_SEND_MULTIMEDIA,false)};
+        boolean[] checkedItems = {mSettingsPrefs.getBoolean(SETTINGS_SEND_MULTIMEDIA, false)};
         final boolean[] send = {mSettingsPrefs.getBoolean(SETTINGS_SEND_MULTIMEDIA, false)};
         builder.setMultiChoiceItems(animals, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
@@ -198,7 +199,7 @@ public class BluetoothConnectionManager {
         builder.setPositiveButton(mActivity.getString(R.string.button_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mSettingsPrefs.edit().putBoolean(SETTINGS_SEND_MULTIMEDIA,send[0]).apply();
+                mSettingsPrefs.edit().putBoolean(SETTINGS_SEND_MULTIMEDIA, send[0]).apply();
                 connect();
             }
         });
@@ -211,6 +212,7 @@ public class BluetoothConnectionManager {
 
     /**
      * Fetch the host of the connection
+     *
      * @return host of the connection
      */
     public BluetoothDevice getHost() {
@@ -219,11 +221,12 @@ public class BluetoothConnectionManager {
 
     /**
      * Fetch the device MAC address
+     *
      * @return
      */
     @SuppressLint("HardwareIds")
-    public String getMyAddress(){
-        if(mBluetoothAdapter!=null)
+    public String getMyAddress() {
+        if (mBluetoothAdapter != null)
             return mBluetoothAdapter.getAddress();
         return null;
 
@@ -232,19 +235,19 @@ public class BluetoothConnectionManager {
     /**
      * Starts the connection process
      */
-    public void connect(){
+    public void connect() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
-            SharedMethods.showToast(mContext,mContext.getString(R.string.bluetooth_not_compatible));
-        }else if (!mBluetoothAdapter.isEnabled()) {
+            SharedMethods.showToast(mContext, mContext.getString(R.string.bluetooth_not_compatible));
+        } else if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             mActivity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }else{
-            if(mHost == null) {
+        } else {
+            if (mHost == null) {
                 String aux = mRecoveryPrefs.getString(RECOVERY_HOST_ADDRESS, null);
-                if(aux != null) {
+                if (aux != null) {
                     mHost = mBluetoothAdapter.getRemoteDevice(aux);
-                    if(aux.equals(getMyAddress()))
+                    if (aux.equals(getMyAddress()))
                         sendHostMessage();
                 }
             }
@@ -256,24 +259,24 @@ public class BluetoothConnectionManager {
     /**
      * Sends a message to the activity handler declaring that this devices is the host of the connection
      */
-    private void sendHostMessage(){
+    private void sendHostMessage() {
         Message message = new Message();
         message.what = MESSAGE_HOSTING;
-        if(mIncomingHandler != null)
+        if (mIncomingHandler != null)
             mIncomingHandler.sendMessage(message);
     }
 
     /**
      * Stop waiting for connections
      */
-    public void stopHosting(){
+    public void stopHosting() {
         try {
             mHosting.shutdown();
-            if(! mHosting.awaitTermination(1, TimeUnit.SECONDS))
+            if (!mHosting.awaitTermination(1, TimeUnit.SECONDS))
                 mHosting.shutdownNow();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             mHosting = Executors.newSingleThreadExecutor();
         }
     }
@@ -281,14 +284,14 @@ public class BluetoothConnectionManager {
     /**
      * Stop searching for devices
      */
-    public void stopSearching(){
+    public void stopSearching() {
         try {
             mSearching.shutdown();
-            if(! mSearching.awaitTermination(1, TimeUnit.SECONDS))
+            if (!mSearching.awaitTermination(1, TimeUnit.SECONDS))
                 mSearching.shutdownNow();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             mSearching = Executors.newSingleThreadExecutor();
 
         }
@@ -297,36 +300,37 @@ public class BluetoothConnectionManager {
     /**
      * Cancels bluetooth discovery
      */
-    public void cancelDiscovery(){
-        if(mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering())
+    public void cancelDiscovery() {
+        if (mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering())
             mBluetoothAdapter.cancelDiscovery();
     }
 
     /**
      * Fetch the connected bluetooth thread that contains all the streams
+     *
      * @return connected bluetooth thread
      */
-    public ConnectedThread getConnectedThread(){
+    public ConnectedThread getConnectedThread() {
         return mConnectedThread;
     }
 
     /**
      * Start the bluetooth discovery
      */
-    private void startDiscovery(){
-        if(!mBluetoothAdapter.isDiscovering()) {
+    private void startDiscovery() {
+        if (!mBluetoothAdapter.isDiscovering()) {
             Intent discoverableIntent =
                     new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, DISCOVERY_TIME);
             mActivity.startActivityForResult(discoverableIntent, REQUEST_ENABLE_DISCOVERY);
-        }else{
-            if(getHost() == null)
+        } else {
+            if (getHost() == null)
                 showPairedDevices(null);
 
-            if(getHost() == null || imHosting())
+            if (getHost() == null || imHosting())
                 startAccepting();
 
-            if(getHost() != null && !imHosting())
+            if (getHost() != null && !imHosting())
                 searchDevices();
         }
     }
@@ -334,28 +338,29 @@ public class BluetoothConnectionManager {
 
     /**
      * To call when bluetooth request is finished. Starts accepting and searching connections
+     *
      * @param requestCode: request code
-     * @param resultCode: result code
-     * @param data: data
+     * @param resultCode:  result code
+     * @param data:        data
      */
     public void onBluetoothResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == Activity.RESULT_OK) {
                 startDiscovery();
 
-            }else{
-                SharedMethods.showToast(mContext,mContext.getString(R.string.bluetooth_not_connected));
+            } else {
+                SharedMethods.showToast(mContext, mContext.getString(R.string.bluetooth_not_connected));
 
             }
-        }else if(requestCode == REQUEST_ENABLE_DISCOVERY){
+        } else if (requestCode == REQUEST_ENABLE_DISCOVERY) {
             if (resultCode == DISCOVERY_TIME) {
-                if(getHost() == null)
+                if (getHost() == null)
                     showPairedDevices(null);
 
-                if(getHost() == null || imHosting())
+                if (getHost() == null || imHosting())
                     startAccepting();
 
-                if(getHost() != null && !imHosting())
+                if (getHost() != null && !imHosting())
                     searchDevices();
             }
 
@@ -366,19 +371,19 @@ public class BluetoothConnectionManager {
     /**
      * Show near devices
      */
-    public void searchDevices(){
+    public void searchDevices() {
 
-        if(mHost != null){
-            if(mConnectedThread != null && mConnectedThread.validStreams()){
+        if (mHost != null) {
+            if (mConnectedThread != null && mConnectedThread.validStreams()) {
                 try {
                     mConnectedThread.write(ALERT_CONNECTION.getBytes());
                     Message message1 = new Message();
                     message1.what = MESSAGE_CONNECTED;
 
-                    if(mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing())
+                    if (mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing())
                         mPairedDevicesDialog.dismiss();
 
-                    if(mIncomingHandler != null)
+                    if (mIncomingHandler != null)
                         mIncomingHandler.sendMessage(message1);
 
                     return;
@@ -394,22 +399,18 @@ public class BluetoothConnectionManager {
                 e.printStackTrace();
             }
 
-        }else
+        } else
             showPairedDevices(mHost);
 
-
-//        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-//        //  showDevicesList();
-//        mContext.registerReceiver(receiver, filter);
-//        showDevicesList();
     }
 
     /**
      * Show paired devices
+     *
      * @param device: device to auto select
      */
-    public void showPairedDevices(BluetoothDevice device){
-        if(mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing())
+    public void showPairedDevices(BluetoothDevice device) {
+        if (mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing())
             mPairedDevicesDialog.dismiss();
 
         mDeviceToSync = null;
@@ -419,18 +420,18 @@ public class BluetoothConnectionManager {
         View dialogView = inflater.inflate(R.layout.paired_devices_layout, null);
 
         CheckBox send_multimedia_check = dialogView.findViewById(R.id.multimedia_check);
-        send_multimedia_check.setChecked(mSettingsPrefs.getBoolean(SETTINGS_SEND_MULTIMEDIA,false));
+        send_multimedia_check.setChecked(mSettingsPrefs.getBoolean(SETTINGS_SEND_MULTIMEDIA, false));
         send_multimedia_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mSettingsPrefs.edit().putBoolean(SETTINGS_SEND_MULTIMEDIA,isChecked).apply();
+                mSettingsPrefs.edit().putBoolean(SETTINGS_SEND_MULTIMEDIA, isChecked).apply();
             }
         });
         TextView sync_button = dialogView.findViewById(R.id.sync_start);
         sync_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(sync_button.getTextColors().getDefaultColor() == mActivity.getResources().getColor(R.color.colorPrimary) && mDeviceToSync != null)
+                if (sync_button.getTextColors().getDefaultColor() == mActivity.getResources().getColor(R.color.colorPrimary) && mDeviceToSync != null)
                     connectToDevice(mDeviceToSync);
             }
         });
@@ -470,31 +471,29 @@ public class BluetoothConnectionManager {
 
 
         int i = 0;
-        for(BluetoothDevice bt : pairedDevices){
+        for (BluetoothDevice bt : pairedDevices) {
 
 
             RadioButton button = new RadioButton(mActivity);
-            if(i != pairedDevices.size() -1) {
+            if (i != pairedDevices.size() - 1) {
                 RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(0, 0, 0, 10);
                 button.setLayoutParams(params);
             }
             button.setTextSize(16);
-            button.setPadding(10,0,0,0);
+            button.setPadding(10, 0, 0, 0);
             button.setTextColor(Color.BLACK);
             button.setText(bt.getName());
             radioGroup.addView(button);
             button.setId(i);
-            devicePerViewID.put(i,bt);
+            devicePerViewID.put(i, bt);
             i++;
-            if(device != null && bt.getAddress().equals(device.getAddress()))
+            if (device != null && bt.getAddress().equals(device.getAddress()))
                 button.setChecked(true);
 
         }
-        if(i == 0)
+        if (i == 0)
             dialogView.findViewById(R.id.no_pairs).setVisibility(View.VISIBLE);
-
-
 
 
         dialogBuilder.setView(dialogView);
@@ -508,19 +507,19 @@ public class BluetoothConnectionManager {
     /**
      * Starts accepting connections
      */
-    public void startAccepting(){
+    public void startAccepting() {
 
-        if(mHost != null){
-            if(mConnectedThread != null && mConnectedThread.validStreams()){
+        if (mHost != null) {
+            if (mConnectedThread != null && mConnectedThread.validStreams()) {
                 try {
                     mConnectedThread.write(ALERT_CONNECTION.getBytes());
                     Message message1 = new Message();
                     message1.what = MESSAGE_CONNECTED;
 
-                    if(mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing())
+                    if (mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing())
                         mPairedDevicesDialog.dismiss();
 
-                    if(mIncomingHandler != null)
+                    if (mIncomingHandler != null)
                         mIncomingHandler.sendMessage(message1);
 
                     return;
@@ -540,7 +539,7 @@ public class BluetoothConnectionManager {
             cancelDiscovery();
             message.what = MESSAGE_ERROR;
             message.obj = mActivity.getString(R.string.bluetooth_error_turning_on);
-            if(mIncomingHandler != null)
+            if (mIncomingHandler != null)
                 mIncomingHandler.sendMessage(message);
 
             return;
@@ -552,7 +551,7 @@ public class BluetoothConnectionManager {
 
         message.what = MESSAGE_ENABLED;
 
-        if(mIncomingHandler != null)
+        if (mIncomingHandler != null)
             mIncomingHandler.sendMessage(message);
 
 
@@ -563,10 +562,10 @@ public class BluetoothConnectionManager {
                 socket = mmServerSocket.accept();
 
                 if (socket != null) {
-                    try{
+                    try {
                         mmServerSocket.close();
-                    }catch (Exception e){
-                        Log.e(TAG,"Error closing",e);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error closing", e);
                     }
                     return socket;
                 }
@@ -576,7 +575,7 @@ public class BluetoothConnectionManager {
             @Override
             public void onSuccess(BluetoothSocket socket) {
 
-                mConnectedThread = new ConnectedThread(socket,mIncomingHandler);
+                mConnectedThread = new ConnectedThread(socket, mIncomingHandler);
 
                 if (mDevicesDialog != null && mDevicesDialog.isShowing())
                     mDevicesDialog.dismiss();
@@ -589,16 +588,16 @@ public class BluetoothConnectionManager {
                 Message message1 = new Message();
                 message1.what = MESSAGE_CONNECTED;
 
-                if(mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing())
+                if (mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing())
                     mPairedDevicesDialog.dismiss();
 
-                if(mHost == null) {
+                if (mHost == null) {
                     mHost = mBluetoothAdapter.getRemoteDevice(getMyAddress());
-                    mRecoveryPrefs.edit().putString(RECOVERY_HOST_ADDRESS,getMyAddress()).apply();
+                    mRecoveryPrefs.edit().putString(RECOVERY_HOST_ADDRESS, getMyAddress()).apply();
                     sendHostMessage();
                 }
 
-                if(mIncomingHandler != null)
+                if (mIncomingHandler != null)
                     mIncomingHandler.sendMessage(message1);
 
             }
@@ -620,35 +619,35 @@ public class BluetoothConnectionManager {
     /**
      * Resets all current connections closing all streams
      */
-    public void resetConnection(){
-        if(mConnectedThread != null) {
+    public void resetConnection() {
+        if (mConnectedThread != null) {
             mConnectedThread.resetConnection();
             mConnectedThread = null;
         }
 
-        if(mSocket != null) {
+        if (mSocket != null) {
             try {
                 mSocket.close();
             } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 mSocket = null;
             }
         }
 
-        if(mmServerSocket != null){
-            try{
+        if (mmServerSocket != null) {
+            try {
                 mmServerSocket.close();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 mmServerSocket = null;
             }
         }
 
         cancelDiscovery();
 
-        if(mDevicesDialog!=null && mDevicesDialog.isShowing())
+        if (mDevicesDialog != null && mDevicesDialog.isShowing())
             mDevicesDialog.dismiss();
 
         stopSearchingReceiver();
@@ -661,12 +660,13 @@ public class BluetoothConnectionManager {
 
     /**
      * Check if the device is the current host
+     *
      * @return true if the device is the current host, false otherwise
      */
-    public boolean imHosting(){
+    public boolean imHosting() {
         try {
             return mHost.getAddress().equals(getMyAddress());
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -679,12 +679,10 @@ public class BluetoothConnectionManager {
         private BluetoothSocket mmSocket;
         private InputStream mmInStream;
         private OutputStream mmOutStream;
-        private byte[] mmBuffer; // mmBuffer store for the stream
         private Handler mIncomingHandler;
 
         /**
-         *
-         * @param socket: bluetooth socket resulting from the connection
+         * @param socket:  bluetooth socket resulting from the connection
          * @param handler: activity handler
          */
         ConnectedThread(BluetoothSocket socket, Handler handler) {
@@ -711,9 +709,10 @@ public class BluetoothConnectionManager {
 
         /**
          * Check if streams are still valid
+         *
          * @return true if the streams are valid, false otherwise
          */
-        public boolean validStreams(){
+        public boolean validStreams() {
             return mmSocket != null && mmSocket.isConnected() && mmOutStream != null && mmInStream != null;
         }
 
@@ -733,8 +732,7 @@ public class BluetoothConnectionManager {
             if (mmOutStream != null) {
                 try {
                     mmOutStream.close();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 mmOutStream = null;
@@ -755,73 +753,74 @@ public class BluetoothConnectionManager {
          * thread's run method. Waiting for messages to process
          */
         public void run() {
-            mmBuffer = new byte[BUFFER_SIZE];
+            // mmBuffer store for the stream
+            byte[] mmBuffer = new byte[BUFFER_SIZE];
             int numBytes; // bytes returned from read()
-            String message ="";
+            String message = "";
             // Keep listening to the InputStream until an exception occurs.
             while (true) {
                 try {
                     // Read from the InputStream.
                     numBytes = mmInStream.read(mmBuffer);
-                    if(numBytes > 0) {
-                        String received_message =  new String(mmBuffer, 0, numBytes);
+                    if (numBytes > 0) {
+                        String received_message = new String(mmBuffer, 0, numBytes);
 
-                        if(received_message.equals(ALERT_CONNECTION)){
+                        if (received_message.equals(ALERT_CONNECTION)) {
                             Message message1 = new Message();
                             message1.what = MESSAGE_CONNECTED;
 
 
-                            if(mIncomingHandler != null)
+                            if (mIncomingHandler != null)
                                 mIncomingHandler.sendMessage(message1);
 
                             continue;
-                        }else if(received_message.equals(ACK)){
+                        } else if (received_message.equals(ACK)) {
                             Message message1 = new Message();
                             message1.what = MESSAGE_CONFLICT_ACK;
 
 
-                            if(mIncomingHandler != null)
+                            if (mIncomingHandler != null)
                                 mIncomingHandler.sendMessage(message1);
 
                             continue;
-                        }else if(message.isEmpty() && mIncomingHandler != null){
+                        } else if (message.isEmpty() && mIncomingHandler != null) {
                             Message message1 = new Message();
                             message1.what = MESSAGE_SHOW_PROGRESS;
                             mIncomingHandler.sendMessage(message1);
                         }
-                        if(received_message.contains(FINAL_ACK)){
+                        if (received_message.contains(FINAL_ACK)) {
                             Message message1 = new Message();
                             message1.what = MESSAGE_FINISH_ACK;
-                            if(mIncomingHandler != null)
+                            if (mIncomingHandler != null)
                                 mIncomingHandler.sendMessage(message1);
 
-                            received_message = received_message.replace(FINAL_ACK,"");
+                            received_message = received_message.replace(FINAL_ACK, "");
                         }
 
                         message += received_message;
-                        Log.e("RECEIVE",message);
+                        Log.e("RECEIVE", message);
 
-                        try{
+                        try {
 
                             JSONObject jsonObject = new JSONObject(message);
 
-                            Log.e("RECEIVE_FINAL",message);
+                            Log.e("RECEIVE_FINAL", message);
 
                             //message = "";
                             Message finalMessage = new Message();
-                            if(jsonObject.has("multimedia_files") || jsonObject.has("locations") || jsonObject.has("effective_duration") || jsonObject.has("note"))
+                            if (jsonObject.has("multimedia_files") || jsonObject.has("locations") || jsonObject.has("effective_duration") || jsonObject.has("note"))
                                 finalMessage.what = MESSAGE_RECEIVE_MULTIMEDIA;
                             else
                                 finalMessage.what = MESSAGE_RECEIVE;
                             finalMessage.obj = jsonObject;
 
-                            if(mIncomingHandler != null)
+                            if (mIncomingHandler != null)
                                 mIncomingHandler.sendMessage(finalMessage);
 
                             mmBuffer = new byte[BUFFER_SIZE];
-                            message ="";
+                            message = "";
 
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -835,6 +834,7 @@ public class BluetoothConnectionManager {
 
         /**
          * Sends a message to the linked device
+         *
          * @param bytes: bytes of the message
          * @throws IOException : broken pipe
          */
@@ -842,11 +842,11 @@ public class BluetoothConnectionManager {
             try {
                 mmOutStream.flush();
 
-                mmOutStream.write(bytes,0,bytes.length);
+                mmOutStream.write(bytes, 0, bytes.length);
 
             } catch (IOException e) {
                 Log.e(TAG, "Error occurred when sending data", e);
-                if(e.getMessage().toLowerCase().contains("broken pipe")){
+                if (e.getMessage().toLowerCase().contains("broken pipe")) {
                     throw new IOException(e.getMessage());
                 }
 
@@ -866,13 +866,13 @@ public class BluetoothConnectionManager {
 
                 if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    if(!pairedDevices.contains(device)) {
+                    if (!pairedDevices.contains(device)) {
                         mDevices.add(device);
                         if (mAdapter != null)
                             mAdapter.notifyDataSetChanged();
                     }
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -886,7 +886,7 @@ public class BluetoothConnectionManager {
             String action = intent.getAction();
 
             if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
-                if(mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing()) {
+                if (mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing()) {
 
                     final int state = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR);
                     final int prevState = intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, BluetoothDevice.ERROR);
@@ -906,8 +906,8 @@ public class BluetoothConnectionManager {
     /**
      * Show list for nearby devices
      */
-    private void showDevicesList(){
-        mDevices =  new ArrayList<>();
+    private void showDevicesList() {
+        mDevices = new ArrayList<>();
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mActivity);
         dialogBuilder.setCancelable(false);
@@ -924,32 +924,32 @@ public class BluetoothConnectionManager {
         mDevicesDialog = dialogBuilder.create();
         try {
             mDevicesDialog.show();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
      * Pair device
+     *
      * @param device: device to pair with
      */
     public void pairDevice(BluetoothDevice device) {
         try {
-            Class class1 = null;
-            class1 = Class.forName("android.bluetooth.BluetoothDevice");
+            Class class1 = Class.forName("android.bluetooth.BluetoothDevice");
             Method createBondMethod = class1.getMethod("createBond");
             Boolean returnValue = (Boolean) createBondMethod.invoke(device);
-            if(returnValue) {
-                if(mDevicesDialog != null && mDevicesDialog.isShowing())
+            if (returnValue) {
+                if (mDevicesDialog != null && mDevicesDialog.isShowing())
                     mDevicesDialog.dismiss();
                 showPairedDevices(device);
                 stopSearchingReceiver();
-            }else
-                SharedMethods.showToast(mActivity,mActivity.getString(R.string.bluetooth_error_pairing));
+            } else
+                SharedMethods.showToast(mActivity, mActivity.getString(R.string.bluetooth_error_pairing));
 
         } catch (Exception e) {
             e.printStackTrace();
-            SharedMethods.showToast(mActivity,mActivity.getString(R.string.bluetooth_error_pairing));
+            SharedMethods.showToast(mActivity, mActivity.getString(R.string.bluetooth_error_pairing));
         }
 
 
@@ -957,9 +957,10 @@ public class BluetoothConnectionManager {
 
     /**
      * Connect to device
+     *
      * @param device: device to connect with
      */
-    public void connectToDevice(BluetoothDevice device){
+    public void connectToDevice(BluetoothDevice device) {
         try {
 
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mActivity);
@@ -973,56 +974,55 @@ public class BluetoothConnectionManager {
             progressDialog.show();
 
 
-
             BluetoothSocket socket = device.createRfcommSocketToServiceRecord(mUUID);
-            Tasks.call(mSearching,() -> {
+            Tasks.call(mSearching, () -> {
                 socket.connect();
                 return socket.isConnected();
             }).addOnSuccessListener(new OnSuccessListener<Boolean>() {
                 @Override
                 public void onSuccess(Boolean tResult) {
-                    if(tResult) {
+                    if (tResult) {
                         mSocket = socket;
                         try {
 
-                            if(mmServerSocket != null){
+                            if (mmServerSocket != null) {
                                 try {
                                     mmServerSocket.close();
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
-                            mConnectedThread = new ConnectedThread(mSocket,mIncomingHandler);
+                            mConnectedThread = new ConnectedThread(mSocket, mIncomingHandler);
 
                             SharedMethods.showToast(mContext, mContext.getString(R.string.bluetooth_connected_to) + " " + device.getName());
 
                             Message message1 = new Message();
                             message1.what = MESSAGE_CONNECTED;
 
-                            if(mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing())
+                            if (mPairedDevicesDialog != null && mPairedDevicesDialog.isShowing())
                                 mPairedDevicesDialog.dismiss();
 
-                            if(mHost == null) {
+                            if (mHost == null) {
                                 mHost = device;
-                                mRecoveryPrefs.edit().putString(RECOVERY_HOST_ADDRESS,device.getAddress()).apply();
+                                mRecoveryPrefs.edit().putString(RECOVERY_HOST_ADDRESS, device.getAddress()).apply();
 
                             }
 
-                            if(mIncomingHandler != null)
+                            if (mIncomingHandler != null)
                                 mIncomingHandler.sendMessage(message1);
 
                         } catch (Exception e) {
                             Message message = new Message();
                             message.what = MESSAGE_ERROR;
                             message.obj = mActivity.getString(R.string.bluetooth_error_turning_on);
-                            if(mIncomingHandler != null)
+                            if (mIncomingHandler != null)
                                 mIncomingHandler.sendMessage(message);
                         }
 
                     }
-                    if( progressDialog.isShowing())
+                    if (progressDialog.isShowing())
                         progressDialog.dismiss();
-                    if(mDevicesDialog != null && mDevicesDialog.isShowing())
+                    if (mDevicesDialog != null && mDevicesDialog.isShowing())
                         mDevicesDialog.dismiss();
 
                 }
@@ -1031,16 +1031,16 @@ public class BluetoothConnectionManager {
                 public void onFailure(@NonNull Exception e) {
 
 
-                    if( progressDialog.isShowing())
+                    if (progressDialog.isShowing())
                         progressDialog.dismiss();
-                    if(mDevicesDialog != null && mDevicesDialog.isShowing())
+                    if (mDevicesDialog != null && mDevicesDialog.isShowing())
                         mDevicesDialog.dismiss();
 
                     e.printStackTrace();
                     Message message = new Message();
                     message.what = MESSAGE_ERROR;
                     message.obj = mActivity.getString(R.string.bluetooth_error_turning_on);
-                    if(mIncomingHandler != null)
+                    if (mIncomingHandler != null)
                         mIncomingHandler.sendMessage(message);
                 }
             });
@@ -1100,10 +1100,10 @@ public class BluetoothConnectionManager {
     /**
      * Stop receiver responsible for updating the list of nearby devices
      */
-    public void stopSearchingReceiver(){
+    public void stopSearchingReceiver() {
         try {
             mContext.unregisterReceiver(searchingReceiver);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -1111,16 +1111,13 @@ public class BluetoothConnectionManager {
     /**
      * Stop receives responsible for updating the list of paired devices
      */
-    public void stopPairedDevicesReceiver(){
+    public void stopPairedDevicesReceiver() {
         try {
             mContext.unregisterReceiver(mPairReceiver);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
-
 
 
 }

@@ -57,7 +57,7 @@ public class CustomToggleView extends FrameLayout {
         positive.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isChecked || !isSelected){
+                if (!isChecked || !isSelected) {
                     positive.setBackground(getResources().getDrawable(R.drawable.custom_toggle_positive_selected));
                     positive.setTextColor(Color.WHITE);
                     negative.setBackground(getResources().getDrawable(R.drawable.custom_toggle_negative));
@@ -74,7 +74,7 @@ public class CustomToggleView extends FrameLayout {
         negative.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isChecked || !isSelected){
+                if (isChecked || !isSelected) {
                     negative.setBackground(getResources().getDrawable(R.drawable.custom_toggle_negative_selected));
                     negative.setTextColor(Color.WHITE);
                     positive.setBackground(getResources().getDrawable(R.drawable.custom_toggle_positive));
@@ -92,23 +92,25 @@ public class CustomToggleView extends FrameLayout {
 
     /**
      * Check the current value of the component
+     *
      * @return true if positive option selected, false otherwise
      */
-    public boolean isChecked(){
+    public boolean isChecked() {
         return isChecked;
     }
 
     /**
      * Change the selected button based on the argument
+     *
      * @param checked: selection
      */
-    public void setChecked(boolean checked){
-        if(checked){
+    public void setChecked(boolean checked) {
+        if (checked) {
             positive.setBackground(getResources().getDrawable(R.drawable.custom_toggle_positive_selected));
             positive.setTextColor(Color.WHITE);
             negative.setBackground(getResources().getDrawable(R.drawable.custom_toggle_negative));
             negative.setTextColor(Color.BLACK);
-        }else{
+        } else {
             negative.setBackground(getResources().getDrawable(R.drawable.custom_toggle_negative_selected));
             negative.setTextColor(Color.WHITE);
             positive.setBackground(getResources().getDrawable(R.drawable.custom_toggle_positive));
@@ -121,7 +123,7 @@ public class CustomToggleView extends FrameLayout {
     /**
      * Deselected the view, disabling both buttons
      */
-    public void deselected(){
+    public void deselected() {
         isSelected = false;
         positive.setBackground(getResources().getDrawable(R.drawable.custom_toggle_positive));
         positive.setTextColor(Color.BLACK);
@@ -131,9 +133,10 @@ public class CustomToggleView extends FrameLayout {
 
     /**
      * Checks if the user selected any of the buttons
+     *
      * @return true if the user selected any one of the buttons, false otherwise
      */
-    public boolean isSelected(){
+    public boolean isSelected() {
         return isSelected;
     }
 

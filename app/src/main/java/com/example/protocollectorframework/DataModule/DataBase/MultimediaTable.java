@@ -7,9 +7,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.protocollectorframework.Complements.SharedMethods;
 import com.example.protocollectorframework.DataModule.Data.LocationData;
 import com.example.protocollectorframework.DataModule.Data.MultimediaData;
-import com.example.protocollectorframework.Complements.SharedMethods;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,14 +43,16 @@ public class MultimediaTable {
 
     /**
      * Constructor
+     *
      * @param context: current context
      */
-    public MultimediaTable(Context context){
+    public MultimediaTable(Context context) {
         db = new DataBase(context);
     }
 
     /**
      * Creates the table
+     *
      * @param sqLiteDatabase: SQLite database
      */
     protected static void createTable(SQLiteDatabase sqLiteDatabase) {
@@ -77,6 +79,7 @@ public class MultimediaTable {
 
     /**
      * Drops the table
+     *
      * @param sqLiteDatabase: SQLite database
      */
     protected static void dropTable(SQLiteDatabase sqLiteDatabase) {
@@ -87,11 +90,12 @@ public class MultimediaTable {
 
     /**
      * Fetch a file given a cursor
+     *
      * @param cursor: query's cursor
      * @return multimedia file data object
      */
-    private MultimediaData getFile(Cursor cursor){
-        if(cursor == null || cursor.getCount() == 0) {
+    private MultimediaData getFile(Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) {
             return null;
         }
 
@@ -110,10 +114,10 @@ public class MultimediaTable {
             String owner = cursor.getString(cursor.getColumnIndex(MULTIMEDIA_OWNER));
             String info = cursor.getString(cursor.getColumnIndex(MULTIMEDIA_INFO));
 
-            LocationData location = new LocationData(lat,ln,point_timestamp,ele,acc,sat);
+            LocationData location = new LocationData(lat, ln, point_timestamp, ele, acc, sat);
 
-            return new MultimediaData(id,type,path,timestamp,location,description,owner,info);
-        }catch(Exception e){
+            return new MultimediaData(id, type, path, timestamp, location, description, owner, info);
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
         }
@@ -121,55 +125,58 @@ public class MultimediaTable {
 
     /**
      * Adds a description to a given file
+     *
      * @param multimedia_id: multimedia file identifier
-     * @param description: description
+     * @param description:   description
      * @return true if description was added with success, false otherwise
      */
-    public boolean addDescription(String multimedia_id, String description){
+    public boolean addDescription(String multimedia_id, String description) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return addDescription(multimedia_id,description, db);
-        }catch(SQLException e){
+        try {
+            return addDescription(multimedia_id, description, db);
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return false;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Adds auxiliary information to a given file
+     *
      * @param multimedia_id: multimedia file identifier
-     * @param info: auxiliary information
+     * @param info:          auxiliary information
      * @return true if the information was added with success, false otherwise
      */
-    public boolean addAuxiliaryInfo(String multimedia_id, String info){
+    public boolean addAuxiliaryInfo(String multimedia_id, String info) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return addAuxiliaryInfo(multimedia_id,info, db);
-        }catch(SQLException e){
+        try {
+            return addAuxiliaryInfo(multimedia_id, info, db);
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return false;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Adds auxiliary information to a given file
+     *
      * @param multimedia_id: multimedia file identifier
-     * @param info: auxiliary information
-     * @param db: SQLite database
+     * @param info:          auxiliary information
+     * @param db:            SQLite database
      * @return true if the information was added with success, false otherwise
      */
-    private boolean addAuxiliaryInfo(String multimedia_id, String info, SQLiteDatabase db){
+    private boolean addAuxiliaryInfo(String multimedia_id, String info, SQLiteDatabase db) {
         try {
             ContentValues cv = new ContentValues();
-            cv.put(MULTIMEDIA_INFO,info);
+            cv.put(MULTIMEDIA_INFO, info);
 
             return db.update(TABLE_NAME, cv, MULTIMEDIA_ID + " = ?", new String[]{multimedia_id}) > 0;
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return false;
         }
@@ -177,19 +184,20 @@ public class MultimediaTable {
 
     /**
      * Adds a description to a given file
+     *
      * @param multimedia_id: multimedia file identifier
-     * @param description: description
-     * @param db: SQLite database
+     * @param description:   description
+     * @param db:            SQLite database
      * @return true if description was added with success, false otherwise
      */
-    private boolean addDescription(String multimedia_id, String description, SQLiteDatabase db){
+    private boolean addDescription(String multimedia_id, String description, SQLiteDatabase db) {
         try {
             ContentValues cv = new ContentValues();
-            cv.put(MULTIMEDIA_DESCRIPTION,description);
+            cv.put(MULTIMEDIA_DESCRIPTION, description);
 
             return db.update(TABLE_NAME, cv, MULTIMEDIA_ID + " = ?", new String[]{multimedia_id}) > 0;
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return false;
         }
@@ -197,17 +205,18 @@ public class MultimediaTable {
 
     /**
      * Tags the desired multimedia file as deleted via the deletion timestamp
+     *
      * @param multimedia_id: multimedia file identifier
      * @return true if tagged with success, false otherwise
      */
     public boolean deleteFile(String multimedia_id) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
+        try {
             ContentValues contentValues = new ContentValues();
             contentValues.put(MULTIMEDIA_DELETE_TIME, SharedMethods.dateToUTCString(new Date()));
 
-            return db.update(TABLE_NAME, contentValues, MULTIMEDIA_ID + " = ?", new String[] {multimedia_id}) > 0;
-        }catch (SQLException e){
+            return db.update(TABLE_NAME, contentValues, MULTIMEDIA_ID + " = ?", new String[]{multimedia_id}) > 0;
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return false;
         }
@@ -215,14 +224,15 @@ public class MultimediaTable {
 
     /**
      * Deletes the file permanently from the database. This method can be used when the current visit is canceled and there is no need to store information from it.
+     *
      * @param multimedia_id: multimedia file indentifier
      * @return true if deleted with success, false otherwise
      */
     public boolean deleteFileOnCancel(String multimedia_id) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return db.delete(TABLE_NAME, MULTIMEDIA_ID +" = ?",new String[]{multimedia_id}) > 0;
-        }catch (SQLException e){
+        try {
+            return db.delete(TABLE_NAME, MULTIMEDIA_ID + " = ?", new String[]{multimedia_id}) > 0;
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return false;
         }
@@ -230,25 +240,26 @@ public class MultimediaTable {
 
     /**
      * Fetch all multimedia files that are in this table
+     *
      * @return list of multimedia file data objects
      */
     public List<MultimediaData> getFiles() {
         List<MultimediaData> array_list = new ArrayList<MultimediaData>();
         SQLiteDatabase db = this.db.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_NAME, null );
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
         try {
             res.moveToFirst();
 
-            while (res.isAfterLast() == false) {
+            while (!res.isAfterLast()) {
                 array_list.add(getFile(res));
                 res.moveToNext();
             }
 
             return array_list;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             res.close();
             db.close();
         }
@@ -256,52 +267,54 @@ public class MultimediaTable {
 
     /**
      * Creates a new file associated to a visit
+     *
      * @param multimediaData: multimedia file data object
-     * @param visit_id: visit's identifier
-     * @param sync_status: sync status identifier, to separate the cases when the file is added to the table by the user input or by other means
+     * @param visit_id:       visit's identifier
+     * @param sync_status:    sync status identifier, to separate the cases when the file is added to the table by the user input or by other means
      * @return multimedia's identifier
      */
-    public long addFile(MultimediaData multimediaData, String visit_id, int sync_status){
+    public long addFile(MultimediaData multimediaData, String visit_id, int sync_status) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return addFile(multimediaData, visit_id, db,sync_status);
-        }catch(SQLException e){
+        try {
+            return addFile(multimediaData, visit_id, db, sync_status);
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return -1;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Creates a new file associated to a visit
+     *
      * @param multimediaData: multimedia file data object
-     * @param visit_id: visit's identifier
-     * @param sync_status: sync status identifier, to separate the cases when the file is added to the table by the user input or by other means
+     * @param visit_id:       visit's identifier
+     * @param sync_status:    sync status identifier, to separate the cases when the file is added to the table by the user input or by other means
      * @return multimedia's identifier
      */
-    private long addFile(MultimediaData multimediaData, String visit_id, SQLiteDatabase db, int sync_status){
-        if(multimediaData == null || db == null)
+    private long addFile(MultimediaData multimediaData, String visit_id, SQLiteDatabase db, int sync_status) {
+        if (multimediaData == null || db == null)
             return -1;
 
         try {
             ContentValues cv = new ContentValues();
             cv.put(MULTIMEDIA_TYPE, multimediaData.getType());
             cv.put(MULTIMEDIA_PATH, multimediaData.getPath());
-            cv.put(VISIT_ID,visit_id);
-            cv.put(MULTIMEDIA_SYNC,sync_status);
+            cv.put(VISIT_ID, visit_id);
+            cv.put(MULTIMEDIA_SYNC, sync_status);
 
-            if(multimediaData.getDescription() != null)
-                cv.put(MULTIMEDIA_DESCRIPTION,multimediaData.getDescription());
+            if (multimediaData.getDescription() != null)
+                cv.put(MULTIMEDIA_DESCRIPTION, multimediaData.getDescription());
 
-            if(multimediaData.getAuxiliaryInformation() != null)
-                cv.put(MULTIMEDIA_INFO,multimediaData.getAuxiliaryInformation());
+            if (multimediaData.getAuxiliaryInformation() != null)
+                cv.put(MULTIMEDIA_INFO, multimediaData.getAuxiliaryInformation());
 
-            if(multimediaData.getOwner() != null)
-                cv.put(MULTIMEDIA_OWNER,multimediaData.getOwner());
+            if (multimediaData.getOwner() != null)
+                cv.put(MULTIMEDIA_OWNER, multimediaData.getOwner());
 
             LocationData locationData = multimediaData.getLocation();
-            if(locationData != null){
+            if (locationData != null) {
                 cv.put(MULTIMEDIA_LAT, locationData.getLat());
                 cv.put(MULTIMEDIA_LN, locationData.getLng());
                 cv.put(MULTIMEDIA_ELEVATION, locationData.getElevation());
@@ -311,7 +324,7 @@ public class MultimediaTable {
             }
             return db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return -1;
         }
@@ -319,32 +332,33 @@ public class MultimediaTable {
 
     /**
      * Fetch all the multimedia files associated to a given visit and type
+     *
      * @param visit_id: visit's identifier
-     * @param type: multimedia file type identifier
+     * @param type:     multimedia file type identifier
      * @return list of multimedia from the visit
      */
-    public List<MultimediaData> getMultimediaFromVisit(String visit_id, String type){
+    public List<MultimediaData> getMultimediaFromVisit(String visit_id, String type) {
         java.util.List<MultimediaData> list = new ArrayList<MultimediaData>();
 
         SQLiteDatabase db = this.db.getReadableDatabase();
 
         Cursor res = db.rawQuery("SELECT *" +
                 " FROM " + TABLE_NAME +
-                " WHERE " + MULTIMEDIA_TYPE + " = ?" + " AND " + MULTIMEDIA_DELETE_TIME + " is null AND " + VISIT_ID +  " = ?" + " ORDER BY " + MULTIMEDIA_CREATION_TIME, new String[]{type, visit_id});
+                " WHERE " + MULTIMEDIA_TYPE + " = ?" + " AND " + MULTIMEDIA_DELETE_TIME + " is null AND " + VISIT_ID + " = ?" + " ORDER BY " + MULTIMEDIA_CREATION_TIME, new String[]{type, visit_id});
 
         try {
             res.moveToFirst();
 
-            while (res.isAfterLast() == false) {
+            while (!res.isAfterLast()) {
                 list.add(getFile(res));
                 res.moveToNext();
             }
 
             return list;
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             res.close();
             db.close();
         }
@@ -352,31 +366,32 @@ public class MultimediaTable {
 
     /**
      * Fetch all the multimedia files associated to a given visit
+     *
      * @param visit_id: visit's identifier
      * @return list of multimedia from the visit
      */
-    public List<MultimediaData> getMultimediaFromVisit(String visit_id){
+    public List<MultimediaData> getMultimediaFromVisit(String visit_id) {
         java.util.List<MultimediaData> list = new ArrayList<MultimediaData>();
 
         SQLiteDatabase db = this.db.getReadableDatabase();
 
         Cursor res = db.rawQuery("SELECT *" +
                 " FROM " + TABLE_NAME +
-                " WHERE " + VISIT_ID +  " = ?"+ " AND " + MULTIMEDIA_DELETE_TIME + " is null" + " ORDER BY " + MULTIMEDIA_CREATION_TIME, new String[]{visit_id});
+                " WHERE " + VISIT_ID + " = ?" + " AND " + MULTIMEDIA_DELETE_TIME + " is null" + " ORDER BY " + MULTIMEDIA_CREATION_TIME, new String[]{visit_id});
 
         try {
             res.moveToFirst();
 
-            while (res.isAfterLast() == false) {
+            while (!res.isAfterLast()) {
                 list.add(getFile(res));
                 res.moveToNext();
             }
 
             return list;
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             res.close();
             db.close();
         }
@@ -384,18 +399,19 @@ public class MultimediaTable {
 
     /**
      * Mark the file as synced
+     *
      * @param id: multimedia file identifier
      * @param db: SQLite database
      * @return number of columns affected (greater than zero if success)
      */
-    private long markFileAsSync(String id, SQLiteDatabase db){
+    private long markFileAsSync(String id, SQLiteDatabase db) {
         try {
             ContentValues cv = new ContentValues();
-            cv.put(MULTIMEDIA_SYNC,"1");
+            cv.put(MULTIMEDIA_SYNC, "1");
 
-            return db.update(TABLE_NAME, cv, VISIT_ID + " = ? AND " + MULTIMEDIA_SYNC + " = ?", new String[]{id,"0"});
+            return db.update(TABLE_NAME, cv, VISIT_ID + " = ? AND " + MULTIMEDIA_SYNC + " = ?", new String[]{id, "0"});
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return -1;
         }
@@ -403,17 +419,18 @@ public class MultimediaTable {
 
     /**
      * Mark the file as synced
+     *
      * @param id: multimedia file identifier
      * @return true if marked successfully, false otherwise
      */
-    public boolean markFileAsSync(String id){
+    public boolean markFileAsSync(String id) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
+        try {
             return markFileAsSync(id, db) > 0;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return false;
-        }finally {
+        } finally {
             db.close();
         }
     }
@@ -421,31 +438,32 @@ public class MultimediaTable {
 
     /**
      * Fetch the multimedia files that where not synced, from a visit
+     *
      * @param visit_id: visit's identifier
      * @return list of multimedia data object that where not synced
      */
-    public List<MultimediaData> getNotSyncedMultimediaFromVisit(String visit_id){
+    public List<MultimediaData> getNotSyncedMultimediaFromVisit(String visit_id) {
         java.util.List<MultimediaData> list = new ArrayList<MultimediaData>();
 
         SQLiteDatabase db = this.db.getReadableDatabase();
 
         Cursor res = db.rawQuery("SELECT *" +
                 " FROM " + TABLE_NAME +
-                " WHERE " + VISIT_ID +  " = ?" + " AND " + MULTIMEDIA_DELETE_TIME + " is null AND "  + MULTIMEDIA_SYNC + " = ?" + " ORDER BY " + MULTIMEDIA_CREATION_TIME, new String[]{visit_id,"0"});
+                " WHERE " + VISIT_ID + " = ?" + " AND " + MULTIMEDIA_DELETE_TIME + " is null AND " + MULTIMEDIA_SYNC + " = ?" + " ORDER BY " + MULTIMEDIA_CREATION_TIME, new String[]{visit_id, "0"});
 
         try {
             res.moveToFirst();
 
-            while (res.isAfterLast() == false) {
+            while (!res.isAfterLast()) {
                 list.add(getFile(res));
                 res.moveToNext();
             }
 
             return list;
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             res.close();
             db.close();
         }
@@ -453,14 +471,15 @@ public class MultimediaTable {
 
     /**
      * Deletes all multimedia files from the table for a given visit
+     *
      * @param visit_id: visit's identifier
      * @return true if deleted with success, false otherwise
      */
     public boolean deleteAllMultimediaFromVisit(String visit_id) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return db.delete(TABLE_NAME, VISIT_ID +" = ?",new String[]{visit_id}) > 0;
-        }catch (SQLException e){
+        try {
+            return db.delete(TABLE_NAME, VISIT_ID + " = ?", new String[]{visit_id}) > 0;
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return false;
         }
@@ -469,26 +488,27 @@ public class MultimediaTable {
 
     /**
      * Fetch a multimedia file given it's identifier
+     *
      * @param id: multimedia file identifier
      * @return multimedia file data object
      */
-    public MultimediaData getMultimediaForId(String id){
+    public MultimediaData getMultimediaForId(String id) {
         List<MultimediaData> array_list = new ArrayList<MultimediaData>();
         SQLiteDatabase db = this.db.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_NAME + " WHERE "  + MULTIMEDIA_ID + " = ? AND " + MULTIMEDIA_DELETE_TIME + " is null", new String[]{id} );
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + MULTIMEDIA_ID + " = ? AND " + MULTIMEDIA_DELETE_TIME + " is null", new String[]{id});
         try {
             res.moveToFirst();
 
-            while (res.isAfterLast() == false) {
+            while (!res.isAfterLast()) {
                 array_list.add(getFile(res));
                 res.moveToNext();
             }
 
             return array_list.get(0);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             res.close();
             db.close();
         }

@@ -57,7 +57,7 @@ public class CustomTimePicker extends FrameLayout {
         hoursPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                if(callOnClick)
+                if (callOnClick)
                     callOnClick();
             }
         });
@@ -94,35 +94,39 @@ public class CustomTimePicker extends FrameLayout {
 
     /**
      * Returns the hours spinner value
+     *
      * @return hours
      */
-    public int getHours(){
+    public int getHours() {
         return hoursPicker.getValue();
     }
 
     /**
      * Returns the minutes spinner value
+     *
      * @return minutes
      */
-    public int getMinutes(){
+    public int getMinutes() {
         return minutesPicker.getValue();
     }
 
     /**
      * Returns the seconds spinner value
+     *
      * @return seconds
      */
-    public int getSeconds(){
+    public int getSeconds() {
         return secondsPicker.getValue();
     }
 
     /**
      * Sets each spinner value given the hour, minutes and seconds
-     * @param hours: hours
+     *
+     * @param hours:   hours
      * @param minutes: minutes
      * @param seconds: seconds
      */
-    public void setTime(int hours, int minutes, int seconds){
+    public void setTime(int hours, int minutes, int seconds) {
         this.hoursPicker.setValue(hours);
         this.minutesPicker.setValue(minutes);
         this.secondsPicker.setValue(seconds);
@@ -130,9 +134,10 @@ public class CustomTimePicker extends FrameLayout {
 
     /**
      * Returns the datetime in the format hh:mm:ss
+     *
      * @return datetime in the format hh:mm:ss
      */
-    public String getTime(){
+    public String getTime() {
         return hoursPicker.getValue() + ":" + minutesPicker.getValue() + ":" + secondsPicker.getValue();
     }
 

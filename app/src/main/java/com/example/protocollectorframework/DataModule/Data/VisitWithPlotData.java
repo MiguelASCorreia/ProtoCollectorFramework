@@ -1,8 +1,5 @@
 package com.example.protocollectorframework.DataModule.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Visit information with corresponding plot
  */
@@ -16,11 +13,12 @@ public class VisitWithPlotData {
 
     /**
      * Constructor
-     * @param visit_id: visit identifier
+     *
+     * @param visit_id:   visit identifier
      * @param start_time: visit start time
-     * @param end_time: visit end time
-     * @param plot_id: plot identifier
-     * @param name: plot name
+     * @param end_time:   visit end time
+     * @param plot_id:    plot identifier
+     * @param name:       plot name
      */
     public VisitWithPlotData(String visit_id, long start_time, long end_time, String plot_id, String name) {
         this.visit_id = visit_id;
@@ -32,6 +30,7 @@ public class VisitWithPlotData {
 
     /**
      * Returns the visit identifier
+     *
      * @return visit's identifier
      */
     public String getVisit_id() {
@@ -41,6 +40,7 @@ public class VisitWithPlotData {
 
     /**
      * Returns the visit start time
+     *
      * @return visit's start time
      */
     public long getStart_time() {
@@ -49,6 +49,7 @@ public class VisitWithPlotData {
 
     /**
      * Returns the visit ending time
+     *
      * @return visit's ending time
      */
     public long getEnd_time() {
@@ -57,6 +58,7 @@ public class VisitWithPlotData {
 
     /**
      * Returns the plot identifier
+     *
      * @return plot's identifier
      */
     public String getPlot_id() {
@@ -65,6 +67,7 @@ public class VisitWithPlotData {
 
     /**
      * Returns the plot name
+     *
      * @return plot's name
      */
     public String getName() {

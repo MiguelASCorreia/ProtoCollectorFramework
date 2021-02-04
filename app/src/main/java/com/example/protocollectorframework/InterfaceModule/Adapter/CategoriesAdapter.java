@@ -28,7 +28,7 @@ public class CategoriesAdapter extends BaseAdapter {
         this.tagFocus = tagFocus;
     }
 
-    public String[] getCategories(){
+    public String[] getCategories() {
         return categories;
     }
 
@@ -57,15 +57,14 @@ public class CategoriesAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.custom_grid_categories, null);
         }
 
-            TextView textView = (TextView) convertView.findViewById(R.id.text_category);
-            textView.setText(category);
+        TextView textView = (TextView) convertView.findViewById(R.id.text_category);
+        textView.setText(category);
 
-            if(tagFocus.contains(category)) {
-                textView.setBackground(context.getResources().getDrawable(R.drawable.pob_square_selected));
-                textView.setTextColor(Color.WHITE);
-            }
-            else
-                textView.setBackground(context.getResources().getDrawable(R.drawable.pob_square));
+        if (tagFocus.contains(category)) {
+            textView.setBackground(context.getResources().getDrawable(R.drawable.pob_square_selected));
+            textView.setTextColor(Color.WHITE);
+        } else
+            textView.setBackground(context.getResources().getDrawable(R.drawable.pob_square));
 
         return convertView;
     }

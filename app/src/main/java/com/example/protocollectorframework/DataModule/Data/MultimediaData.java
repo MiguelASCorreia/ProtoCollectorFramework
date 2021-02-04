@@ -17,14 +17,15 @@ public class MultimediaData {
 
     /**
      * Constructor
-     * @param ID: multimedia file identifier
-     * @param type: multimedia file type identifier
-     * @param path: multimedia file external path
-     * @param timestamp: multimedia file creation timestamp in milliseconds
-     * @param location: associated location
+     *
+     * @param ID:          multimedia file identifier
+     * @param type:        multimedia file type identifier
+     * @param path:        multimedia file external path
+     * @param timestamp:   multimedia file creation timestamp in milliseconds
+     * @param location:    associated location
      * @param description: multimedia file description
-     * @param owner: multimedia file owner's identifier
-     * @param info: multimedia file auxiliary information
+     * @param owner:       multimedia file owner's identifier
+     * @param info:        multimedia file auxiliary information
      */
 
     public MultimediaData(String ID, String type, String path, long timestamp, LocationData location, String description, String owner, String info) {
@@ -40,9 +41,10 @@ public class MultimediaData {
 
     /**
      * Constructor
-     * @param owner: multimedia file owner's identifier
-     * @param type: multimedia file type identifier
-     * @param path: multimedia file external path
+     *
+     * @param owner:    multimedia file owner's identifier
+     * @param type:     multimedia file type identifier
+     * @param path:     multimedia file external path
      * @param location: associated location
      */
     public MultimediaData(String owner, String type, String path, LocationData location) {
@@ -56,9 +58,10 @@ public class MultimediaData {
 
     /**
      * Constructor
-     * @param type: multimedia file type identifier
-     * @param path: multimedia file external path
-     * @param location: associated location
+     *
+     * @param type:        multimedia file type identifier
+     * @param path:        multimedia file external path
+     * @param location:    associated location
      * @param description: multimedia file description
      */
     public MultimediaData(String type, String path, LocationData location, String description) {
@@ -72,6 +75,7 @@ public class MultimediaData {
 
     /**
      * Returns the file's owner identifier
+     *
      * @return owner identifier
      */
     public String getOwner() {
@@ -80,6 +84,7 @@ public class MultimediaData {
 
     /**
      * Sets the file owner
+     *
      * @param owner: owner's identifier
      */
     public void setOwner(String owner) {
@@ -88,6 +93,7 @@ public class MultimediaData {
 
     /**
      * Returns the file description
+     *
      * @return file's description
      */
     public String getDescription() {
@@ -96,6 +102,7 @@ public class MultimediaData {
 
     /**
      * Sets the file description
+     *
      * @param description: file's description
      */
     public void setDescription(String description) {
@@ -104,6 +111,7 @@ public class MultimediaData {
 
     /**
      * Returns the file auxiliary information
+     *
      * @return file's auxiliary information
      */
     public String getAuxiliaryInformation() {
@@ -112,13 +120,16 @@ public class MultimediaData {
 
     /**
      * Sets the file auxiliary information
+     *
      * @param description: file's auxiliary information
      */
     public void setAuxiliaryInformation(String description) {
         this.info = info;
     }
+
     /**
      * Returns the file identifier
+     *
      * @return file's identifier
      */
     public String getID() {
@@ -127,6 +138,7 @@ public class MultimediaData {
 
     /**
      * Sets the file identifier
+     *
      * @param ID: file's identifier
      */
     public void setID(String ID) {
@@ -135,6 +147,7 @@ public class MultimediaData {
 
     /**
      * Returns the file's creation timestamp in milliseconds
+     *
      * @return creation timestamp in milliseconds
      */
     public long getTimestamp() {
@@ -143,6 +156,7 @@ public class MultimediaData {
 
     /**
      * Sets the file's creation timestamp in milliseconds
+     *
      * @param timestamp: creation timestamp in milliseconds
      */
     public void setTimestamp(long timestamp) {
@@ -151,6 +165,7 @@ public class MultimediaData {
 
     /**
      * Returns the file's geographical location
+     *
      * @return file's geographical location
      */
     public LocationData getLocation() {
@@ -159,6 +174,7 @@ public class MultimediaData {
 
     /**
      * Sets the file's geographical location
+     *
      * @param location: file's geographical location
      */
     public void setLocation(LocationData location) {
@@ -167,6 +183,7 @@ public class MultimediaData {
 
     /**
      * Returns the file's type identifier
+     *
      * @return file's type identifier
      */
     public String getType() {
@@ -175,6 +192,7 @@ public class MultimediaData {
 
     /**
      * Sets the file's type identifier
+     *
      * @param type: file's type identifier
      */
     public void setType(String type) {
@@ -183,6 +201,7 @@ public class MultimediaData {
 
     /**
      * Returns the file's external storage path
+     *
      * @return file's external storage path
      */
     public String getPath() {
@@ -191,6 +210,7 @@ public class MultimediaData {
 
     /**
      * Sets the file's external storage path
+     *
      * @param path: file's external storage path
      */
     public void setPath(String path) {
@@ -199,7 +219,7 @@ public class MultimediaData {
 
     @NotNull
     public String toString() {
-        if(location != null)
+        if (location != null)
             return type + " " + location.getLat() + " " + location.getLng() + " " + location.getElevation() + " " + location.getAccuracy() + " " + location.getSat_number();
         else return type + " " + path;
     }

@@ -21,34 +21,36 @@ public class AbstractData {
     private String plot_name;
     private String plot_info;
 
-    private HashMap<String,Integer> multimediaCountByType;
+    private HashMap<String, Integer> multimediaCountByType;
 
-    private HashMap<String,HashMap<String,Object>> resultsForMethods;
+    private HashMap<String, HashMap<String, Object>> resultsForMethods;
 
     /**
      * Empty constructor
      */
-    public AbstractData(){
+    public AbstractData() {
 
     }
+
     /**
      * Constructor
-     * @param visit_id: visit identifier
-     * @param visit_start: visit start time in milliseconds
-     * @param visit_end: visit ending time in milliseconds
-     * @param visit_info: information associated to the visit (stored in the info column of the corresponding table)
-     * @param complementary_id: complementary observations identifier
-     * @param complementary_start: complementary observations start time in milliseconds
-     * @param complementary_end: complementary observations ending time in milliseconds
-     * @param complementary_info: information associated to the complementary observations (stored in the info column of the corresponding table)
-     * @param plot_id: plot identifier
-     * @param plot_acronym: plot acronym
-     * @param plot_name: plot name
-     * @param plot_info: information associated to the plot (stored in the info column of the corresponding table)
+     *
+     * @param visit_id:              visit identifier
+     * @param visit_start:           visit start time in milliseconds
+     * @param visit_end:             visit ending time in milliseconds
+     * @param visit_info:            information associated to the visit (stored in the info column of the corresponding table)
+     * @param complementary_id:      complementary observations identifier
+     * @param complementary_start:   complementary observations start time in milliseconds
+     * @param complementary_end:     complementary observations ending time in milliseconds
+     * @param complementary_info:    information associated to the complementary observations (stored in the info column of the corresponding table)
+     * @param plot_id:               plot identifier
+     * @param plot_acronym:          plot acronym
+     * @param plot_name:             plot name
+     * @param plot_info:             information associated to the plot (stored in the info column of the corresponding table)
      * @param multimediaCountByType: structure that maps for each multimedia type the corresponding counter
-     * @param resultsForMethods: structure that maps for each class the returned value for each assigned method
+     * @param resultsForMethods:     structure that maps for each class the returned value for each assigned method
      */
-    public AbstractData(String visit_id, long visit_start, long visit_end, String visit_info, String complementary_id, long complementary_start, long complementary_end, String complementary_info, String plot_id, String plot_acronym, String plot_name, String plot_info, HashMap<String, Integer> multimediaCountByType, HashMap<String,HashMap<String, Object>> resultsForMethods) {
+    public AbstractData(String visit_id, long visit_start, long visit_end, String visit_info, String complementary_id, long complementary_start, long complementary_end, String complementary_info, String plot_id, String plot_acronym, String plot_name, String plot_info, HashMap<String, Integer> multimediaCountByType, HashMap<String, HashMap<String, Object>> resultsForMethods) {
         this.visit_id = visit_id;
         this.visit_start = visit_start;
         this.visit_end = visit_end;
@@ -67,6 +69,7 @@ public class AbstractData {
 
     /**
      * Returns the visit identifier
+     *
      * @return visit's identifier
      */
     public String getVisit_id() {
@@ -75,6 +78,7 @@ public class AbstractData {
 
     /**
      * Sets the visit identifier
+     *
      * @param visit_id: visit's identifier
      */
     public void setVisit_id(String visit_id) {
@@ -83,6 +87,7 @@ public class AbstractData {
 
     /**
      * Returns the visit start time
+     *
      * @return visit start time in milliseconds
      */
     public long getVisit_start() {
@@ -91,6 +96,7 @@ public class AbstractData {
 
     /**
      * Sets the visit start time
+     *
      * @param visit_start: visit start time in milliseconds
      */
     public void setVisit_start(long visit_start) {
@@ -99,6 +105,7 @@ public class AbstractData {
 
     /**
      * Returns the visit ending time
+     *
      * @return visit ending time in milliseconds
      */
     public long getVisit_end() {
@@ -107,6 +114,7 @@ public class AbstractData {
 
     /**
      * Sets the visit ending time
+     *
      * @param visit_end: visit ending time in milliseconds
      */
     public void setVisit_end(long visit_end) {
@@ -115,6 +123,7 @@ public class AbstractData {
 
     /**
      * Returns JSON string corresponding to the visit info data
+     *
      * @return extra data
      */
     public String getVisit_info() {
@@ -123,6 +132,7 @@ public class AbstractData {
 
     /**
      * Sets the visit info data
+     *
      * @param visit_info: JSON string corresponding to the extra data
      */
     public void setVisit_info(String visit_info) {
@@ -131,6 +141,7 @@ public class AbstractData {
 
     /**
      * Returns the complementary observations identifier
+     *
      * @return complementary observations identifier
      */
     public String getComplementary_id() {
@@ -139,6 +150,7 @@ public class AbstractData {
 
     /**
      * Sets the complementary observations identifier
+     *
      * @param complementary_id: complementary observations identifier
      */
     public void setComplementary_id(String complementary_id) {
@@ -147,6 +159,7 @@ public class AbstractData {
 
     /**
      * Returns the complementary observations start time
+     *
      * @return complementary observations start time in milliseconds
      */
     public long getComplementary_start() {
@@ -155,6 +168,7 @@ public class AbstractData {
 
     /**
      * Sets the complementary observations start time
+     *
      * @param complementary_start: complementary observations start time in milliseconds
      */
     public void setComplementary_start(long complementary_start) {
@@ -163,6 +177,7 @@ public class AbstractData {
 
     /**
      * Returns the complementary observations ending time
+     *
      * @return complementary observations ending time in milliseconds
      */
     public long getComplementary_end() {
@@ -171,6 +186,7 @@ public class AbstractData {
 
     /**
      * Sets the complementary observations ending time
+     *
      * @param complementary_end: complementary observations ending time in milliseconds
      */
     public void setComplementary_end(long complementary_end) {
@@ -179,13 +195,16 @@ public class AbstractData {
 
     /**
      * Returns JSON string corresponding to the complementary observations info data
+     *
      * @return extra data
      */
     public String getComplementary_info() {
         return complementary_info;
     }
+
     /**
      * Sets the complementary observations info data
+     *
      * @param complementary_info: JSON string corresponding to the extra data
      */
     public void setComplementary_info(String complementary_info) {
@@ -194,6 +213,7 @@ public class AbstractData {
 
     /**
      * Returns the plot identifier
+     *
      * @return plot identifier
      */
     public String getPlot_id() {
@@ -202,6 +222,7 @@ public class AbstractData {
 
     /**
      * Sets the plot's identifier
+     *
      * @param plot_id: plot's identifier
      */
     public void setPlot_id(String plot_id) {
@@ -210,6 +231,7 @@ public class AbstractData {
 
     /**
      * Returns the plot's acronym
+     *
      * @return plot's acronym
      */
     public String getPlot_acronym() {
@@ -218,6 +240,7 @@ public class AbstractData {
 
     /**
      * Sets the plot's acronym
+     *
      * @param plot_acronym: plot's acronym
      */
     public void setPlot_acronym(String plot_acronym) {
@@ -226,6 +249,7 @@ public class AbstractData {
 
     /**
      * Returns plot's name
+     *
      * @return plot's name
      */
     public String getPlot_name() {
@@ -234,6 +258,7 @@ public class AbstractData {
 
     /**
      * Sets plot's name
+     *
      * @param plot_name: plot's name
      */
     public void setPlot_name(String plot_name) {
@@ -242,6 +267,7 @@ public class AbstractData {
 
     /**
      * Returns plot's info data
+     *
      * @return plot's info data
      */
     public String getPlot_info() {
@@ -250,6 +276,7 @@ public class AbstractData {
 
     /**
      * Sets plot's info data
+     *
      * @param plot_info: plot's info data
      */
     public void setPlot_info(String plot_info) {
@@ -258,6 +285,7 @@ public class AbstractData {
 
     /**
      * Returns the number of multimedia files created during the visit for each type
+     *
      * @return structure that maps for each type the corresponding counter
      */
     public HashMap<String, Integer> getMultimediaCountByType() {
@@ -266,6 +294,7 @@ public class AbstractData {
 
     /**
      * Sets the number of multimedia files created during the visit for each type
+     *
      * @param multimediaCountByType: structure that maps for each type the corresponding counter
      */
     public void setMultimediaCountByType(HashMap<String, Integer> multimediaCountByType) {
@@ -274,17 +303,19 @@ public class AbstractData {
 
     /**
      * Returns the returned value for each of the assigned methods, mapped the corresponding method and class
+     *
      * @return structure that maps for each package class name, the method and the associated returned value
      */
-    public HashMap<String,HashMap<String, Object>> getResultsForMethods() {
+    public HashMap<String, HashMap<String, Object>> getResultsForMethods() {
         return resultsForMethods;
     }
 
     /**
      * Sets the returned value for each of the assigned methods, mapped the corresponding method and class
+     *
      * @param resultsForMethods that maps for each package class name, the method and the associated returned value
      */
-    public void setResultsForMethods(HashMap<String,HashMap<String, Object>> resultsForMethods) {
+    public void setResultsForMethods(HashMap<String, HashMap<String, Object>> resultsForMethods) {
         this.resultsForMethods = resultsForMethods;
     }
 }

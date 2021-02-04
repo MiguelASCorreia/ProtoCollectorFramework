@@ -22,15 +22,17 @@ public class TrajectorySegmentTable {
 
     /**
      * Constructor
+     *
      * @param context: current context
      */
-    public TrajectorySegmentTable(Context context){
+    public TrajectorySegmentTable(Context context) {
         db = new DataBase(context);
         this.context = context;
     }
 
     /**
      * Creates the table
+     *
      * @param sqLiteDatabase: SQLite database
      */
     protected static void createTable(SQLiteDatabase sqLiteDatabase) {
@@ -45,6 +47,7 @@ public class TrajectorySegmentTable {
 
     /**
      * Drops the table
+     *
      * @param sqLiteDatabase: SQLite database
      */
     protected static void dropTable(SQLiteDatabase sqLiteDatabase) {
@@ -54,29 +57,31 @@ public class TrajectorySegmentTable {
 
     /**
      * Creates a segment associated to a trajectory
+     *
      * @param trajectory_id: trajectory's identifier
      * @return segment's identifier
      */
-    public String createSegment(String trajectory_id){
+    public String createSegment(String trajectory_id) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
+        try {
             return createSegment(trajectory_id, db);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Creates a segment associated to a trajectory
+     *
      * @param trajectory_id: trajectory's identifier
-     * @param db: SQLite database
+     * @param db:            SQLite database
      * @return segment's identifier
      */
-    private String createSegment(String trajectory_id, SQLiteDatabase db){
-        if(trajectory_id == null || db == null)
+    private String createSegment(String trajectory_id, SQLiteDatabase db) {
+        if (trajectory_id == null || db == null)
             return null;
 
         try {
@@ -84,7 +89,7 @@ public class TrajectorySegmentTable {
             cv.put(TRAJECTORY_ID, trajectory_id);
             return Long.toString(db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE));
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
         }

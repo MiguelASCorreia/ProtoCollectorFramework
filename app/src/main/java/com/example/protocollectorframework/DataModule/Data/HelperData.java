@@ -8,14 +8,14 @@ public class HelperData {
     private String extra_json;
 
 
-    public HelperData(int position, String title, String message){
+    public HelperData(int position, String title, String message) {
         this.position = position;
         this.title = title;
         this.message = message;
         this.extra_json = null;
     }
 
-    public HelperData(int position, String title, String message, String extra_json){
+    public HelperData(int position, String title, String message, String extra_json) {
         this.position = position;
         this.title = title;
         this.message = message;

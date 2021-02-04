@@ -59,7 +59,7 @@ public class CustomDatePicker extends FrameLayout {
         dayOfMonthPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                if(callOnClick)
+                if (callOnClick)
                     callOnClick();
             }
         });
@@ -67,7 +67,7 @@ public class CustomDatePicker extends FrameLayout {
         monthPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                setDay(dayOfMonthPicker.getValue(),newVal,yearPicker.getValue());
+                setDay(dayOfMonthPicker.getValue(), newVal, yearPicker.getValue());
 
                 callOnClick();
 
@@ -76,7 +76,7 @@ public class CustomDatePicker extends FrameLayout {
         yearPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                setDay(dayOfMonthPicker.getValue(),monthPicker.getValue(),newVal);
+                setDay(dayOfMonthPicker.getValue(), monthPicker.getValue(), newVal);
 
                 callOnClick();
             }
@@ -95,7 +95,7 @@ public class CustomDatePicker extends FrameLayout {
         yearPicker.setMinValue(1970);
         yearPicker.setValue(year);
 
-        setDay(day,month,year);
+        setDay(day, month, year);
 
 
     }
@@ -103,18 +103,19 @@ public class CustomDatePicker extends FrameLayout {
 
     /**
      * Sets each spinner value
-     * @param day: day of the month
+     *
+     * @param day:   day of the month
      * @param month: month
-     * @param year: year
+     * @param year:  year
      */
-    private void setDay( int day, int month, int year){
+    private void setDay(int day, int month, int year) {
         callOnClick = false;
 
         dayOfMonthPicker.setMinValue(1);
-        if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
             dayOfMonthPicker.setMaxValue(31);
-        else if(month == 2){
-            if((year % 4 == 0) && (year % 100 != 0))
+        else if (month == 2) {
+            if ((year % 4 == 0) && (year % 100 != 0))
                 dayOfMonthPicker.setMaxValue(29);
             else
                 dayOfMonthPicker.setMaxValue(28);
@@ -122,7 +123,7 @@ public class CustomDatePicker extends FrameLayout {
             dayOfMonthPicker.setMaxValue(30);
 
 
-        if(day <= dayOfMonthPicker.getMaxValue())
+        if (day <= dayOfMonthPicker.getMaxValue())
             dayOfMonthPicker.setValue(day);
         else
             dayOfMonthPicker.setValue(1);
@@ -133,35 +134,39 @@ public class CustomDatePicker extends FrameLayout {
 
     /**
      * Returns the current value on the day of the month spinner
+     *
      * @return day of the month
      */
-    public int getDayOfMonth(){
+    public int getDayOfMonth() {
         return dayOfMonthPicker.getValue();
     }
 
     /**
      * Returns the current value on the month spinner
+     *
      * @return month
      */
-    public int getMonth(){
+    public int getMonth() {
         return monthPicker.getValue();
     }
 
     /**
      * Returns the current value on the year spinner
+     *
      * @return year
      */
-    public int getYear(){
+    public int getYear() {
         return yearPicker.getValue();
     }
 
     /**
      * Sets the date given the year, month and day of the month
-     * @param year: year
-     * @param month: month
+     *
+     * @param year:       year
+     * @param month:      month
      * @param dayOfMonth: day of the month
      */
-    public void setDate(int year, int month, int dayOfMonth){
+    public void setDate(int year, int month, int dayOfMonth) {
         yearPicker.setValue(year);
         monthPicker.setValue(month);
         dayOfMonthPicker.setValue(dayOfMonth);
@@ -169,9 +174,10 @@ public class CustomDatePicker extends FrameLayout {
 
     /**
      * Returns the date shown on the view on the format dd/MM/yyyy
+     *
      * @return date on the format dd/mm/yyyy
      */
-    public String getDate(){
+    public String getDate() {
         return dayOfMonthPicker.getValue() + "/" + monthPicker.getValue() + "/" + yearPicker.getValue();
     }
 

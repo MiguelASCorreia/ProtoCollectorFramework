@@ -25,24 +25,26 @@ public class AnimationLibrary {
 
     /**
      * Constructor
+     *
      * @param context: the context of the activity
      */
-    public AnimationLibrary(Context context){
+    public AnimationLibrary(Context context) {
         this.context = context;
     }
 
     /**
      * Fetch the default button click animation
+     *
      * @return default button click animation
      */
-    public AlphaAnimation getClickAnimation(){
+    public AlphaAnimation getClickAnimation() {
         return buttonClick;
     }
 
     /**
      * Causes a vibration for 500 milliseconds
      */
-    public void vibrate(){
+    public void vibrate() {
         Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
@@ -53,9 +55,10 @@ public class AnimationLibrary {
 
     /**
      * Causes a vibration for a certain milliseconds
+     *
      * @param duration: vibration duration in milliseconds
      */
-    public void vibrate(long duration){
+    public void vibrate(long duration) {
         Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE));
@@ -66,10 +69,11 @@ public class AnimationLibrary {
 
     /**
      * Rotates a floating action button and then changes it's drawable
-     * @param v: floating action button view
-     * @param rotate: flag for rotation
+     *
+     * @param v:        floating action button view
+     * @param rotate:   flag for rotation
      * @param rotation: degree of rotation
-     * @param d: new drawable
+     * @param d:        new drawable
      * @return true if drawable changed with success, false otherwise
      */
     public boolean rotateFab(final View v, boolean rotate, float rotation, final Drawable d) {
@@ -77,11 +81,11 @@ public class AnimationLibrary {
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        if(d != null){
+                        if (d != null) {
                             try {
                                 FloatingActionButton fb = (FloatingActionButton) v;
                                 fb.setImageDrawable(d);
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 Log.e("Animation eror", "Not a FAB");
                             }
                         }
@@ -94,9 +98,10 @@ public class AnimationLibrary {
 
     /**
      * Show hidden view
-     * @param v: target view
-     * @param x: x axis translation
-     * @param y: y axis translation
+     *
+     * @param v:        target view
+     * @param x:        x axis translation
+     * @param y:        y axis translation
      * @param duration: animation duration in milliseconds
      */
     public void showIn(final View v, int x, int y, long duration) {
@@ -120,9 +125,10 @@ public class AnimationLibrary {
 
     /**
      * Hide visible view
-     * @param v: target view
-     * @param x: x axis translation
-     * @param y: y axis translation
+     *
+     * @param v:        target view
+     * @param x:        x axis translation
+     * @param y:        y axis translation
      * @param duration: animation duration in milliseconds
      */
     public void showOut(final View v, int x, int y, long duration) {
@@ -146,10 +152,11 @@ public class AnimationLibrary {
 
     /**
      * Starts a blinking animation
-     * @param v: target view
+     *
+     * @param v:        target view
      * @param duration: animation duration in milliseconds
      */
-    public void startBlinkAnimation(View v, long duration){
+    public void startBlinkAnimation(View v, long duration) {
         Animation animation = new AlphaAnimation((float) 1.0, 0);
 
         animation.setDuration(duration);
@@ -163,9 +170,10 @@ public class AnimationLibrary {
 
     /**
      * Removes all animations associated to the view
+     *
      * @param v: target view
      */
-    public void removeAnimations(View v){
+    public void removeAnimations(View v) {
         v.clearAnimation();
     }
 }

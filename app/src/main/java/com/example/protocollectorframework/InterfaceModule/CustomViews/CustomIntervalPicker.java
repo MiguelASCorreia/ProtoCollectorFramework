@@ -56,21 +56,22 @@ public class CustomIntervalPicker extends FrameLayout {
 
     /**
      * Sets the possible values for each interval limit
+     *
      * @param firstValues: domain of values for the left limit
-     * @param lastValues: domain of values for the right limite
+     * @param lastValues:  domain of values for the right limite
      */
-    public void setValues(String[] firstValues, String[] lastValues){
+    public void setValues(String[] firstValues, String[] lastValues) {
         firstPicker.setMinValue(1);
         firstPicker.setMaxValue(firstValues.length);
         firstPicker.setDisplayedValues(firstValues);
         firstPicker.setWrapSelectorWheel(false);
 
-        if(lastValues != null) {
+        if (lastValues != null) {
             secondPicker.setMinValue(1);
             secondPicker.setMaxValue(lastValues.length);
             secondPicker.setDisplayedValues(lastValues);
             secondPicker.setWrapSelectorWheel(false);
-        }else{
+        } else {
             secondPicker.setMinValue(1);
             secondPicker.setMaxValue(firstValues.length);
             secondPicker.setDisplayedValues(firstValues);
@@ -82,9 +83,10 @@ public class CustomIntervalPicker extends FrameLayout {
 
     /**
      * Sets the possible values for each interval limit
+     *
      * @param firstValues: domain of values for both limits
      */
-    public void setValues(String[] firstValues){
+    public void setValues(String[] firstValues) {
         firstPicker.setMinValue(1);
         firstPicker.setMaxValue(firstValues.length);
         firstPicker.setDisplayedValues(firstValues);
@@ -101,11 +103,11 @@ public class CustomIntervalPicker extends FrameLayout {
     /**
      * Sets the on value changed listener for each spinner
      */
-    private void setOnChange(){
+    private void setOnChange() {
         firstPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                if(!valueChanged)
+                if (!valueChanged)
                     valueChanged = true;
                 secondPicker.setValue(newVal);
 
@@ -117,9 +119,9 @@ public class CustomIntervalPicker extends FrameLayout {
         secondPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                if(!valueChanged)
+                if (!valueChanged)
                     valueChanged = true;
-                if(firstPicker.getValue() == 1 || firstPicker.getValue() > newVal)
+                if (firstPicker.getValue() == 1 || firstPicker.getValue() > newVal)
                     firstPicker.setValue(newVal);
 
 
@@ -132,74 +134,83 @@ public class CustomIntervalPicker extends FrameLayout {
 
     /**
      * Check if the value was changed by the user
+     *
      * @return true if changed, false otherwise
      */
-    public boolean isValueChanged(){
+    public boolean isValueChanged() {
         return valueChanged;
     }
 
     /**
      * Returns the domain of the left limit
+     *
      * @return domain of the left limit
      */
-    public String[] getFirstValues(){
+    public String[] getFirstValues() {
         return firstPicker.getDisplayedValues();
     }
 
     /**
      * Returns the domain of the right limit
+     *
      * @return domain of the right limit
      */
-    public String[] getSecondValues(){
+    public String[] getSecondValues() {
         return secondPicker.getDisplayedValues();
     }
 
     /**
      * Returns the current index of the left value
+     *
      * @return index of the left limit value
      */
-    public int getFirstValue(){
+    public int getFirstValue() {
         return firstPicker.getValue();
     }
 
     /**
      * Returns the current index of the right value
+     *
      * @return index of the right limit value
      */
-    public int getSecondValue(){
+    public int getSecondValue() {
         return secondPicker.getValue();
     }
 
     /**
      * Sets the left value
+     *
      * @param value left value
      */
-    public void setFirstValue(int value){
+    public void setFirstValue(int value) {
         firstPicker.setValue(value);
     }
 
     /**
      * Sets the right value
+     *
      * @param value right value
      */
-    public void setSecondValue(int value){
+    public void setSecondValue(int value) {
         secondPicker.setValue(value);
     }
 
     /**
      * Returns the interval value (left and right values divided by '/')
+     *
      * @return interval value
      */
-    public String getRawValue(){
+    public String getRawValue() {
         return getStringValueFromFirst() + "/" + getStringValueFromSecond();
     }
 
     /**
      * Returns the interval value. If both limits are equal, only the left only is returned, otherwise the left and right values are joined, divided by '/'
+     *
      * @return interval value
      */
-    public String getProcessedValue(){
-        if(getFirstValues()[getFirstValue()-1].equals(getSecondValues()[getSecondValue()-1]))
+    public String getProcessedValue() {
+        if (getFirstValues()[getFirstValue() - 1].equals(getSecondValues()[getSecondValue() - 1]))
             return getStringValueFromFirst();
         else
             return getRawValue();
@@ -207,43 +218,46 @@ public class CustomIntervalPicker extends FrameLayout {
 
     /**
      * Returns the left value
+     *
      * @return left value
      */
-    public String getStringValueFromFirst(){
-        return getFirstValues()[getFirstValue()-1];
+    public String getStringValueFromFirst() {
+        return getFirstValues()[getFirstValue() - 1];
     }
 
     /**
      * Returns the right value
+     *
      * @return right value
      */
-    public String getStringValueFromSecond(){
-        return getSecondValues()[getSecondValue()-1];
+    public String getStringValueFromSecond() {
+        return getSecondValues()[getSecondValue() - 1];
     }
 
     /**
      * Sets each limit value
-     * @param first: left value
+     *
+     * @param first:  left value
      * @param second: right value
      */
-    public void setValues(String first, String second){
-        try{
+    public void setValues(String first, String second) {
+        try {
 
             List<String> efs = Arrays.asList(getFirstValues());
             int index = efs.indexOf(first);
-            if(index != -1)
+            if (index != -1)
                 setFirstValue(index + 1);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try{
+        try {
             List<String> efs = Arrays.asList(getSecondValues());
             int index = efs.indexOf(second);
-            if(index != -1)
+            if (index != -1)
                 setSecondValue(index + 1);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

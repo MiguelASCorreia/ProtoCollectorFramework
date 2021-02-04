@@ -23,19 +23,20 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Constructor
-     * @param type: component data type
-     * @param units: data units
-     * @param label: label of the component
-     * @param value_type: defines the type of numeric value (integer or real)
-     * @param min: minimum numeric acceptable value
-     * @param max: maximum numeric acceptable value
-     * @param countValues: acceptable values in a count
+     *
+     * @param type:         component data type
+     * @param units:        data units
+     * @param label:        label of the component
+     * @param value_type:   defines the type of numeric value (integer or real)
+     * @param min:          minimum numeric acceptable value
+     * @param max:          maximum numeric acceptable value
+     * @param countValues:  acceptable values in a count
      * @param temporalType: temporal data type (date or datetime)
      * @param first_values: left domain of the interval component
-     * @param last_values: right domain of the interval component
-     * @param unique: uniqueness of the selection in the categorical component type
-     * @param observation: associated observation
-     * @param protocol: associated protocol
+     * @param last_values:  right domain of the interval component
+     * @param unique:       uniqueness of the selection in the categorical component type
+     * @param observation:  associated observation
+     * @param protocol:     associated protocol
      */
     public ComponentBuildInfo(int type, String units, String label, String value_type, int min, int max, String[] countValues, String temporalType, String[] first_values, String[] last_values, boolean unique, String observation, String protocol) {
         this.type = type;
@@ -55,22 +56,25 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Check if the selection is unique
+     *
      * @return true if only one value can be selected at a given time, false otherwise
      */
-    public boolean getUnique(){
+    public boolean getUnique() {
         return unique;
     }
 
     /**
      * Sets if the selection is unique
+     *
      * @param unique: true if only one value can be selected at a given time, false otherwise
      */
-    public void setUnique(boolean unique){
+    public void setUnique(boolean unique) {
         this.unique = unique;
     }
 
     /**
      * Returns the numeric value type
+     *
      * @return numeric value type
      */
     public String getValue_type() {
@@ -79,6 +83,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the numeric value type
+     *
      * @param value_type: numeric value type
      */
     public void setValue_type(String value_type) {
@@ -87,6 +92,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Returns the left domain of values of the interval
+     *
      * @return left domain of the interval
      */
     public String[] getFirst_values() {
@@ -95,6 +101,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the left domain of values of the interval
+     *
      * @param first_values: left domain of the interval
      */
     public void setFirst_values(String[] first_values) {
@@ -103,6 +110,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Returns the right domain of values of the interval
+     *
      * @return left right of the interval
      */
     public String[] getLast_values() {
@@ -111,6 +119,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the right domain of values of the interval
+     *
      * @param last_values: right domain of the interval
      */
     public void setLast_values(String[] last_values) {
@@ -119,6 +128,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Returns the observation name associated to the component
+     *
      * @return observation's name
      */
     public String getObservation_name() {
@@ -127,6 +137,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the observation name of the component
+     *
      * @param observation_name: observation's name
      */
     public void setObservation_name(String observation_name) {
@@ -135,6 +146,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Returns the protocol associated to the component
+     *
      * @return protocol's name
      */
     public String getProtocol() {
@@ -143,6 +155,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the protocol associated to the component
+     *
      * @param protocol: protocol's name
      */
     public void setProtocol(String protocol) {
@@ -151,6 +164,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Returns the units of the value
+     *
      * @return units
      */
     public String getUnits() {
@@ -159,6 +173,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the units of the value
+     *
      * @param units: units
      */
     public void setUnits(String units) {
@@ -167,6 +182,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Returns the component's data type
+     *
      * @return component data type
      */
     public int getType() {
@@ -175,6 +191,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the component's data type
+     *
      * @param type: data type identifier
      */
     public void setType(int type) {
@@ -183,6 +200,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Returns the component's label
+     *
      * @return component's label
      */
     public String getLabel() {
@@ -191,6 +209,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the component's label
+     *
      * @param label: component's label
      */
     public void setLabel(String label) {
@@ -199,6 +218,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Returns the minimum acceptable value
+     *
      * @return minimum acceptable value
      */
     public int getMin() {
@@ -207,6 +227,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the minimum acceptable value
+     *
      * @param min: minimum acceptable value
      */
     public void setMin(int min) {
@@ -215,6 +236,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Returns the maximum acceptable value
+     *
      * @return maximum acceptable value
      */
     public int getMax() {
@@ -223,6 +245,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the maximum acceptable value
+     *
      * @param max: maximum acceptable value
      */
     public void setMax(int max) {
@@ -231,6 +254,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Returns the acceptable values in a count
+     *
      * @return domain of acceptable values in a count
      */
     public String[] getCountValues() {
@@ -239,6 +263,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the domain of acceptable values in a count
+     *
      * @param countValues: domain of acceptable values in a count
      */
     public void setCountValues(String[] countValues) {
@@ -247,6 +272,7 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Returns the temporal type of the temporal component
+     *
      * @return temporal type (date or datetime)
      */
     public String getTemporalType() {
@@ -255,14 +281,12 @@ public class ComponentBuildInfo implements Serializable {
 
     /**
      * Sets the temporal type of the temporal component
+     *
      * @param temporalType: temporal type (date or datetime)
      */
     public void setTemporalType(String temporalType) {
         this.temporalType = temporalType;
     }
-
-
-
 
 
 }

@@ -28,14 +28,16 @@ public class ConfigTable {
 
     /**
      * Constructor
+     *
      * @param context: current context
      */
-    public ConfigTable(Context context){
+    public ConfigTable(Context context) {
         db = new DataBase(context);
     }
 
     /**
      * Creates the table
+     *
      * @param sqLiteDatabase: SQLite database
      */
     protected static void createTable(SQLiteDatabase sqLiteDatabase) {
@@ -50,6 +52,7 @@ public class ConfigTable {
 
     /**
      * Drops the table
+     *
      * @param sqLiteDatabase: SQLite database
      */
     protected static void dropTable(SQLiteDatabase sqLiteDatabase) {
@@ -59,32 +62,34 @@ public class ConfigTable {
 
     /**
      * Creates a new file
+     *
      * @param config_name: file's name
-     * @param version: file's version
-     * @param path: file's external storage path
+     * @param version:     file's version
+     * @param path:        file's external storage path
      * @return file identifier
      */
-    public String addConfigFile(String config_name, int version, String path){
+    public String addConfigFile(String config_name, int version, String path) {
         SQLiteDatabase db = this.db.getWritableDatabase();
-        try{
-            return addConfigFile(config_name, version,path, db);
-        }catch(SQLException e){
+        try {
+            return addConfigFile(config_name, version, path, db);
+        } catch (SQLException e) {
             Log.e("error", e.toString());
             return null;
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Creates a new file
+     *
      * @param config_name: file's name
-     * @param version: file's version
-     * @param path: file's external storage path
-     * @param db: SQLite database
+     * @param version:     file's version
+     * @param path:        file's external storage path
+     * @param db:          SQLite database
      * @return file identifier
      */
-    private String addConfigFile(String config_name, int version, String path, SQLiteDatabase db){
+    private String addConfigFile(String config_name, int version, String path, SQLiteDatabase db) {
 
         try {
             ContentValues cv = new ContentValues();
@@ -94,7 +99,7 @@ public class ConfigTable {
 
             long id = db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
             return Long.toString(id);
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
             return null;
         }
@@ -102,41 +107,43 @@ public class ConfigTable {
 
     /**
      * Tags the desired file as deleted via the deletion timestamp
+     *
      * @param name: file's name
      */
-    public void deleteConfig(String name){
+    public void deleteConfig(String name) {
         SQLiteDatabase db = this.db.getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues();
             contentValues.put(CONFIG_DELETE_TIME, SharedMethods.dateToUTCString(new Date()));
 
-            db.update(TABLE_NAME, contentValues, CONFIG_NAME + " = ?", new String[] {name});
-        }catch(SQLException e){
+            db.update(TABLE_NAME, contentValues, CONFIG_NAME + " = ?", new String[]{name});
+        } catch (SQLException e) {
             Log.e("error", e.toString());
-        }finally {
+        } finally {
             db.close();
         }
     }
 
     /**
      * Fetch the version of a given file
+     *
      * @param name: file's name
      * @return file's version
      */
-    public int getConfigVersion(String name){
+    public int getConfigVersion(String name) {
         SQLiteDatabase db = this.db.getWritableDatabase();
         Cursor res = db.rawQuery("SELECT + " + CONFIG_VERSION + " FROM " + TABLE_NAME + " WHERE " + CONFIG_NAME + " = ?", new String[]{name});
 
-        try{
+        try {
             if (res != null && res.getCount() > 0) {
                 res.moveToFirst();
                 return res.getInt(0);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
-        }finally {
+        } finally {
             db.close();
-            if(res != null)
+            if (res != null)
                 res.close();
         }
         return 0;
@@ -144,23 +151,24 @@ public class ConfigTable {
 
     /**
      * Fetch the edit timestamp of a given file
+     *
      * @param name: file's name
      * @return file's timestamp
      */
-    public String getConfigEditTime(String name){
+    public String getConfigEditTime(String name) {
         SQLiteDatabase db = this.db.getWritableDatabase();
         Cursor res = db.rawQuery("SELECT + " + CONFIG_EDIT_TIME + " FROM " + TABLE_NAME + " WHERE " + CONFIG_NAME + " = ?", new String[]{name});
 
-        try{
+        try {
             if (res != null && res.getCount() > 0) {
                 res.moveToFirst();
                 return res.getString(0);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", e.toString());
-        }finally {
+        } finally {
             db.close();
-            if(res != null)
+            if (res != null)
                 res.close();
         }
         return null;
@@ -168,23 +176,24 @@ public class ConfigTable {
 
     /**
      * Fetch the external storage path of a given file
+     *
      * @param name: file's name
      * @return file's external storage path
      */
-    public String getConfigPath(String name){
+    public String getConfigPath(String name) {
         SQLiteDatabase db = this.db.getWritableDatabase();
         Cursor res = db.rawQuery("SELECT + " + CONFIG_PATH + " FROM " + TABLE_NAME + " WHERE " + CONFIG_NAME + " = ?", new String[]{name});
 
-        try{
+        try {
             if (res != null && res.getCount() > 0) {
                 res.moveToFirst();
                 return res.getString(0);
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Log.e("error", e.toString());
-        }finally {
+        } finally {
             db.close();
-            if(res != null)
+            if (res != null)
                 res.close();
         }
         return null;
@@ -193,27 +202,26 @@ public class ConfigTable {
 
     /**
      * Edits the information of a given file
-     * @param name: file's name
-     * @param version: file's version
+     *
+     * @param name:      file's name
+     * @param version:   file's version
      * @param file_path: file's external storage path
      */
-    public void editConfig(String name, int version, String file_path){
+    public void editConfig(String name, int version, String file_path) {
         SQLiteDatabase db = this.db.getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(CONFIG_VERSION,version);
-            contentValues.put(CONFIG_PATH,file_path);
+            contentValues.put(CONFIG_VERSION, version);
+            contentValues.put(CONFIG_PATH, file_path);
             contentValues.put(CONFIG_EDIT_TIME, SharedMethods.dateToUTCString(new Date()));
 
-            db.update(TABLE_NAME, contentValues, CONFIG_NAME + " = ?", new String[] {name});
-        }catch(SQLException e){
+            db.update(TABLE_NAME, contentValues, CONFIG_NAME + " = ?", new String[]{name});
+        } catch (SQLException e) {
             Log.e("error", e.toString());
-        }finally {
+        } finally {
             db.close();
         }
     }
-
-
 
 
 }
