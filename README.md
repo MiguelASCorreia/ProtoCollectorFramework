@@ -15,7 +15,8 @@ All the following modules make available CRUD methods that allow each one to man
 
 ### Registration Module
 
-//TODO 
+The registration module was created for the controllers of the visits and the complementary observations that are made after them, offering CRUD methods for fetching data and creating new entities. After this, was expanded with the configuration manager and the abstract generator. 
+The configurations allow the association of configurations files that can be useful for setting up the application that the developer is looking up to. Some configuration files are mandatory for the normal execution of this framework as it is the case of the protocol configuration file. The abstract generator offers a tool to generate abstracts based on the records from field visits plus returned values from methods that the developer deems necessary. It makes use of the configuration manager for defining the abstract template which will be explained after this section.
 
 ### Location Module
 Location data maybe useful for data analyses and to detect some behaviors that can be linked to data collection moments. With this purpose, a location module was developed to manage all the geographical information associated with the field plots, but also the user’s location during a visit. This module was developed with the support of the Mapbox API, offering method for map manipulation like the creation of symbols, lines and polygons.
