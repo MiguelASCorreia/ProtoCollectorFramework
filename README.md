@@ -5,7 +5,6 @@ This framework was developed for the purpose of favoring the creation of android
 ----
 
 ## Framework Overview
-## Framework Overview
 
 The framework is divided in six different modules, each on composed of a set of Java classes and, in some cases, a group of XML resources. All these modules were developed in parallel with a mobile application whose purpose was to collect information on the field regarding pets and diseases that affect apple and pear crops. That said, the design of the framework was heavily influenced by the needs of that project. However, an effort was made to generalize the essential features for, not only the phytosanitary context, but for all types of field data collection that require making observations according to elements of interest.
 
