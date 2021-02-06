@@ -89,6 +89,7 @@ public class LocationModule {
     private static final long DEFAULT_REFRESH_TIME = 5000;
 
     private static final long MAX_INTERVAL = 60 * 1000;
+    public static final String GPX_EXTENSION = ".gpx";
 
     private Context context;
     private Activity mActivity;
@@ -662,9 +663,9 @@ public class LocationModule {
     public String exportGPXFile(List<MultimediaData> multimedia, String id, String timestamp) {
         String auxName;
         if (mActualPlot != null)
-            auxName = mActualPlot.getID() + "_" + mActualPlot.getAcronym() + "_track_" + id + "_" + timestamp;
+            auxName = mActualPlot.getID() + "_" + mActualPlot.getAcronym() + "_" + id + "_" + timestamp;
         else
-            auxName = "track_" + id + "_" + timestamp;
+            auxName =  id + "_" + timestamp;
 
         return exportGPX(multimedia, mLocations, auxName);
     }
@@ -686,7 +687,7 @@ public class LocationModule {
             String name = "<name>" + fileName + "</name>\n";
 
 
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ",Locale.getDefault());
 
             StringBuilder segment_text = new StringBuilder();
 
@@ -740,7 +741,7 @@ public class LocationModule {
                 showError();
             }
 
-            File gpxFile = new File(dir, fileName + ".gpx");
+            File gpxFile = new File(dir, fileName + GPX_EXTENSION);
             try {
                 FileWriter writer = new FileWriter(gpxFile, false);
                 writer.append(header);

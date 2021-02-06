@@ -62,6 +62,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 public class MultimediaManager implements Serializable {
 
+    public static final String WPT_TAG = "wpt";
+    public static final String LAT_TAG = "lat";
+    public static final String LON_TAG = "lon";
+    public static final String TIME_TAG = "time";
+    public static final String SAT_TAG = "sat";
+    public static final String ELE_TAG = "ele";
+    public static final String ACCURACY_TAG = "accuracy";
+    public static final String NAME_TAG = "name";
+    public static final String IMAGES_EXTENSION = ".jpg";
+    public static final String AUDIOS_EXTENSION = ".mp3";
+    public static final String IMAGES_FOLDER = "Images";
+    public static final String AUDIOS_FOLDER = "Audios";
     private final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
     public static final String DIR_IMAGES = "Images";
     public static final String DIR_AUDIO = "Audio";
@@ -317,8 +329,9 @@ public class MultimediaManager implements Serializable {
      * Request camera activity
      *
      * @param mLastKnownLocation: location to be associated to the photo
+     * @param  authority:         file's provider authority
      */
-    public void dispatchTakePictureIntent(LocationData mLastKnownLocation) {
+    public void dispatchTakePictureIntent(LocationData mLastKnownLocation, String authority) {
         if (mLastKnownLocation != null)
             this.mLastKnownLocation = mLastKnownLocation;
         int permissionsOnHold = askCameraPermissions();
@@ -334,7 +347,7 @@ public class MultimediaManager implements Serializable {
                 if (photoFile != null) {
                     try {
                         Uri photoURI = FileProvider.getUriForFile(context,
-                                "com.example.fitoagro.fileprovider",
+                                authority,
                                 photoFile);
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         activity.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -359,7 +372,7 @@ public class MultimediaManager implements Serializable {
         File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,
-                ".jpg",
+                IMAGES_EXTENSION,
                 storageDir
         );
         currentPhoto = image.getAbsolutePath();
@@ -421,7 +434,7 @@ public class MultimediaManager implements Serializable {
                 Document document = documentBuilder.parse(fileInputStream);
                 Element elementRoot = document.getDocumentElement();
 
-                NodeList nodelist_wpt = elementRoot.getElementsByTagName("wpt");
+                NodeList nodelist_wpt = elementRoot.getElementsByTagName(WPT_TAG);
 
                 for (int i = 0; i < nodelist_wpt.getLength(); i++) {
 
@@ -429,8 +442,8 @@ public class MultimediaManager implements Serializable {
                     NamedNodeMap attributes = node.getAttributes();
                     NodeList children = node.getChildNodes();
 
-                    double lat = Double.parseDouble(attributes.getNamedItem("lat").getTextContent());
-                    double ln = Double.parseDouble(attributes.getNamedItem("lon").getTextContent());
+                    double lat = Double.parseDouble(attributes.getNamedItem(LAT_TAG).getTextContent());
+                    double ln = Double.parseDouble(attributes.getNamedItem(LON_TAG).getTextContent());
 
                     String time = "";
                     int sat = 0;
@@ -442,19 +455,19 @@ public class MultimediaManager implements Serializable {
                         Node sub_node = children.item(w);
                         String node_name = sub_node.getNodeName();
                         switch (node_name) {
-                            case "time":
+                            case TIME_TAG:
                                 time = sub_node.getTextContent();
                                 break;
-                            case "sat":
+                            case SAT_TAG:
                                 sat = Integer.parseInt(sub_node.getTextContent());
                                 break;
-                            case "ele":
+                            case ELE_TAG:
                                 ele = Double.parseDouble(sub_node.getTextContent());
                                 break;
-                            case "accuracy":
+                            case ACCURACY_TAG:
                                 accuracy = Float.parseFloat(sub_node.getTextContent());
                                 break;
-                            case "name":
+                            case NAME_TAG:
                                 name = sub_node.getTextContent();
                                 break;
                             default:
@@ -463,14 +476,14 @@ public class MultimediaManager implements Serializable {
                     }
 
                     String type = "";
-                    String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/FitoAgro/";
+                    String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/"+SharedMethods.APP_FOLDER_NAME+"/";
 
-                    if (name.contains(".jpg")) {
+                    if (name.contains(IMAGES_EXTENSION)) {
                         type = MultimediaManager.PHOTO;
-                        path += "Images/" + name;
-                    } else if (name.contains(".mp3")) {
+                        path += IMAGES_FOLDER +"/" + name;
+                    } else if (name.contains(AUDIOS_EXTENSION)) {
                         type = MultimediaManager.RECORD;
-                        path += "Audio/" + name;
+                        path += AUDIOS_FOLDER +"/" + name;
                     }
 
                     long timeStamp = -1;
@@ -527,7 +540,7 @@ public class MultimediaManager implements Serializable {
 
                 String date = SIMPLE_DATE_FORMAT.format(new Date());
 
-                File photo = new File(dir, mPlot.getID() + "_" + mPlot.getAcronym() + "_" + SharedMethods.getMyId(activity) + "_photo_" + date + ".jpg");
+                File photo = new File(dir, mPlot.getID() + "_" + mPlot.getAcronym() + "_" + SharedMethods.getMyId(activity) + "_" + date + IMAGES_EXTENSION);
                 File original = new File(currentPhoto);
                 FileOutputStream fos = null;
                 try {
@@ -567,7 +580,7 @@ public class MultimediaManager implements Serializable {
                 return false;
             }
             String date = SIMPLE_DATE_FORMAT.format(new Date());
-            String fileName = mPlot.getID() + "_" + mPlot.getAcronym() + "_" + SharedMethods.getMyId(context) + "_audio_" + date + ".mp3";
+            String fileName = mPlot.getID() + "_" + mPlot.getAcronym() + "_" + SharedMethods.getMyId(context) + "_" + date + AUDIOS_EXTENSION;
             File audioFile = new File(dir, fileName);
             currentRecord = audioFile.getPath();
             recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -637,7 +650,7 @@ public class MultimediaManager implements Serializable {
                 intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
                 mSpeechRecognizer.startListening(intent);
             } else {
-                SharedMethods.showToast(activity, "Sem internet");
+                SharedMethods.showToast(activity, "No connection");
             }
         }
     }

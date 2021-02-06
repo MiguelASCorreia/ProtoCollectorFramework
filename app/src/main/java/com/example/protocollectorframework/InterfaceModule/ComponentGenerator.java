@@ -61,6 +61,11 @@ public class ComponentGenerator {
 
     public static final String TYPE_REAL = "real";
     public static final String TYPE_INTEGER = "integer";
+    public static final String TITLE_TAG = "title";
+    public static final String VALUE_TAG = "value";
+    public static final String OBSERVATION_NAME_TAG = "observation_name";
+    public static final String PROTOCOL_NAME_TAG = "protocol_name";
+    public static final String TYPE_TAG = "type";
 
     private Context context;
     private static boolean saveValues;
@@ -119,11 +124,11 @@ public class ComponentGenerator {
     public void sendStateToActivity(String title, String value, String observation_name, String protocol_name, int component_type) {
         try {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("title", title);
-            jsonObject.put("value", value);
-            jsonObject.put("observation_name", observation_name);
-            jsonObject.put("protocol_name", protocol_name);
-            jsonObject.put("type", component_type);
+            jsonObject.put(TITLE_TAG, title);
+            jsonObject.put(VALUE_TAG, value);
+            jsonObject.put(OBSERVATION_NAME_TAG, observation_name);
+            jsonObject.put(PROTOCOL_NAME_TAG, protocol_name);
+            jsonObject.put(TYPE_TAG, component_type);
 
             Message message1 = new Message();
             message1.what = 1;

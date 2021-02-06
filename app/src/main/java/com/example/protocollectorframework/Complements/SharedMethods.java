@@ -21,7 +21,7 @@ import java.util.TimeZone;
  */
 public class SharedMethods {
 
-
+    public static final String APP_FOLDER_NAME = "ProtoCollector";
     /**
      * Returns the device's identifier. If there is a google account associeted, the device id is equals to the user name of that account, otherwise the id is build by joining the device build model number with a secure Android unique id
      *
@@ -69,11 +69,11 @@ public class SharedMethods {
         if (!mainDir.exists()) {
             success = mainDir.mkdir();
         }
-        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "ProtoCollector");
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), APP_FOLDER_NAME);
         if (!dir.exists()) {
             success = dir.mkdir();
         }
-        dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "ProtoCollector/" + folder_name);
+        dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), APP_FOLDER_NAME+ "/" + folder_name);
         if (!dir.exists()) {
             success = dir.mkdir();
         }
