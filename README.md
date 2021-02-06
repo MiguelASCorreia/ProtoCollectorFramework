@@ -4,16 +4,44 @@ This framework was developed for the purpose of favoring the creation of android
 
 ----
 
-## Framework Modules
+## Framework Overview
+
+The framework is divided in six different modules, each on composed of a set of Java classes and, in some cases, a group of XML resources. All these modules were developed in parallel with a mobile application whose purpose was to collect information on the field regarding pets and diseases that affect apple and pear crops. That said, the design of the framework was heavily influenced by the needs of that project. However, an effort was made to generalize the essential features for, not only the phytosanitary context, but for all types of field data collection that require making observations according to elements of interest.
+
+### Data Module
+
+This module is the foundation of the framework. It is divided in two group, the data objects, which are used across the different modules, and the database, that was implemented in a generic way to store information according to the needs of the application. 
+All the following modules make available CRUD methods that allow each one to manage the data that they are responsible for.
+
+### Registration Module
+
+The registration module was created for the controllers of the visits and the complementary observations that are made after them, offering CRUD methods for fetching data and creating new entities. Afterwards, it was expanded with the configuration manager and the abstract generator. 
+The configurations allow the association of configurations files that can be useful for setting up the application that the developer is looking up to. Some configuration files are mandatory for the normal execution of this framework as it is the case of the protocol configuration file. The abstract generator offers a tool to generate abstracts based on the records from field visits plus returned values from methods that the developer deems necessary. It makes use of the configuration manager for defining the abstract template which will be explained after this section.
+
+### Location Module
+Location data maybe useful for data analyses and to detect some behaviors that can be linked to data collection moments. With this purpose, a location module was developed to manage all the geographical information associated with the field plots, but also the user’s location during a visit. This module was developed with the support of the Mapbox API, offering method for map manipulation like the creation of symbols, lines and polygons.
+Two location listeners were made available, one for plot detection and another for user location management, however, the module can be extended with new listeners that satisfy the needs of the specific project.  In the second one, the route taken by the user is stored in the database and can be easily exported with the GPX format.
+### Multimedia Module
+Sometimes the collected data needs to be supported by some other means. For this purpose, the multimedia module was implemented so that the application allows the association of multimedia to a field visit as a whole or even to specific moments.
+This module provides methods to favor the process of capturing multimedia elements such as photos and audios, managing all the needed permissions. It can be easily extended to other types of elements since each element it is stored with a type identifier. Additionally, provides a listener that allows the conversion of speech to text if there is a need to store the textual information.  An element can still be supported by the data provided by the location module and it is always marked with a creation timestamp.
+
+### Interface Module
+The automatic component generation is possible due to this module. It contains some custom views that were developed to satisfy needs that the default views were not able to and are used on the interface component API that was created. The interface components that are generated are dependent of the corresponding data type that is specified in the protocol’s configuration file, that will be explain shortly after this overview. Each component uses message mechanism that it’s triggered every time their value is changed. This mechanism sends a message with the updates in real time to a provided handler.
+
+### Cooperation Module
+This module offers a Bluetooth connection management API that sends message to the desired context to handle each on as the developer intends to. Also offers UI layouts to handler the pairing process and the search for devices to connect to.
+The main purpose of this module was to enable the exchange of messages between users during the same visit, so that the work could be divided by users on the field and then the data combined into a single record, made available in both devices at the same time. 
 
  
- ## Protocols configuration files
- 
-Before using this framework there are some types of configuration files that must be understood and reproduced. These files allow not only the generation of the user interface but also the creation of abstracts for each field visit.
+ ## Configuration
+ Before using this framework there are some types of configuration files that must be understood and reproduced. These files allow not only the generation of the user interface but also the creation of abstracts for each field visit.
 This system allows the user to utilize their own configuration files for the needed purposes however, there are two types of files that are mandatory and must respect a template. These files are:
  
  1. Protocols configuration file.
  1. Abstract configuration file.
+ 
+ ### Protocol configuration file
+
  
  Protocols are the base of data collection in this system. A protocol is applied during a period of time on EOIs (Elements of Interest) and explains to the user the steps that must be done to perform an correct observation and the values that must be registered for a desired target.
  
@@ -51,7 +79,7 @@ This system allows the user to utilize their own configuration files for the nee
   }
 ```
 
-### Helper
+#### Helper
 
   As mentioned above, this field is used to associate information to the observation that explains the registration process to the user.
   A helper is divided by steps and, due to the JSON format's nature, it's important to identify the position of each step because there's no guarantee that the array order will be maintained.
@@ -74,7 +102,7 @@ This system allows the user to utilize their own configuration files for the nee
   ]
 ```
 
-### Iterations
+#### Iterations
 	
 Each object belonging to this field indicates a value that is to be inserted by the user. For this purpose there were defined different data types that the value can belong to. Each data type is identified by a numeric value ranging from 0 to 6. Depending on the type, some additional fields may need to be filled. The following table features the different data types and each required field. Beyond these fields, the *name* field must be defined to identify the value's name/description.
 	
@@ -103,9 +131,10 @@ Identifier | Type | Fields
 1. *first*: array of values used to define the left domain of the interval type.
 1. *last*: array of values used to define the right domain of the interval type. If omitted, it assumes the value of *first*.
 
-### Protocol example
+#### Protocol Specification
 
 For a better understanding, it is presented the definition of a protocol.It is applied on twenty different trees across the field plot, between the months of April and October. In each one of the EOIs, the user must observe the state of the shoots and register the number of affected ones (up to a maximum of five). 
+By specifying the protocol configuration file, which must contain a JSONArray named "Protocols", the interface module allows processing the information of each protocols in the structure,  generating the interface components as well as the data structure that maps each value to the corresponding observation and protocol.
 
 ```json
 {
@@ -145,9 +174,24 @@ For a better understanding, it is presented the definition of a protocol.It is a
    ]
 }
 ```
+When specifying the protocol configuration file, which must contain a JSONArray with a given tag name, the interface module allows processing the information of each protocol in the structure,  generating the interface components as well as the data structure that maps each value to the corresponding observation and protocol. Afterwards, the following structures are made available.
+```java
+    HashMap<String, JSONObject> protocolsByTag; // Structure that maps each protocol JSONObject to the given protocol’s name
+    
+    HashMap<String, Integer> numberOfEOIsPerProtocol; // Structure that maps each EOI counter to the given protocol's name
+    
+    SortedSet<String> hiddenProtocols; // Set of protocol's names that are not active on the given time of the year duo to the date_min and date_max specification
+    
+    HashMap<String, HashMap<String, List<ComponentView>>> viewsPerProtocol; // Structure that maps all the generated observation's views that are EOI dependent to the given protocol's name
+    
+    HashMap<String, List<ComponentView>> generalObservations; // Structure that maps all the generated observation's views that are not EOI dependent to the given protocol's name
+    
+    HashMap<String, HashMap<String, List<Integer>>> limitedObservations; // Structure that maps the list of accountable EOIs to the given protocol's name
+    
+    HashMap<String, HashMap<String, List<HelperData>>> helpersPerProtocol; // Structure that maps the list of helpers to the given protocol's name
+```
 
-
- ## Abstract configuration files
+ ### Abstract configuration files
  The abstracts are used to synthesize the information of one field visit into an object. It can be divided into two groups, the data that the application stores in the database and the data that can be computed given methods and their respective arguments. Therefore, the configuration file contains flags that can be turned on or off, depending on the needs of the project and it is possible to associate external methods present in the project where the framework is placed to add the returned values to the abstract object. This file must respect the following template.
 ```json
 {
