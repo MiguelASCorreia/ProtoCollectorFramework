@@ -20,7 +20,15 @@ The configurations allow the association of configurations files that can be use
 
 ### Location Module
 Location data maybe useful for data analyses and to detect some behaviors that can be linked to data collection moments. With this purpose, a location module was developed to manage all the geographical information associated with the field plots, but also the user’s location during a visit. This module was developed with the support of the Mapbox API, offering method for map manipulation like the creation of symbols, lines and polygons.
-Two location listeners were made available, one for plot detection and another for user location management, however, the module can be extended with new listeners that satisfy the needs of the specific project.  In the second one, the route taken by the user is stored in the database and can be easily exported with the GPX format.
+Two location listeners were made available, one for plot detection and another for user location management, however, the module can be extended with new listeners that satisfy the needs of the specific project.  In the second one, the route taken by the user is stored in the database and can be easily exported with the GPX format. This files contains all the point's information across the following tags:
+
+1. *lat*: latitude of the given point.
+1. *ln*: longitude of the given point.
+1. *time*: timestamp for the given point in the format yyyy-MM-dd'T'HH:mm:ssZ.
+1. *sat*: number of satellites used for the given point.
+1. *ele*: altitude in meters, of the given point, above the WGS 84 reference ellipsoid.
+1. *accuracy*: estimated horizontal accuracy of the given point, radial, in meters.
+
 ### Multimedia Module
 Sometimes the collected data needs to be supported by some other means. For this purpose, the multimedia module was implemented so that the application allows the association of multimedia to a field visit as a whole or even to specific moments.
 This module provides methods to favor the process of capturing multimedia elements such as photos and audios, managing all the needed permissions. It can be easily extended to other types of elements since each element it is stored with a type identifier. Additionally, provides a listener that allows the conversion of speech to text if there is a need to store the textual information.  An element can still be supported by the data provided by the location module and it is always marked with a creation timestamp.
