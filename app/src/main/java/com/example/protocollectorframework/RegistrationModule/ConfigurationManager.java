@@ -100,10 +100,11 @@ public class ConfigurationManager {
     /**
      * Process one configuration file, given it's name, and extracts all the protocols that are associated to the field "Protocols"
      *
-     * @param file_name: protocol file's name
+     * @param file_name:           protocol file's name
+     * @param protocol_json_tag:   tag of the JSONArray that contains the desired specifications from the protocols
      * @return JSONArray containing the information for each protocol
      */
-    public JSONArray readProtocols(String file_name) {
+    public JSONArray readProtocols(String file_name, String protocol_json_tag) {
         InputStream is = null;
         String protocol_json_path = mConfigTable.getConfigPath(file_name);
         if (protocol_json_path != null) {
@@ -141,7 +142,7 @@ public class ConfigurationManager {
 
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
-            return jsonObject.getJSONArray("Protocols");
+            return jsonObject.getJSONArray(protocol_json_path);
 
         } catch (Exception e) {
             e.printStackTrace();
