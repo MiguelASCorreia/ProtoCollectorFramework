@@ -15,7 +15,7 @@ All the following modules make available CRUD methods that allow each one to man
 
 ### Registration Module
 
-The registration module was created for the controllers of the visits and the complementary observations that are made after them, offering CRUD methods for fetching data and creating new entities. After this, was expanded with the configuration manager and the abstract generator. 
+The registration module was created for the controllers of the visits and the complementary observations that are made after them, offering CRUD methods for fetching data and creating new entities. Afterwards, it was expanded with the configuration manager and the abstract generator. 
 The configurations allow the association of configurations files that can be useful for setting up the application that the developer is looking up to. Some configuration files are mandatory for the normal execution of this framework as it is the case of the protocol configuration file. The abstract generator offers a tool to generate abstracts based on the records from field visits plus returned values from methods that the developer deems necessary. It makes use of the configuration manager for defining the abstract template which will be explained after this section.
 
 ### Location Module
@@ -174,7 +174,7 @@ By specifying the protocol configuration file, which must contain a JSONArray na
    ]
 }
 ```
-When specifying the protocol configuration file, which must contain a JSONArray with a given tag name, the interface module allows processing the information of each protocol in the structure,  generating the interface components as well as the data structure that maps each value to the corresponding observation and protocol. After this, the following structures are made available.
+When specifying the protocol configuration file, which must contain a JSONArray with a given tag name, the interface module allows processing the information of each protocol in the structure,  generating the interface components as well as the data structure that maps each value to the corresponding observation and protocol. Afterwards, the following structures are made available.
 ```java
     HashMap<String, JSONObject> protocolsByTag; // Structure that maps each protocol JSONObject to the given protocol’s name
     
