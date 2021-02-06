@@ -131,9 +131,10 @@ Identifier | Type | Fields
 1. *first*: array of values used to define the left domain of the interval type.
 1. *last*: array of values used to define the right domain of the interval type. If omitted, it assumes the value of *first*.
 
-#### Protocol example
+#### Protocol Specification
 
 For a better understanding, it is presented the definition of a protocol.It is applied on twenty different trees across the field plot, between the months of April and October. In each one of the EOIs, the user must observe the state of the shoots and register the number of affected ones (up to a maximum of five). 
+By specifying the protocol configuration file, which must contain a JSONArray named "Protocols", the interface module allows processing the information of each protocols in the structure,  generating the interface components as well as the data structure that maps each value to the corresponding observation and protocol.
 
 ```json
 {
@@ -173,7 +174,22 @@ For a better understanding, it is presented the definition of a protocol.It is a
    ]
 }
 ```
-
+When specifying the protocol configuration file, which must contain a JSONArray with a given tag name, the interface module allows processing the information of each protocol in the structure,  generating the interface components as well as the data structure that maps each value to the corresponding observation and protocol. After this, the following structures are made available.
+```java
+    HashMap<String, JSONObject> protocolsByTag; // Structure that maps each protocol JSONObject to the given protocol’s name
+    
+    HashMap<String, Integer> numberOfEOIsPerProtocol; // Structure that maps each EOI counter to the given protocol's name
+    
+    SortedSet<String> hiddenProtocols; // Set of protocol's names that are not active on the given time of the year duo to the date_min and date_max specification
+    
+    HashMap<String, HashMap<String, List<ComponentView>>> viewsPerProtocol; // Structure that maps all the generated observation's views that are EOI dependent to the given protocol's name
+    
+    HashMap<String, List<ComponentView>> generalObservations; // Structure that maps all the generated observation's views that are not EOI dependent to the given protocol's name
+    
+    HashMap<String, HashMap<String, List<Integer>>> limitedObservations; // Structure that maps the list of accountable EOIs to the given protocol's name
+    
+    HashMap<String, HashMap<String, List<HelperData>>> helpersPerProtocol; // Structure that maps the list of helpers to the given protocol's name
+```
 
  ### Abstract configuration files
  The abstracts are used to synthesize the information of one field visit into an object. It can be divided into two groups, the data that the application stores in the database and the data that can be computed given methods and their respective arguments. Therefore, the configuration file contains flags that can be turned on or off, depending on the needs of the project and it is possible to associate external methods present in the project where the framework is placed to add the returned values to the abstract object. This file must respect the following template.
