@@ -18,9 +18,9 @@ The database is composed of nine tables, all with creation, edition and deletion
 1. *VisitTable*: Stores the information associated with a field visit. The EOI data and an extra field name *visit_info* are stored as a JSON string allowing some flexibility. Has a foreign key that references the plot’s identifier from the *PlotTable*.
 1. *ComplementaryTable*: Stores the information from post visit activities. Has the same structure of a visit plus a foreign key that references the visit’s identifier from the *VisitTable*.
 1. *MultimediaTable*: Stores the information from captured multimedia files associated with visit entities (foreign key). Can store geographical information and an extra field name *multimedia_info* that allows the application to store generic information associated with the entity.
-1. *TrajectoryTable*: Stores the trajectories from each field visit. 
-1. *TrajectorySegmentTable*: Stores the segments from each trajectory.
-1. *TrajectoryPointTable*: Stores the points from each segment. Each point has an extra field name *point_info* that allows the application to store generic information associated with the entity.
+1. *TrajectoryTable*: Stores the trajectories from each field visit (foreign key). 
+1. *TrajectorySegmentTable*: Stores the segments from each trajectory (foreign key).
+1. *TrajectoryPointTable*: Stores the points from each segment (foreign key). Each point has an extra field name *point_info* that allows the application to store generic information associated with the entity.
 1. *ConfigTable*: Stores the information (name, path and version) for the desired configuration files.
 1. *BluetoothSyncTable*: Stores logs from the Cooperation module for each connection moment.
 
