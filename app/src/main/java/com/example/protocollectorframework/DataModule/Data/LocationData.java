@@ -13,6 +13,7 @@ public class LocationData implements Serializable {
     private double elevation;
     private float accuracy;
     private int sat_number;
+    private String info;
 
     /**
      * Constructor
@@ -106,14 +107,34 @@ public class LocationData implements Serializable {
      * @param elevation:  point's elevation
      * @param accuracy:   point's horizontal accuracy
      * @param sat_number: number of satellites used to get the point
+     * @param info:       extra information associated with the point
      */
-    public LocationData(double lat, double lng, long timestamp, double elevation, float accuracy, int sat_number) {
+    public LocationData(double lat, double lng, long timestamp, double elevation, float accuracy, int sat_number, String info) {
         this.lat = lat;
         this.lng = lng;
         this.elevation = elevation;
         this.timestamp = timestamp;
         this.accuracy = accuracy;
         this.sat_number = sat_number;
+        this.info = info;
+    }
+
+    /**
+     * Returns the extra information associated with the point
+     *
+     * @return extra information associated with the point
+     */
+    public String getInfo() {
+        return info;
+    }
+
+    /**
+     * Sets the extra information associated with the point
+     *
+     * @param info extra information associated with the point
+     */
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     /**
@@ -121,7 +142,7 @@ public class LocationData implements Serializable {
      *
      * @return number os satellites
      */
-    public int getSat_number() {
+    public int getSatNumber() {
         return sat_number;
     }
 
@@ -130,7 +151,7 @@ public class LocationData implements Serializable {
      *
      * @param sat_number number of satellites
      */
-    public void setSat_number(int sat_number) {
+    public void setSatNumber(int sat_number) {
         this.sat_number = sat_number;
     }
 

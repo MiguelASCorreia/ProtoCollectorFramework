@@ -19,12 +19,12 @@ public class TrajectoryTable {
 
     public static final String TABLE_NAME = "Trajectory_table";
     public static final String TRAJECTORY_ID = "_id";
-    public static final String VISIT_ID = "Visit_id";
-    public static final String TRAJECTORY_PATH = "Trajectory_path";
-    public static final String TRAJECTORY_OWNER = "Trajectory_owner";
-    public static final String TRAJECTORY_CREATION_TIME = "Trajectory_creation_time";
-    public static final String TRAJECTORY_EDIT_TIME = "Trajectory_edit_time";
-    public static final String TRAJECTORY_DELETE_TIME = "Trajectory_delete_time";
+    public static final String VISIT_ID = "visit_id";
+    public static final String TRAJECTORY_PATH = "trajectory_path";
+    public static final String TRAJECTORY_OWNER = "trajectory_owner";
+    public static final String TRAJECTORY_CREATION_TIME = "trajectory_creation_time";
+    public static final String TRAJECTORY_EDIT_TIME = "trajectory_edit_time";
+    public static final String TRAJECTORY_DELETE_TIME = "trajectory_delete_time";
 
     private Context context;
 

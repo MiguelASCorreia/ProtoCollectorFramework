@@ -18,13 +18,17 @@ import java.util.List;
 public class TrajectoryPointTable {
     public static final String TABLE_NAME = "Trajectory_point_table";
     public static final String POINT_ID = "_id";
-    public static final String SEGMENT_ID = "Segment_id";
-    public static final String POINT_TIMESTAMP = "Point_timestamp";
-    public static final String POINT_LAT = "Point_lat";
-    public static final String POINT_LN = "Point_ln";
-    public static final String POINT_ELEVATION = "Point_ele";
-    public static final String POINT_ACCURACY = "Point_acc";
-    public static final String POINT_SAT = "Point_sat";
+    public static final String SEGMENT_ID = "segment_id";
+    public static final String POINT_TIMESTAMP = "point_timestamp";
+    public static final String POINT_LAT = "point_lat";
+    public static final String POINT_LN = "point_ln";
+    public static final String POINT_ELEVATION = "point_ele";
+    public static final String POINT_ACCURACY = "point_acc";
+    public static final String POINT_SAT = "point_sat";
+    public static final String POINT_INFO = "point_info";
+    public static final String POINT_CREATION_TIME = "point_creation_time";
+    public static final String POINT_EDIT_TIME = "point_edit_time";
+    public static final String POINT_DELETE_TIME = "point_delete_time";
 
     private Context context;
 
@@ -54,6 +58,10 @@ public class TrajectoryPointTable {
                 POINT_ACCURACY + " REAL, " +
                 POINT_SAT + " INTEGER, " +
                 POINT_TIMESTAMP + " INTEGER, " +
+                POINT_INFO + " TEXT, " +
+                POINT_CREATION_TIME + " TEXT DEFAULT CURRENT_TIMESTAMP, " +
+                POINT_EDIT_TIME + " TEXT, " +
+                POINT_DELETE_TIME + " TEXT, " +
                 "FOREIGN KEY(" + SEGMENT_ID + ") " + "REFERENCES " + TrajectorySegmentTable.TABLE_NAME + "(" + TrajectorySegmentTable.SEGMENT_ID + ") on delete cascade)";
 
 
@@ -109,8 +117,9 @@ public class TrajectoryPointTable {
             cv.put(POINT_LN, locationData.getLng());
             cv.put(POINT_ELEVATION, locationData.getElevation());
             cv.put(POINT_ACCURACY, locationData.getAccuracy());
-            cv.put(POINT_SAT, locationData.getSat_number());
+            cv.put(POINT_SAT, locationData.getSatNumber());
             cv.put(POINT_TIMESTAMP, locationData.getTimestamp());
+            cv.put(POINT_INFO,locationData.getInfo());
 
             return db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
 
@@ -180,8 +189,8 @@ public class TrajectoryPointTable {
             float acc = cursor.getFloat(cursor.getColumnIndex(POINT_ACCURACY));
             int sat = cursor.getInt(cursor.getColumnIndex(POINT_SAT));
             long timestamp = cursor.getLong(cursor.getColumnIndex(POINT_TIMESTAMP));
-
-            return new LocationData(lat, ln, timestamp, ele, acc, sat);
+            String info = cursor.getString(cursor.getColumnIndex(POINT_INFO));
+            return new LocationData(lat, ln, timestamp, ele, acc, sat,info);
 
         } catch (Exception e) {
             Log.e("error", e.toString());

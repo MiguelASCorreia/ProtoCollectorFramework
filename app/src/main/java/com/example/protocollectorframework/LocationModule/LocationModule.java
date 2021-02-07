@@ -696,7 +696,7 @@ public class LocationModule {
 
                 for (LocationData location : segment) {
                     if (location != null) {
-                        segment_text.append("<trkpt lat=\"").append(location.getLat()).append("\" lon=\"").append(location.getLng()).append("\">").append("<time>").append(df.format(new Date(location.getTimestamp()))).append("</time>").append("<sat>").append(location.getSat_number()).append("</sat>");
+                        segment_text.append("<trkpt lat=\"").append(location.getLat()).append("\" lon=\"").append(location.getLng()).append("\">").append("<time>").append(df.format(new Date(location.getTimestamp()))).append("</time>").append("<sat>").append(location.getSatNumber()).append("</sat>");
 
                         segment_text.append("<ele>").append(location.getElevation()).append("</ele>");
 
@@ -722,7 +722,7 @@ public class LocationModule {
                     if (location != null && (location.getLat() != 0.0 || location.getLng() != 0.0)) {
                         points += "<wpt lat=\"" + location.getLat() + "\" lon=\"" + location.getLng() + "\">" +
                                 "<time>" + df.format(new Date(location.getTimestamp())) + "</time>" +
-                                "<sat>" + location.getSat_number() + "</sat>";
+                                "<sat>" + location.getSatNumber() + "</sat>";
 
                         points += "<ele>" + location.getElevation() + "</ele>";
 

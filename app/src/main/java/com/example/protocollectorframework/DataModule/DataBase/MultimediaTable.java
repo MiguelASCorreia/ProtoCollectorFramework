@@ -319,7 +319,7 @@ public class MultimediaTable {
                 cv.put(MULTIMEDIA_LN, locationData.getLng());
                 cv.put(MULTIMEDIA_ELEVATION, locationData.getElevation());
                 cv.put(MULTIMEDIA_ACCURACY, locationData.getAccuracy());
-                cv.put(MULTIMEDIA_SAT, locationData.getSat_number());
+                cv.put(MULTIMEDIA_SAT, locationData.getSatNumber());
                 cv.put(MULTIMEDIA_POINT_TIMESTAMP, locationData.getTimestamp());
             }
             return db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);

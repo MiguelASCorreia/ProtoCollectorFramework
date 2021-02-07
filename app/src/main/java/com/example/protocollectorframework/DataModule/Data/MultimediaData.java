@@ -220,7 +220,7 @@ public class MultimediaData {
     @NotNull
     public String toString() {
         if (location != null)
-            return type + " " + location.getLat() + " " + location.getLng() + " " + location.getElevation() + " " + location.getAccuracy() + " " + location.getSat_number();
+            return type + " " + location.getLat() + " " + location.getLng() + " " + location.getElevation() + " " + location.getAccuracy() + " " + location.getSatNumber();
         else return type + " " + path;
     }
 }

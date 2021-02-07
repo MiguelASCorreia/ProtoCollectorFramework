@@ -13,8 +13,10 @@ public class TrajectorySegmentTable {
 
     public static final String TABLE_NAME = "Trajectory_segment_table";
     public static final String SEGMENT_ID = "_id";
-    public static final String TRAJECTORY_ID = "Trajectory_id";
-    public static final String SEGMENT_CREATION_TIME = "Segment_creation_time";
+    public static final String TRAJECTORY_ID = "trajectory_id";
+    public static final String SEGMENT_CREATION_TIME = "segment_creation_time";
+    public static final String SEGMENT_EDIT_TIME = "segment_edit_time";
+    public static final String SEGMENT_DELETE_TIME = "segment_delete_time";
 
     private Context context;
 
@@ -39,6 +41,8 @@ public class TrajectorySegmentTable {
         String createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + SEGMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 TRAJECTORY_ID + " INTEGER, " +
                 SEGMENT_CREATION_TIME + " TEXT DEFAULT CURRENT_TIMESTAMP, " +
+                SEGMENT_EDIT_TIME + " TEXT, " +
+                SEGMENT_DELETE_TIME + " TEXT, " +
                 "FOREIGN KEY(" + TRAJECTORY_ID + ") " + "REFERENCES " + TrajectoryTable.TABLE_NAME + "(" + TrajectoryTable.TRAJECTORY_ID + ") on delete cascade)";
 
 
