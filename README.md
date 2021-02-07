@@ -11,7 +11,18 @@ The framework is divided in six different modules, each on composed of a set of 
 ### Data Module
 
 This module is the foundation of the framework. It is divided in two group, the data objects, which are used across the different modules, and the database, that was implemented in a generic way to store information according to the needs of the application. 
-All the following modules make available CRUD methods that allow each one to manage the data that they are responsible for.
+All the following modules make available CRUD methods that allow each one to manage the data that they are responsible for. 
+
+The database is composed of nine tables, all with creation, edition and deletion timestamps.  These tables are:
+1. *PlotTable*: Stores geographical information associated with the field plots. As an extra column named *plot_info* that allows the application to store generic information associated with the entity.
+1. *VisitTable*: Stores the information associated with a field visit. The EOI data and an extra field name *visit_info* are stored as a JSON string allowing some flexibility. Has a foreign key that references the plot’s identifier from the *PlotTable*.
+1. *ComplementaryTable*: Stores the information from post visit activities. Has the same structure of a visit plus a foreign key that references the visit’s identifier from the *VisitTable*.
+1. *MultimediaTable*: Stores the information from captured multimedia files associated with visit entities (foreign key). Can store geographical information and an extra field name *multimedia_info* that allows the application to store generic information associated with the entity.
+1. *TrajectoryTable*: Stores the trajectories from each field visit (foreign key). 
+1. *TrajectorySegmentTable*: Stores the segments from each trajectory (foreign key).
+1. *TrajectoryPointTable*: Stores the points from each segment (foreign key). Each point has an extra field name *point_info* that allows the application to store generic information associated with the entity.
+1. *ConfigTable*: Stores the information (name, path and version) for the desired configuration files.
+1. *BluetoothSyncTable*: Stores logs from the Cooperation module for each connection moment.
 
 ### Registration Module
 
@@ -20,7 +31,15 @@ The configurations allow the association of configurations files that can be use
 
 ### Location Module
 Location data maybe useful for data analyses and to detect some behaviors that can be linked to data collection moments. With this purpose, a location module was developed to manage all the geographical information associated with the field plots, but also the user’s location during a visit. This module was developed with the support of the Mapbox API, offering method for map manipulation like the creation of symbols, lines and polygons.
-Two location listeners were made available, one for plot detection and another for user location management, however, the module can be extended with new listeners that satisfy the needs of the specific project.  In the second one, the route taken by the user is stored in the database and can be easily exported with the GPX format.
+Two location listeners were made available, one for plot detection and another for user location management, however, the module can be extended with new listeners that satisfy the needs of the specific project.  In the second one, the route taken by the user is stored in the database and can be easily exported with the GPX format. This files contains all the point's information across the following tags:
+
+1. *lat*: latitude of the given point.
+1. *ln*: longitude of the given point.
+1. *time*: timestamp for the given point in the format yyyy-MM-dd'T'HH:mm:ssZ.
+1. *sat*: number of satellites used for the given point.
+1. *ele*: altitude in meters, of the given point, above the WGS 84 reference ellipsoid.
+1. *accuracy*: estimated horizontal accuracy of the given point, radial, in meters.
+
 ### Multimedia Module
 Sometimes the collected data needs to be supported by some other means. For this purpose, the multimedia module was implemented so that the application allows the association of multimedia to a field visit as a whole or even to specific moments.
 This module provides methods to favor the process of capturing multimedia elements such as photos and audios, managing all the needed permissions. It can be easily extended to other types of elements since each element it is stored with a type identifier. Additionally, provides a listener that allows the conversion of speech to text if there is a need to store the textual information.  An element can still be supported by the data provided by the location module and it is always marked with a creation timestamp.
