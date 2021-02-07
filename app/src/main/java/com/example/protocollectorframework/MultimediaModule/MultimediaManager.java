@@ -496,7 +496,7 @@ public class MultimediaManager implements Serializable {
                         return false;
                     }
 
-                    LocationData locationData = new LocationData(lat, ln, timeStamp, ele, accuracy, sat);
+                    LocationData locationData = new LocationData(lat, ln, timeStamp, ele, accuracy, sat,null);
                     for (MultimediaData multimediaData : multimediaFiles) {
                         if (multimediaData.getPath().equals(path)) {
                             mMultimediaTable.addFile(new MultimediaData(type, path, locationData, multimediaData.getDescription()), visit_id, 0);

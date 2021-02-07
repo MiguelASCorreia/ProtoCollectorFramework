@@ -107,6 +107,25 @@ public class LocationData implements Serializable {
      * @param elevation:  point's elevation
      * @param accuracy:   point's horizontal accuracy
      * @param sat_number: number of satellites used to get the point
+     */
+    public LocationData(double lat, double lng, long timestamp, double elevation, float accuracy, int sat_number) {
+        this.lat = lat;
+        this.lng = lng;
+        this.elevation = elevation;
+        this.timestamp = timestamp;
+        this.accuracy = accuracy;
+        this.sat_number = sat_number;
+    }
+
+    /**
+     * Constructor
+     *
+     * @param lat:        point's latitude
+     * @param lng:        point's longitude
+     * @param timestamp:  point's capture timestamp
+     * @param elevation:  point's elevation
+     * @param accuracy:   point's horizontal accuracy
+     * @param sat_number: number of satellites used to get the point
      * @param info:       extra information associated with the point
      */
     public LocationData(double lat, double lng, long timestamp, double elevation, float accuracy, int sat_number, String info) {
