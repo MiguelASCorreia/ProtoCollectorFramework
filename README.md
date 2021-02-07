@@ -49,7 +49,15 @@ The automatic component generation is possible due to this module. It contains s
 
 ### Cooperation Module
 This module offers a Bluetooth connection management API that sends message to the desired context to handle each on as the developer intends to. Also offers UI layouts to handler the pairing process and the search for devices to connect to.
-The main purpose of this module was to enable the exchange of messages between users during the same visit, so that the work could be divided by users on the field and then the data combined into a single record, made available in both devices at the same time. 
+The main purpose of this module was to enable the exchange of messages between users during the same visit, so that the work could be divided by users on the field and then the data combined into a single record, made available in both devices at the same time. By default, this module accounts for five different type of messages
+
+By default, this module accounts for five different types of messages that are sent by the handler to the calling activity and can be processed for the desired application. These messages are tagged by the following constants:
+
+1. __*MESSAGE_ENABLED*__:  *BluetoothAdapter* is enabled and the application is ready to connect with another device.
+1. __*MESSAGE_CONNECTED*__:  The requested connection was successful.
+1. __*MESSAGE_RECEIVED*__:  Reception of a message from the partner.
+1. __*MESSAGE_HOSTING*__:  This device is the host of the current connection. The host device is the on that accepts the connection.
+1. __*MESSAGE_ERROR*__: An error has occurred during the initialization of the *BluetoothAdapter*, during the reception of a message or the connection was lost.
 
  
  ## Configuration
