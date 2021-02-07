@@ -65,11 +65,11 @@ public class BluetoothConnectionManager {
     public static final String SETTINGS = "SETTINGS";
     public static final String SETTINGS_SEND_MULTIMEDIA = "SETTINGS_SEND_MULTIMEDIA";
 
-    public static final int MESSAGE_RECEIVE = 0;
-    public static final int MESSAGE_ENABLED = 1;
-    public static final int MESSAGE_CONNECTED = 2;
-    public static final int MESSAGE_ERROR = 3;
-    public static final int MESSAGE_HOSTING = 4;
+    public static final int MESSAGE_ERROR = -1;
+    public static final int MESSAGE_ENABLED = 0;
+    public static final int MESSAGE_CONNECTED = 1;
+    public static final int MESSAGE_RECEIVED = 2;
+    public static final int MESSAGE_HOSTING = 3;
     public static String ALERT_CONNECTION = "c0";
 
     public static final int BUFFER_SIZE = 1024 * 1024;
@@ -757,7 +757,7 @@ public class BluetoothConnectionManager {
                             JSONObject jsonObject = new JSONObject(message.toString());
 
                             Message finalMessage = new Message();
-                            finalMessage.what = MESSAGE_RECEIVE;
+                            finalMessage.what = MESSAGE_RECEIVED;
                             finalMessage.obj = jsonObject;
 
                             if (mIncomingHandler != null)
