@@ -55,7 +55,7 @@ By default, this module accounts for five different types of messages that are s
 
 1. __*MESSAGE_ENABLED*__:  *BluetoothAdapter* is enabled and the application is ready to connect with another device.
 1. __*MESSAGE_CONNECTED*__:  The requested connection was successful.
-1. __*MESSAGE_RECEIVED*__:  Device received a message from their partner.
+1. __*MESSAGE_RECEIVED*__:  Reception of a message from the partner.
 1. __*MESSAGE_HOSTING*__:  This device is the host of the current connection. The host device is the on that accepts the connection.
 1. __*MESSAGE_ERROR*__: An error has occurred during the initialization of the *BluetoothAdapter*, during the reception of a message or the connection was lost.
 
