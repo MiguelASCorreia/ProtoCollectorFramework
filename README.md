@@ -48,8 +48,8 @@ This module provides methods to favor the process of capturing multimedia elemen
 The automatic component generation is possible due to this module. It contains some custom views that were developed to satisfy needs that the default views were not able to and are used on the interface component API that was created. The interface components that are generated are dependent of the corresponding data type that is specified in the protocol’s configuration file, that will be explain shortly after this overview. Each component uses message mechanism that it’s triggered every time their value is changed. This mechanism sends a message with the updates in real time to a provided handler.
 
 ### Cooperation Module
-This module offers a Bluetooth connection management API that sends message to the desired context to handle each on as the developer intends to. Also offers UI layouts to handler the pairing process and the search for devices to connect to.
-The main purpose of this module was to enable the exchange of messages between users during the same visit, so that the work could be divided by users on the field and then the data combined into a single record, made available in both devices at the same time. By default, this module accounts for five different type of messages
+This module offers a Bluetooth connection management API that sends message to the desired context to handle each on as the developer intends to. Also offers UI layouts, adapters and a broadcast receiver to handle and automate the pairing process and the search for devices.
+The main purpose of this module was to enable the exchange of messages between users during the same visit, so that the work could be divided by users on the field and then the data combined into a single record, made available in both devices at the same time.
 
 By default, this module accounts for five different types of messages that are sent by the handler to the calling activity and can be processed for the desired application. These messages are tagged by the following constants:
 
