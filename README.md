@@ -229,8 +229,7 @@ When specifying the protocol configuration file, which must contain a JSONArray 
       "complementary_info":true,
       "plot_data":true,
       "plot_info":true,
-      "multimedia_count":true,
-      "gps_info":true
+      "multimedia_count":true
    },
    "Methods":[
       {
