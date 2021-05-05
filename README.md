@@ -64,11 +64,12 @@ To secure that the desired application has the required permissions and the set 
 
 1. __Permissions__: set permissios that the user must agree on to use some device's features (Example: Manifest.permission.ACCESS_WIFI_STATE so that the application can check the Wi-Fi state). This module facilitates the check of the application permissions and the process of requesting the missing ones.
 1. __Technologies__: set of required technologies that must be available on the device. Some of these may need previous permissions, so the developer must define the required technologies according to the previously defined permissions. At this moment, this module has four types of technologies that can be checked, which are identified by the following constants:
+```
 	__*INTERNET*__ : explicits the need for internet connection.
 	__*WIFI*__ : explicits the need for internet connection via Wi-Fi.
 	__*BLUETOOTH*__ : explicits the need for bluetooth.
 	__*GPS*__ : explicits the need for GPS signal.
-
+```
  
  ## Configuration
  Before using this framework there are some types of configuration files that must be understood and reproduced. These files allow not only the generation of the user interface but also the creation of abstracts for each field visit.
