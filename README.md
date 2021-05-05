@@ -6,7 +6,7 @@ This framework was developed for the purpose of favoring the creation of android
 
 ## Framework Overview
 
-The framework is divided in six different modules, each on composed of a set of Java classes and, in some cases, a group of XML resources. All these modules were developed in parallel with a mobile application whose purpose was to collect information on the field regarding pets and diseases that affect apple and pear crops. That said, the design of the framework was heavily influenced by the needs of that project. However, an effort was made to generalize the essential features for, not only the phytosanitary context, but for all types of field data collection that require making observations according to elements of interest.
+The framework is divided in seven different modules, each on composed of a set of Java classes and, in some cases, a group of XML resources. All these modules were developed in parallel with a mobile application whose purpose was to collect information on the field regarding pets and diseases that affect apple and pear crops. That said, the design of the framework was heavily influenced by the needs of that project. However, an effort was made to generalize the essential features for, not only the phytosanitary context, but for all types of field data collection that require making observations according to elements of interest.
 
 ### Data Module
 
@@ -58,6 +58,16 @@ By default, this module accounts for five different types of messages that are s
 1. __*MESSAGE_RECEIVED*__:  Reception of a message from the partner.
 1. __*MESSAGE_HOSTING*__:  This device is the host of the current connection. The host device is the on that accepts the connection.
 1. __*MESSAGE_ERROR*__: An error has occurred during the initialization of the *BluetoothAdapter*, during the reception of a message or the connection was lost.
+
+### AccessesModule
+To secure that the desired application has the required permissions and the set of resources to operate at full capacity, this module was develop to define and check these resources and the state of the required accesses. These accesses are divided in two types:
+
+1. __Permissions__: set permissios that the user must agree on to use some device's features (Example: Manifest.permission.ACCESS_WIFI_STATE so that the application can check the Wi-Fi state). This module facilitates the check of the application permissions and the process of requesting the missing ones.
+1. __Technologies__: set of required technologies that must be available on the device. Some of these may need previous permissions, so the developer must define the required technologies according to the previously defined permissions. At this moment, this module has four types of technologies that can be checked, which are identified by the following constants:
+2. __*INTERNET*___ : explicits the need for internet connection.
+2. __*WIFI*___ : explicits the need for internet connection via Wi-Fi.
+2. __*BLUETOOTH*___ : explicits the need for bluetooth.
+2. __*GPS*___ : explicits the need for GPS signal.
 
  
  ## Configuration
